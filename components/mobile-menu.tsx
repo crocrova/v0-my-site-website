@@ -164,7 +164,7 @@ export function MobileMenu() {
               <Menu size={20} color="#2D2D2D" />
             </button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[260px] bg-white p-0">
+          <SheetContent side="right" className="w-[260px] bg-white p-0" aria-describedby={undefined}>
             <SheetHeader className="border-b border-[#E8E9EC] p-4">
               <SheetTitle className="text-left font-sans text-[0.9rem] font-semibold text-[#2D2D2D]">
                 Menu
@@ -292,7 +292,7 @@ export function MobileMenu() {
 
       {/* Portfolio Dialog - slides up from bottom */}
       <Dialog open={activeDialog === 'portfolio'} onOpenChange={(open) => !open && setActiveDialog(null)}>
-        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom">
+        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom" aria-describedby={undefined}>
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
             <button 
               onClick={() => {
@@ -470,7 +470,7 @@ export function MobileMenu() {
 
       {/* Plans Dialog */}
       <Dialog open={activeDialog === 'plans'} onOpenChange={(open) => !open && setActiveDialog(null)}>
-        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom">
+        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom" aria-describedby={undefined}>
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
             <button 
               onClick={() => setActiveDialog(null)}
@@ -527,7 +527,7 @@ export function MobileMenu() {
 
       {/* Contact Dialog */}
       <Dialog open={activeDialog === 'contact'} onOpenChange={(open) => !open && setActiveDialog(null)}>
-        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom">
+        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom" aria-describedby={undefined}>
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
             <button 
               onClick={() => setActiveDialog(null)}
