@@ -1,71 +1,181 @@
 'use client'
 
+import { useState } from 'react'
 import { LanguageProvider } from '@/lib/language-context'
+import { Navbar } from '@/components/navbar'
 import { HeroBlock } from '@/components/blocks/hero-block'
 import { PortfolioBlock } from '@/components/blocks/portfolio-block'
 import { PlansBlock } from '@/components/blocks/plans-block'
 import { LogoBlock } from '@/components/blocks/logo-block'
 import { ContactBlock } from '@/components/blocks/contact-block'
-import { LanguageBlock } from '@/components/blocks/language-block'
+import { PortfolioView } from '@/components/views/portfolio-view'
+import { PlansView } from '@/components/views/plans-view'
+import { ContactView } from '@/components/views/contact-view'
 import { MobileMenu } from '@/components/mobile-menu'
 
+type View = 'home' | 'portfolio' | 'plans' | 'contact'
+
 export default function Home() {
+  const [currentView, setCurrentView] = useState<View>('home')
+
   return (
     <LanguageProvider>
-      <main className="min-h-screen bg-white p-3 md:h-screen md:overflow-hidden md:p-3">
-        <MobileMenu />
-        
-        {/* Desktop Bento Grid */}
-        <div className="hidden h-full w-full gap-3 md:grid md:grid-cols-[2fr_1fr] md:grid-rows-[7fr_3fr]">
-          {/* Row 1 */}
-          <div id="hero-block" className="row-span-1">
-            <HeroBlock />
-          </div>
-          
-          <div className="grid grid-rows-2 gap-3">
-            <div id="portfolio-block">
-              <PortfolioBlock />
-            </div>
-            <div id="plans-block">
-              <PlansBlock />
-            </div>
-          </div>
-          
-          {/* Row 2 */}
-          <div className="col-span-2 grid grid-cols-[3fr_4fr_3fr] gap-3">
-            <div id="logo-block">
-              <LogoBlock />
-            </div>
-            <div id="contact-block-wrapper">
-              <ContactBlock />
-            </div>
-            <div id="language-block">
-              <LanguageBlock />
-            </div>
+      <main className="h-screen w-screen overflow-hidden bg-white p-3">
+        {/* Mobile Menu */}
+        <div className="md:hidden">
+          <MobileMenu />
+        </div>
+
+        {/* Desktop Layout */}
+        <div className="hidden h-full w-full flex-col gap-3 md:flex">
+          {/* Navbar */}
+          <Navbar 
+            onPortfolioClick={() => setCurrentView('portfolio')}
+            onPlansClick={() => setCurrentView('plans')}
+            onContactClick={() => setCurrentView('contact')}
+          />
+
+          {/* Main Content Area */}
+          <div className="relative flex-1">
+            {/* Home View */}
+            {currentView === 'home' && (
+              <div 
+                className="absolute inset-0 grid grid-cols-[2fr_1fr] grid-rows-[7fr_3fr] gap-3"
+                style={{
+                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                }}
+              >
+                {/* Row 1 */}
+                <div 
+                  id="hero-block"
+                  style={{
+                    opacity: 0,
+                    animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    animationDelay: '0ms',
+                  }}
+                >
+                  <HeroBlock />
+                </div>
+                
+                <div className="grid grid-rows-2 gap-3">
+                  <div 
+                    id="portfolio-block"
+                    style={{
+                      opacity: 0,
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '60ms',
+                    }}
+                  >
+                    <PortfolioBlock onClick={() => setCurrentView('portfolio')} />
+                  </div>
+                  <div 
+                    id="plans-block"
+                    style={{
+                      opacity: 0,
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '120ms',
+                    }}
+                  >
+                    <PlansBlock onClick={() => setCurrentView('plans')} />
+                  </div>
+                </div>
+                
+                {/* Row 2 */}
+                <div className="col-span-2 grid grid-cols-3 gap-3">
+                  <div 
+                    id="logo-block"
+                    style={{
+                      opacity: 0,
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '180ms',
+                    }}
+                  >
+                    <LogoBlock />
+                  </div>
+                  <div 
+                    id="contact-block-wrapper"
+                    style={{
+                      opacity: 0,
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '240ms',
+                    }}
+                  >
+                    <ContactBlock onClick={() => setCurrentView('contact')} />
+                  </div>
+                  <div 
+                    id="language-block"
+                    className="rounded-2xl bg-[#F5F6F8]"
+                    style={{
+                      opacity: 0,
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '300ms',
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Portfolio View */}
+            {currentView === 'portfolio' && (
+              <div 
+                className="absolute inset-0"
+                style={{
+                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                }}
+              >
+                <PortfolioView onBack={() => setCurrentView('home')} />
+              </div>
+            )}
+
+            {/* Plans View */}
+            {currentView === 'plans' && (
+              <div 
+                className="absolute inset-0"
+                style={{
+                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                }}
+              >
+                <PlansView 
+                  onBack={() => setCurrentView('home')} 
+                  onRequestAnalysis={() => setCurrentView('contact')}
+                />
+              </div>
+            )}
+
+            {/* Contact View */}
+            {currentView === 'contact' && (
+              <div 
+                className="absolute inset-0"
+                style={{
+                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                }}
+              >
+                <ContactView onBack={() => setCurrentView('home')} />
+              </div>
+            )}
           </div>
         </div>
-        
-        {/* Mobile Stack */}
-        <div className="flex flex-col gap-3 md:hidden">
-          <div id="hero-block-mobile" className="min-h-[400px]">
-            <HeroBlock />
-          </div>
-          <div id="portfolio-block-mobile" className="min-h-[120px]">
-            <PortfolioBlock />
-          </div>
-          <div id="plans-block-mobile" className="min-h-[200px]">
-            <PlansBlock />
-          </div>
-          <div id="contact-block-mobile" className="min-h-[160px]">
-            <ContactBlock />
-          </div>
-          <div id="logo-block-mobile" className="min-h-[120px]">
-            <LogoBlock />
-          </div>
-          <div id="language-block-mobile" className="min-h-[100px]">
-            <LanguageBlock />
-          </div>
-        </div>
+
+        <style jsx>{`
+          @keyframes fadeInView {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+          @keyframes fadeInScale {
+            from {
+              opacity: 0;
+              transform: scale(0.98);
+            }
+            to {
+              opacity: 1;
+              transform: scale(1);
+            }
+          }
+        `}</style>
       </main>
     </LanguageProvider>
   )

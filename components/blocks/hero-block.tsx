@@ -9,76 +9,65 @@ const businessNames = [
   { prefix: 'my.', name: 'company' },
   { prefix: 'my.', name: 'coffee' },
   { prefix: 'my.', name: 'clinic' },
-  { prefix: 'my.', name: 'salon' },
   { prefix: 'my.', name: 'hotel' },
   { prefix: 'my.', name: 'studio' },
-  { prefix: 'my.', name: 'store' },
-  { prefix: 'my.', name: 'office' },
 ]
 
 export function HeroBlock() {
   const [loadedItems, setLoadedItems] = useState<number[]>([])
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
-  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  const displayNames = isMobile ? businessNames.slice(0, 5) : businessNames
-
-  useEffect(() => {
-    // Sequential fade-in animation
-    displayNames.forEach((_, index) => {
+    // Sequential fade-in animation with 60ms stagger
+    businessNames.forEach((_, index) => {
       setTimeout(() => {
         setLoadedItems(prev => [...prev, index])
-      }, index * 80)
+      }, index * 60)
     })
 
     // Start highlight cycling after all items loaded
-    const totalLoadTime = displayNames.length * 80 + 400
+    const totalLoadTime = businessNames.length * 60 + 300
     const highlightTimeout = setTimeout(() => {
       setHighlightedIndex(0)
     }, totalLoadTime)
 
     return () => clearTimeout(highlightTimeout)
-  }, [displayNames.length])
+  }, [])
 
   useEffect(() => {
     if (highlightedIndex === null) return
 
+    // Cycle every 2 seconds
     const interval = setInterval(() => {
       setHighlightedIndex(prev => 
-        prev === null ? 0 : (prev + 1) % displayNames.length
+        prev === null ? 0 : (prev + 1) % businessNames.length
       )
-    }, 3000)
+    }, 2000)
 
     return () => clearInterval(interval)
-  }, [highlightedIndex, displayNames.length])
+  }, [highlightedIndex])
 
   return (
-    <div className="bento-block relative h-full w-full rounded-2xl bg-[#F5F6F8] p-6 md:p-8">
+    <div className="bento-block relative flex h-full w-full flex-col justify-center rounded-2xl bg-[#F5F6F8] px-6 py-4 md:px-8 md:py-6">
       <Sparkles 
         className="absolute right-4 top-4 md:right-6 md:top-6" 
         size={20} 
         color="#4DE8D8" 
       />
       
-      <div className="flex h-full flex-col justify-center gap-1 md:gap-2">
-        {displayNames.map((item, index) => (
+      <div className="flex flex-col gap-0.5 md:gap-1">
+        {businessNames.map((item, index) => (
           <div
             key={index}
             className="hero-name flex items-baseline"
             style={{
-              animationDelay: `${index * 80}ms`,
+              animationDelay: `${index * 60}ms`,
               opacity: loadedItems.includes(index) ? 1 : 0,
+              transition: 'opacity 200ms ease-out',
             }}
           >
             <span 
-              className="font-serif text-[1.4rem] font-light italic md:text-[2.8rem]"
+              className="font-serif text-[1.3rem] font-light italic md:text-[2.2rem]"
               style={{ 
                 color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D',
                 transition: 'color 200ms ease-in-out'
@@ -87,7 +76,7 @@ export function HeroBlock() {
               {item.prefix}
             </span>
             <span 
-              className="font-sans text-[1.4rem] font-medium md:text-[2.8rem]"
+              className="font-sans text-[1.3rem] font-medium md:text-[2.2rem]"
               style={{ 
                 color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D',
                 transition: 'color 200ms ease-in-out'
