@@ -13,7 +13,7 @@ export function Navbar({ onPortfolioClick, onPlansClick, onContactClick }: Navba
   const { language, setLanguage, t } = useLanguage()
 
   return (
-    <div className="flex h-14 items-center justify-between rounded-2xl bg-[#F5F6F8] px-5">
+    <div className="flex h-12 shrink-0 items-center justify-between rounded-2xl bg-[#F5F6F8] px-5">
       {/* Logo */}
       <img 
         id="site-logo-nav" 

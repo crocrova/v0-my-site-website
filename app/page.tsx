@@ -27,7 +27,7 @@ export default function Home() {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden h-full w-full flex-col gap-3 md:flex">
+        <div className="hidden h-full w-full flex-col md:flex" style={{ gap: '8px' }}>
           {/* Navbar */}
           <Navbar 
             onPortfolioClick={() => setCurrentView('portfolio')}
@@ -40,8 +40,9 @@ export default function Home() {
             {/* Home View */}
             {currentView === 'home' && (
               <div 
-                className="absolute inset-0 grid grid-cols-[2fr_1fr] grid-rows-[7fr_3fr] gap-3"
-                style={{
+                className="absolute inset-0 grid grid-cols-[2fr_1fr] grid-rows-[7fr_3fr]"
+                style={{ 
+                  gap: '8px',
                   animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                 }}
               >
@@ -52,18 +53,20 @@ export default function Home() {
                     opacity: 0,
                     animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                     animationDelay: '0ms',
+                    willChange: 'transform, opacity',
                   }}
                 >
                   <HeroBlock />
                 </div>
                 
-                <div className="grid grid-rows-2 gap-3">
+                <div className="grid grid-rows-2" style={{ gap: '8px' }}>
                   <div 
                     id="portfolio-block"
                     style={{
                       opacity: 0,
                       animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                       animationDelay: '60ms',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     <PortfolioBlock onClick={() => setCurrentView('portfolio')} />
@@ -74,6 +77,7 @@ export default function Home() {
                       opacity: 0,
                       animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                       animationDelay: '120ms',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     <PlansBlock onClick={() => setCurrentView('plans')} />
@@ -81,13 +85,14 @@ export default function Home() {
                 </div>
                 
                 {/* Row 2 */}
-                <div className="col-span-2 grid grid-cols-3 gap-3">
+                <div className="col-span-2 grid grid-cols-3" style={{ gap: '8px' }}>
                   <div 
                     id="logo-block"
                     style={{
                       opacity: 0,
                       animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                       animationDelay: '180ms',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     <LogoBlock />
@@ -98,6 +103,7 @@ export default function Home() {
                       opacity: 0,
                       animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                       animationDelay: '240ms',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     <ContactBlock onClick={() => setCurrentView('contact')} />
@@ -109,6 +115,7 @@ export default function Home() {
                       opacity: 0,
                       animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                       animationDelay: '300ms',
+                      willChange: 'transform, opacity',
                     }}
                   />
                 </div>

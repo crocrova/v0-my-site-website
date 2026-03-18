@@ -23,19 +23,24 @@ export function ContactView({ onBack }: ContactViewProps) {
   }
 
   return (
-    <div className="grid h-full grid-cols-[1fr_2fr_1fr] gap-3">
+    <div 
+      className="grid h-full grid-cols-[1fr_2fr_1fr]"
+      style={{ gap: '8px' }}
+    >
       {/* Left spacer with back button */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col" style={{ gap: '8px' }}>
         <div
-          className="bento-block block-cursor flex items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8] p-4"
+          className="bento-block block-cursor flex items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8]"
           style={{
+            padding: '16px',
             opacity: 0,
             animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+            willChange: 'transform, opacity',
           }}
           onClick={onBack}
         >
-          <ArrowLeft size={20} color="#8C8C8C" />
-          <span className="font-sans text-[0.9rem] font-medium text-[#8C8C8C]">
+          <ArrowLeft size={18} color="#8C8C8C" />
+          <span className="font-sans font-medium text-[#8C8C8C]" style={{ fontSize: '0.8rem' }}>
             {t('home')}
           </span>
         </div>
@@ -45,23 +50,26 @@ export function ContactView({ onBack }: ContactViewProps) {
             opacity: 0,
             animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
             animationDelay: '60ms',
+            willChange: 'transform, opacity',
           }}
         />
       </div>
 
       {/* Center form */}
       <div 
-        className="flex flex-col rounded-2xl bg-[#F5F6F8] p-6"
+        className="flex flex-col rounded-2xl bg-[#F5F6F8]"
         style={{
+          padding: '20px',
           opacity: 0,
           animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
           animationDelay: '120ms',
+          willChange: 'transform, opacity',
         }}
       >
         <form onSubmit={handleSubmit} className="flex h-full flex-col">
           {/* Business Name - prominent */}
-          <div className="flex items-baseline gap-2 border-b border-[#E8E9EC] pb-4">
-            <span className="font-serif text-[1.5rem] font-light italic text-[#2D2D2D]">
+          <div className="flex items-baseline gap-2 border-b border-[#E8E9EC] pb-3">
+            <span className="font-serif font-light italic text-[#2D2D2D]" style={{ fontSize: '1.3rem' }}>
               my.
             </span>
             <input
@@ -70,42 +78,46 @@ export function ContactView({ onBack }: ContactViewProps) {
               onChange={(e) => setBusinessName(e.target.value)}
               placeholder="business"
               autoFocus
-              className="flex-1 bg-transparent font-mono text-[1.3rem] text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
+              className="flex-1 bg-transparent font-mono text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
+              style={{ fontSize: '1.1rem' }}
             />
           </div>
 
           {/* Other fields */}
-          <div className="mt-6 flex flex-col gap-4">
-            <div className="flex items-center gap-3 border-b border-[#E8E9EC] pb-3">
-              <Phone size={18} color="#4DE8D8" />
+          <div className="mt-4 flex flex-col gap-3">
+            <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
+              <Phone size={16} color="#4DE8D8" />
               <Input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder={t('phonePlaceholder')}
-                className="border-none bg-transparent font-sans text-[1rem] shadow-none focus-visible:ring-0"
+                className="border-none bg-transparent font-sans shadow-none focus-visible:ring-0"
+                style={{ fontSize: '0.9rem' }}
               />
             </div>
 
-            <div className="flex items-center gap-3 border-b border-[#E8E9EC] pb-3">
-              <Mail size={18} color="#4DE8D8" />
+            <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
+              <Mail size={16} color="#4DE8D8" />
               <Input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('emailPlaceholder')}
-                className="border-none bg-transparent font-sans text-[1rem] shadow-none focus-visible:ring-0"
+                className="border-none bg-transparent font-sans shadow-none focus-visible:ring-0"
+                style={{ fontSize: '0.9rem' }}
               />
             </div>
 
-            <div className="flex items-center gap-3 border-b border-[#E8E9EC] pb-3">
-              <Building2 size={18} color="#4DE8D8" />
+            <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
+              <Building2 size={16} color="#4DE8D8" />
               <Input
                 type="text"
                 value={businessType}
                 onChange={(e) => setBusinessType(e.target.value)}
                 placeholder={t('businessTypePlaceholder')}
-                className="border-none bg-transparent font-sans text-[1rem] shadow-none focus-visible:ring-0"
+                className="border-none bg-transparent font-sans shadow-none focus-visible:ring-0"
+                style={{ fontSize: '0.9rem' }}
               />
             </div>
           </div>
@@ -114,7 +126,8 @@ export function ContactView({ onBack }: ContactViewProps) {
           <div className="mt-auto">
             <Button
               type="submit"
-              className="w-full rounded-xl bg-[#4DE8D8] py-5 font-sans text-[1rem] font-medium text-white transition-colors hover:bg-[#3BCFBF]"
+              className="w-full rounded-xl bg-[#4DE8D8] py-4 font-sans font-medium text-white transition-colors hover:bg-[#3BCFBF]"
+              style={{ fontSize: '0.9rem' }}
             >
               {t('start')}
             </Button>
@@ -123,28 +136,31 @@ export function ContactView({ onBack }: ContactViewProps) {
       </div>
 
       {/* Right spacer */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col" style={{ gap: '8px' }}>
         <div 
           className="flex-1 rounded-2xl bg-[#F5F6F8]"
           style={{
             opacity: 0,
             animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
             animationDelay: '180ms',
+            willChange: 'transform, opacity',
           }}
         />
         <div 
-          className="flex items-center justify-center rounded-2xl bg-[#F5F6F8] p-4"
+          className="flex items-center justify-center rounded-2xl bg-[#F5F6F8]"
           style={{
+            padding: '16px',
             opacity: 0,
             animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
             animationDelay: '240ms',
+            willChange: 'transform, opacity',
           }}
         >
           <img 
             id="site-logo" 
             src="/logo-placeholder.svg" 
-            width={100} 
-            height={33} 
+            width={80} 
+            height={27} 
             alt="MY.SITE" 
           />
         </div>

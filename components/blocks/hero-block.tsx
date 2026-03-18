@@ -48,14 +48,19 @@ export function HeroBlock() {
   }, [highlightedIndex])
 
   return (
-    <div className="bento-block relative flex h-full w-full flex-col justify-center rounded-2xl bg-[#F5F6F8] px-6 py-4 md:px-8 md:py-6">
+    <div 
+      className="bento-block relative flex h-full w-full flex-col justify-center rounded-2xl bg-[#F5F6F8]"
+      style={{ padding: '16px' }}
+    >
+      {/* Only Sparkles icon - no other decorative elements */}
       <Sparkles 
-        className="absolute right-4 top-4 md:right-6 md:top-6" 
-        size={20} 
+        className="absolute"
+        style={{ right: '16px', top: '16px' }}
+        size={18} 
         color="#4DE8D8" 
       />
       
-      <div className="flex flex-col gap-0.5 md:gap-1">
+      <div className="flex flex-col" style={{ gap: '2px' }}>
         {businessNames.map((item, index) => (
           <div
             key={index}
@@ -67,8 +72,9 @@ export function HeroBlock() {
             }}
           >
             <span 
-              className="font-serif text-[1.3rem] font-light italic md:text-[2.2rem]"
+              className="font-serif font-light italic"
               style={{ 
+                fontSize: '1.8rem',
                 color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D',
                 transition: 'color 200ms ease-in-out'
               }}
@@ -76,8 +82,9 @@ export function HeroBlock() {
               {item.prefix}
             </span>
             <span 
-              className="font-sans text-[1.3rem] font-medium md:text-[2.2rem]"
+              className="font-sans font-medium"
               style={{ 
+                fontSize: '1.8rem',
                 color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D',
                 transition: 'color 200ms ease-in-out'
               }}

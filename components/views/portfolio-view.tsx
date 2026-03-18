@@ -103,43 +103,56 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
     : projects
 
   return (
-    <div className="flex h-full w-full flex-col gap-3">
+    <div 
+      className="flex h-full w-full flex-col"
+      style={{ gap: '8px' }}
+    >
       {selectedProject === null ? (
-        // Initial 3x2 grid
-        <div className="grid h-full grid-cols-3 grid-rows-2 gap-3">
+        // Initial 3x2 grid - fits in 100vh
+        <div 
+          className="grid flex-1 grid-cols-3 grid-rows-2"
+          style={{ gap: '8px' }}
+        >
           {projects.map((project, index) => (
             <div
               key={project.id}
-              className="bento-block block-cursor flex flex-col justify-between rounded-2xl p-4"
+              className="bento-block block-cursor flex flex-col justify-between rounded-2xl"
               style={{
                 backgroundColor: project.bg,
                 border: project.border,
+                padding: '16px',
                 opacity: 0,
                 animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
                 animationDelay: `${index * 60}ms`,
+                willChange: 'transform, opacity',
               }}
               onClick={() => setSelectedProject(project.id)}
             >
               <div>
                 <p 
-                  className={`${project.nameFont} text-[1.1rem]`}
-                  style={{ color: project.nameColor }}
+                  className={`${project.nameFont}`}
+                  style={{ color: project.nameColor, fontSize: '0.9rem' }}
                 >
                   {project.name}
                 </p>
-                <div className="mt-2 flex gap-1.5">
+                <div className="mt-1.5 flex gap-1">
                   {project.swatches.map((color, i) => (
                     <div 
                       key={i}
-                      className="h-3 w-3 rounded-full"
-                      style={{ backgroundColor: color, border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined }}
+                      className="rounded-full"
+                      style={{ 
+                        width: '8px', 
+                        height: '8px',
+                        backgroundColor: color, 
+                        border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined 
+                      }}
                     />
                   ))}
                 </div>
               </div>
               <p 
-                className="font-sans text-[0.7rem]"
-                style={{ color: project.labelColor }}
+                className="font-sans"
+                style={{ color: project.labelColor, fontSize: '0.6rem' }}
               >
                 {t(project.labelKey)}
               </p>
@@ -148,35 +161,48 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
           
           {/* Home button */}
           <div
-            className="bento-block block-cursor flex items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8] p-4"
+            className="bento-block block-cursor flex items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8]"
             style={{
+              padding: '16px',
               opacity: 0,
               animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
               animationDelay: `${5 * 60}ms`,
+              willChange: 'transform, opacity',
             }}
             onClick={onBack}
           >
-            <ArrowLeft size={20} color="#8C8C8C" />
-            <span className="font-sans text-[0.9rem] font-medium text-[#8C8C8C]">
+            <ArrowLeft size={18} color="#8C8C8C" />
+            <span className="font-sans font-medium text-[#8C8C8C]" style={{ fontSize: '0.8rem' }}>
               {t('home')}
             </span>
           </div>
         </div>
       ) : (
-        // Selected project view: left column + detail panel
-        <div className="grid h-full grid-cols-[1fr_3fr] gap-3">
+        // Selected project view: left column (20%) + detail panel (80%)
+        <div 
+          className="grid flex-1"
+          style={{ 
+            gridTemplateColumns: '20% 1fr',
+            gap: '8px',
+          }}
+        >
           {/* Left column - remaining projects + home */}
-          <div className="flex flex-col gap-3">
+          <div 
+            className="flex flex-col"
+            style={{ gap: '8px' }}
+          >
             {remainingProjects.map((project, index) => (
               <div
                 key={project.id}
-                className="bento-block block-cursor flex flex-1 flex-col justify-between rounded-2xl p-3"
+                className="bento-block block-cursor flex flex-1 flex-col justify-center rounded-2xl"
                 style={{
                   backgroundColor: project.bg,
                   border: project.border,
+                  padding: '10px',
                   opacity: 0,
                   animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
                   animationDelay: `${index * 60}ms`,
+                  willChange: 'transform, opacity',
                 }}
                 onClick={() => {
                   setSelectedProject(project.id)
@@ -184,14 +210,14 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
                 }}
               >
                 <p 
-                  className={`${project.nameFont} text-[0.9rem]`}
-                  style={{ color: project.nameColor }}
+                  className={`${project.nameFont}`}
+                  style={{ color: project.nameColor, fontSize: '0.75rem' }}
                 >
                   {project.name}
                 </p>
                 <p 
-                  className="font-sans text-[0.6rem]"
-                  style={{ color: project.labelColor }}
+                  className="font-sans mt-0.5"
+                  style={{ color: project.labelColor, fontSize: '0.55rem' }}
                 >
                   {t(project.labelKey)}
                 </p>
@@ -200,16 +226,18 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
             
             {/* Home button */}
             <div
-              className="bento-block block-cursor flex flex-1 items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8] p-3"
+              className="bento-block block-cursor flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-[#F5F6F8]"
               style={{
+                padding: '10px',
                 opacity: 0,
                 animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
                 animationDelay: `${4 * 60}ms`,
+                willChange: 'transform, opacity',
               }}
               onClick={onBack}
             >
-              <ArrowLeft size={18} color="#8C8C8C" />
-              <span className="font-sans text-[0.8rem] font-medium text-[#8C8C8C]">
+              <ArrowLeft size={16} color="#8C8C8C" />
+              <span className="font-sans font-medium text-[#8C8C8C]" style={{ fontSize: '0.7rem' }}>
                 {t('home')}
               </span>
             </div>
@@ -218,102 +246,151 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
           {/* Right panel - detail */}
           {selectedProjectData && (
             <div 
-              className="flex flex-col rounded-2xl bg-[#F5F6F8] p-6"
+              className="flex flex-col rounded-2xl bg-[#F5F6F8]"
               style={{
+                padding: '16px',
                 opacity: 0,
                 animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
                 animationDelay: '100ms',
+                willChange: 'transform, opacity',
               }}
             >
-              {/* Header */}
+              {/* Header row */}
               <div className="flex items-start justify-between">
                 <div>
                   <h2 
-                    className={`${selectedProjectData.nameFont} text-[2rem]`}
-                    style={{ color: selectedProjectData.nameColor }}
+                    className={`${selectedProjectData.nameFont}`}
+                    style={{ color: selectedProjectData.nameColor, fontSize: '1.5rem' }}
                   >
                     {selectedProjectData.name}
                   </h2>
-                  <p className="mt-1 font-sans text-[0.9rem] text-[#8C8C8C]">
+                  <p className="mt-0.5 font-sans text-[#8C8C8C]" style={{ fontSize: '0.75rem' }}>
                     {t(selectedProjectData.subtitleKey)}
                   </p>
                 </div>
                 <img 
                   id="site-logo-portfolio" 
                   src="/logo-placeholder.svg" 
-                  width={80} 
-                  height={27} 
+                  width={60} 
+                  height={20} 
                   alt="MY.SITE" 
                 />
               </div>
 
-              {/* Palette */}
-              <div className="mt-4 flex items-center gap-4">
-                {selectedProjectData.swatches.map((color, i) => (
-                  <div key={i} className="flex flex-col items-center gap-1">
-                    <div 
-                      className="h-5 w-5 rounded-full"
-                      style={{ backgroundColor: color, border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined }}
-                    />
-                    <span className="font-mono text-[0.7rem] text-[#8C8C8C]">
-                      {color}
-                    </span>
-                  </div>
-                ))}
+              {/* Palette + Toggle row */}
+              <div className="mt-3 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  {selectedProjectData.swatches.map((color, i) => (
+                    <div key={i} className="flex flex-col items-center gap-0.5">
+                      <div 
+                        className="rounded-full"
+                        style={{ 
+                          width: '14px', 
+                          height: '14px',
+                          backgroundColor: color, 
+                          border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined 
+                        }}
+                      />
+                      <span className="font-mono text-[#8C8C8C]" style={{ fontSize: '0.55rem' }}>
+                        {color}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="flex gap-1">
+                  <Button
+                    variant="ghost"
+                    className={`rounded-lg px-3 py-1 font-sans ${
+                      viewMode === 'web' 
+                        ? 'bg-white font-semibold text-[#2D2D2D]' 
+                        : 'text-[#C4C4C4]'
+                    }`}
+                    style={{ fontSize: '0.75rem' }}
+                    onClick={() => setViewMode('web')}
+                  >
+                    {t('web')}
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className={`rounded-lg px-3 py-1 font-sans ${
+                      viewMode === 'mobile' 
+                        ? 'bg-white font-semibold text-[#2D2D2D]' 
+                        : 'text-[#C4C4C4]'
+                    }`}
+                    style={{ fontSize: '0.75rem' }}
+                    onClick={() => setViewMode('mobile')}
+                  >
+                    {t('mobile')}
+                  </Button>
+                </div>
               </div>
 
-              {/* Toggle */}
-              <div className="mt-4 flex gap-2">
-                <Button
-                  variant="ghost"
-                  className={`rounded-lg px-4 py-2 font-sans text-[0.85rem] ${
-                    viewMode === 'web' 
-                      ? 'bg-white font-semibold text-[#2D2D2D]' 
-                      : 'text-[#C4C4C4]'
-                  }`}
-                  onClick={() => setViewMode('web')}
-                >
-                  {t('web')}
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={`rounded-lg px-4 py-2 font-sans text-[0.85rem] ${
-                    viewMode === 'mobile' 
-                      ? 'bg-white font-semibold text-[#2D2D2D]' 
-                      : 'text-[#C4C4C4]'
-                  }`}
-                  onClick={() => setViewMode('mobile')}
-                >
-                  {t('mobile')}
-                </Button>
-              </div>
-
-              {/* Mockup area */}
-              <div className="mt-4 flex flex-1 items-center justify-center">
+              {/* Mockup area - takes remaining space */}
+              <div className="mt-3 flex flex-1 items-center justify-center">
                 {viewMode === 'web' ? (
                   <div 
                     id={`portfolio-${selectedProjectData.id}-web`}
-                    className="w-full rounded-xl border border-[#E8E9EC]"
+                    className="relative w-full overflow-hidden rounded-xl border border-[#E8E9EC]"
                     style={{ 
                       backgroundColor: selectedProjectData.mockupBg,
-                      aspectRatio: '16/10',
+                      height: 'calc(100% - 40px)',
                     }}
-                  />
+                  >
+                    {/* Browser chrome */}
+                    <div 
+                      className="absolute top-0 left-0 right-0 flex items-center border-b border-[#E8E9EC] bg-[#F5F6F8]"
+                      style={{ 
+                        height: '28px', 
+                        padding: '0 12px',
+                        borderRadius: '12px 12px 0 0',
+                        gap: '6px',
+                      }}
+                    >
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#FF5F57' }} />
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
+                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#28C840' }} />
+                      <span className="ml-auto font-sans text-[#C4C4C4]" style={{ fontSize: '0.6rem' }}>
+                        my-site-preview
+                      </span>
+                    </div>
+                    {/* Live site content area */}
+                    <div style={{ paddingTop: '28px', height: '100%' }}>
+                      {/* Live site component will be embedded here later */}
+                    </div>
+                  </div>
                 ) : (
                   <div 
                     id={`portfolio-${selectedProjectData.id}-mobile`}
-                    className="rounded-xl border border-[#E8E9EC]"
+                    className="relative overflow-hidden"
                     style={{ 
+                      width: '220px',
+                      height: 'calc(100% - 20px)',
                       backgroundColor: selectedProjectData.mockupBg,
-                      width: '35%',
-                      aspectRatio: '9/19',
+                      borderRadius: '24px',
+                      border: '3px solid #2D2D2D',
                     }}
-                  />
+                  >
+                    {/* Phone notch */}
+                    <div 
+                      className="absolute top-0 left-0 right-0 flex items-center justify-center"
+                      style={{ 
+                        height: '24px', 
+                        backgroundColor: selectedProjectData.mockupBg,
+                      }}
+                    >
+                      <div style={{ width: '40px', height: '4px', borderRadius: '2px', backgroundColor: '#E8E9EC' }} />
+                    </div>
+                    {/* Live site content area */}
+                    <div style={{ paddingTop: '24px', height: '100%' }}>
+                      {/* Live site component will be embedded here later */}
+                    </div>
+                  </div>
                 )}
               </div>
 
               {/* Disclaimer */}
-              <p className="mt-4 text-center font-serif text-[0.75rem] italic text-[#C4C4C4]">
+              <p className="mt-2 text-center font-serif italic text-[#C4C4C4]" style={{ fontSize: '0.65rem' }}>
                 {t('portfolioDisclaimer')}
               </p>
             </div>

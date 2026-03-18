@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Menu, Globe, ArrowLeft, Phone, Mail, Building2, CheckCircle, Zap, Target, Award, Sparkles } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Menu, Globe, ArrowLeft, Phone, Mail, Building2, CheckCircle, Zap, Target, Award, Sparkles, ArrowRight } from 'lucide-react'
 import { useLanguage } from '@/lib/language-context'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,7 +19,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 
-// Hero names for mobile
+// Hero names for mobile - only 5
 const businessNames = [
   { prefix: 'my.', name: 'site' },
   { prefix: 'my.', name: 'restaurant' },
@@ -132,12 +132,12 @@ export function MobileMenu() {
   const { language, setLanguage, t } = useLanguage()
 
   // Cycle highlight for hero
-  useState(() => {
+  useEffect(() => {
     const interval = setInterval(() => {
       setHighlightedIndex(prev => (prev + 1) % businessNames.length)
     }, 2000)
     return () => clearInterval(interval)
-  })
+  }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -145,26 +145,28 @@ export function MobileMenu() {
     setActiveDialog(null)
   }
 
+  const selectedProject = expandedProject ? projects.find(p => p.id === expandedProject) : null
+
   return (
     <div className="flex min-h-screen flex-col gap-3 overflow-y-auto pb-6">
-      {/* Mobile Header */}
-      <div className="flex items-center justify-between rounded-2xl bg-[#F5F6F8] p-4">
+      {/* Mobile Header - 44px */}
+      <div className="flex h-11 shrink-0 items-center justify-between rounded-2xl bg-[#F5F6F8] px-4">
         <img 
           src="/logo-placeholder.svg" 
-          width={80} 
-          height={27} 
+          width={70} 
+          height={23} 
           alt="MY.SITE" 
         />
         
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <button className="rounded-xl bg-white p-2">
-              <Menu size={24} color="#2D2D2D" />
+              <Menu size={20} color="#2D2D2D" />
             </button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-[280px] bg-white p-0">
+          <SheetContent side="right" className="w-[260px] bg-white p-0">
             <SheetHeader className="border-b border-[#E8E9EC] p-4">
-              <SheetTitle className="text-left font-sans text-[1rem] font-semibold text-[#2D2D2D]">
+              <SheetTitle className="text-left font-sans text-[0.9rem] font-semibold text-[#2D2D2D]">
                 Menu
               </SheetTitle>
             </SheetHeader>
@@ -175,7 +177,7 @@ export function MobileMenu() {
                   setActiveDialog('portfolio')
                   setIsOpen(false)
                 }}
-                className="border-b border-[#E8E9EC] py-4 text-left font-sans text-[1rem] font-medium text-[#2D2D2D]"
+                className="border-b border-[#E8E9EC] py-3 text-left font-sans text-[0.9rem] font-medium text-[#2D2D2D]"
               >
                 {t('portfolio')}
               </button>
@@ -184,7 +186,7 @@ export function MobileMenu() {
                   setActiveDialog('plans')
                   setIsOpen(false)
                 }}
-                className="border-b border-[#E8E9EC] py-4 text-left font-sans text-[1rem] font-medium text-[#2D2D2D]"
+                className="border-b border-[#E8E9EC] py-3 text-left font-sans text-[0.9rem] font-medium text-[#2D2D2D]"
               >
                 {t('plans')}
               </button>
@@ -193,15 +195,15 @@ export function MobileMenu() {
                   setActiveDialog('contact')
                   setIsOpen(false)
                 }}
-                className="border-b border-[#E8E9EC] py-4 text-left font-sans text-[1rem] font-medium text-[#2D2D2D]"
+                className="border-b border-[#E8E9EC] py-3 text-left font-sans text-[0.9rem] font-medium text-[#2D2D2D]"
               >
                 {t('contact')}
               </button>
               
               {/* Language toggle */}
-              <div className="mt-6 flex items-center gap-3">
-                <Globe size={18} color="#4DE8D8" />
-                <div className="flex items-center gap-2 font-sans text-[0.9rem]">
+              <div className="mt-5 flex items-center gap-3">
+                <Globe size={16} color="#4DE8D8" />
+                <div className="flex items-center gap-2 font-sans text-[0.85rem]">
                   <button
                     onClick={() => setLanguage('en')}
                     className={language === 'en' ? 'font-semibold text-[#2D2D2D]' : 'text-[#C4C4C4]'}
@@ -222,25 +224,26 @@ export function MobileMenu() {
         </Sheet>
       </div>
 
-      {/* Hero Block - Mobile */}
-      <div className="relative min-h-[280px] rounded-2xl bg-[#F5F6F8] p-5">
+      {/* Hero Block - Mobile (5 names, 1.2rem) */}
+      <div className="relative rounded-2xl bg-[#F5F6F8] p-5">
+        {/* Only Sparkles icon */}
         <Sparkles 
           className="absolute right-4 top-4" 
-          size={18} 
+          size={16} 
           color="#4DE8D8" 
         />
-        <div className="flex h-full flex-col justify-center gap-1">
+        <div className="flex flex-col gap-0.5">
           {businessNames.map((item, index) => (
             <div key={index} className="flex items-baseline">
               <span 
-                className="font-serif text-[1.4rem] font-light italic transition-colors duration-200"
-                style={{ color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D' }}
+                className="font-serif font-light italic transition-colors duration-200"
+                style={{ fontSize: '1.2rem', color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D' }}
               >
                 {item.prefix}
               </span>
               <span 
-                className="font-sans text-[1.4rem] font-medium transition-colors duration-200"
-                style={{ color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D' }}
+                className="font-sans font-medium transition-colors duration-200"
+                style={{ fontSize: '1.2rem', color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D' }}
               >
                 {item.name}
               </span>
@@ -249,71 +252,69 @@ export function MobileMenu() {
         </div>
       </div>
 
-      {/* Portfolio Block - Mobile */}
+      {/* Portfolio Block - Compact */}
       <div 
-        className="flex items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8] p-5"
+        className="flex items-center justify-between rounded-2xl bg-[#F5F6F8] p-5"
         onClick={() => setActiveDialog('portfolio')}
       >
-        <span className="font-sans text-[1.2rem] font-semibold text-[#2D2D2D]">
+        <span className="font-sans text-[1rem] font-semibold text-[#2D2D2D]">
           {t('portfolio')}
         </span>
+        <ArrowRight size={18} color="#8C8C8C" />
       </div>
 
-      {/* Plans Block - Mobile */}
+      {/* Plans Block - Compact */}
       <div 
-        className="rounded-2xl bg-[#F5F6F8] p-5"
+        className="flex items-center justify-between rounded-2xl bg-[#F5F6F8] p-5"
         onClick={() => setActiveDialog('plans')}
       >
-        <span className="font-sans text-[1.2rem] font-semibold text-[#2D2D2D]">
+        <span className="font-sans text-[1rem] font-semibold text-[#2D2D2D]">
           {t('plans')}
         </span>
-        <div className="mt-2 flex flex-col gap-0.5">
-          <span className="font-sans text-[0.85rem] text-[#8C8C8C]">{t('starter')}</span>
-          <span className="font-sans text-[0.85rem] text-[#8C8C8C]">{t('standard')}</span>
-          <span className="font-sans text-[0.85rem] text-[#8C8C8C]">{t('pro')}</span>
-        </div>
+        <ArrowRight size={18} color="#8C8C8C" />
       </div>
 
-      {/* Contact Block - Mobile */}
+      {/* Contact Block - Compact */}
       <div 
-        className="rounded-2xl bg-[#F5F6F8] p-5"
+        className="flex items-center justify-between rounded-2xl bg-[#F5F6F8] p-5"
         onClick={() => setActiveDialog('contact')}
       >
         <div className="flex items-baseline gap-1">
-          <span className="font-serif text-[1.3rem] font-light italic text-[#2D2D2D]">
+          <span className="font-serif text-[1.1rem] font-light italic text-[#2D2D2D]">
             my.
           </span>
-          <span className="font-mono text-[1rem] text-[#C4C4C4]">
-            ________
+          <span className="font-mono text-[0.9rem] text-[#C4C4C4]">
+            ____
           </span>
         </div>
-        <p className="mt-1 font-sans text-[0.7rem] text-[#C4C4C4]">
-          {t('tellUsYourBusiness')}
-        </p>
+        <ArrowRight size={18} color="#8C8C8C" />
       </div>
 
-      {/* Portfolio Dialog */}
+      {/* Portfolio Dialog - slides up from bottom */}
       <Dialog open={activeDialog === 'portfolio'} onOpenChange={(open) => !open && setActiveDialog(null)}>
-        <DialogContent className="h-[90vh] max-w-[95vw] overflow-y-auto rounded-t-2xl p-0">
+        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom">
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
             <button 
-              onClick={() => setActiveDialog(null)}
-              className="flex items-center gap-2 font-sans text-[0.9rem] font-medium text-[#8C8C8C]"
+              onClick={() => {
+                setExpandedProject(null)
+                setActiveDialog(null)
+              }}
+              className="flex items-center gap-2 font-sans text-[0.85rem] font-medium text-[#8C8C8C]"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={16} />
               {t('back')}
             </button>
-            <DialogTitle className="font-sans text-[1rem] font-semibold text-[#2D2D2D]">
+            <DialogTitle className="font-sans text-[0.9rem] font-semibold text-[#2D2D2D]">
               {t('portfolio')}
             </DialogTitle>
-            <div className="w-16" />
+            <div className="w-14" />
           </DialogHeader>
           
-          <div className="flex flex-col gap-4 p-4">
+          <div className="flex flex-col gap-3 p-4">
             {projects.map((project) => (
               <div key={project.id}>
                 <div
-                  className="rounded-2xl p-4"
+                  className="rounded-2xl p-4 transition-all duration-300"
                   style={{
                     backgroundColor: project.bg,
                     border: project.border,
@@ -321,54 +322,70 @@ export function MobileMenu() {
                   onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
                 >
                   <p 
-                    className={`${project.nameFont} text-[1.1rem]`}
-                    style={{ color: project.nameColor }}
+                    className={`${project.nameFont}`}
+                    style={{ color: project.nameColor, fontSize: '1rem' }}
                   >
                     {project.name}
                   </p>
-                  <div className="mt-2 flex gap-1.5">
+                  <div className="mt-1.5 flex gap-1">
                     {project.swatches.map((color, i) => (
                       <div 
                         key={i}
-                        className="h-3 w-3 rounded-full"
-                        style={{ backgroundColor: color, border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined }}
+                        className="rounded-full"
+                        style={{ 
+                          width: '10px', 
+                          height: '10px',
+                          backgroundColor: color, 
+                          border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined 
+                        }}
                       />
                     ))}
                   </div>
                   <p 
-                    className="mt-2 font-sans text-[0.7rem]"
-                    style={{ color: project.labelColor }}
+                    className="mt-1.5 font-sans"
+                    style={{ color: project.labelColor, fontSize: '0.65rem' }}
                   >
                     {t(project.labelKey)}
                   </p>
                 </div>
                 
-                {/* Expanded detail */}
-                {expandedProject === project.id && (
+                {/* Expanded detail - pushes others down */}
+                <div 
+                  className="overflow-hidden transition-all duration-300"
+                  style={{ 
+                    maxHeight: expandedProject === project.id ? '500px' : '0',
+                    opacity: expandedProject === project.id ? 1 : 0,
+                  }}
+                >
                   <div className="mt-2 rounded-2xl bg-[#F5F6F8] p-4">
-                    <p className="font-sans text-[0.85rem] text-[#8C8C8C]">
+                    <p className="font-sans text-[0.8rem] text-[#8C8C8C]">
                       {t(project.subtitleKey)}
                     </p>
                     
-                    <div className="mt-3 flex items-center gap-3">
+                    <div className="mt-2 flex items-center gap-2">
                       {project.swatches.map((color, i) => (
-                        <div key={i} className="flex flex-col items-center gap-1">
+                        <div key={i} className="flex flex-col items-center gap-0.5">
                           <div 
-                            className="h-4 w-4 rounded-full"
-                            style={{ backgroundColor: color, border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined }}
+                            className="rounded-full"
+                            style={{ 
+                              width: '12px', 
+                              height: '12px',
+                              backgroundColor: color, 
+                              border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined 
+                            }}
                           />
-                          <span className="font-mono text-[0.6rem] text-[#8C8C8C]">
+                          <span className="font-mono text-[#8C8C8C]" style={{ fontSize: '0.5rem' }}>
                             {color}
                           </span>
                         </div>
                       ))}
                     </div>
                     
-                    <div className="mt-3 flex gap-2">
+                    <div className="mt-2 flex gap-2">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className={viewMode === 'web' ? 'bg-white font-semibold text-[#2D2D2D]' : 'text-[#C4C4C4]'}
+                        className={`text-[0.75rem] ${viewMode === 'web' ? 'bg-white font-semibold text-[#2D2D2D]' : 'text-[#C4C4C4]'}`}
                         onClick={(e) => {
                           e.stopPropagation()
                           setViewMode('web')
@@ -379,7 +396,7 @@ export function MobileMenu() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className={viewMode === 'mobile' ? 'bg-white font-semibold text-[#2D2D2D]' : 'text-[#C4C4C4]'}
+                        className={`text-[0.75rem] ${viewMode === 'mobile' ? 'bg-white font-semibold text-[#2D2D2D]' : 'text-[#C4C4C4]'}`}
                         onClick={(e) => {
                           e.stopPropagation()
                           setViewMode('mobile')
@@ -389,34 +406,62 @@ export function MobileMenu() {
                       </Button>
                     </div>
                     
-                    <div className="mt-3 flex justify-center">
+                    <div className="mt-2 flex justify-center">
                       {viewMode === 'web' ? (
                         <div 
                           id={`portfolio-${project.id}-web-mobile`}
-                          className="w-full rounded-xl border border-[#E8E9EC]"
+                          className="relative w-full overflow-hidden rounded-xl border border-[#E8E9EC]"
                           style={{ 
                             backgroundColor: project.mockupBg,
                             aspectRatio: '16/10',
                           }}
-                        />
+                        >
+                          {/* Browser chrome */}
+                          <div 
+                            className="absolute top-0 left-0 right-0 flex items-center border-b border-[#E8E9EC] bg-[#F5F6F8]"
+                            style={{ 
+                              height: '20px', 
+                              padding: '0 8px',
+                              borderRadius: '12px 12px 0 0',
+                              gap: '4px',
+                            }}
+                          >
+                            <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#FF5F57' }} />
+                            <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
+                            <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#28C840' }} />
+                          </div>
+                        </div>
                       ) : (
                         <div 
                           id={`portfolio-${project.id}-mobile-mobile`}
-                          className="rounded-xl border border-[#E8E9EC]"
+                          className="relative overflow-hidden"
                           style={{ 
                             backgroundColor: project.mockupBg,
-                            width: '50%',
+                            width: '120px',
                             aspectRatio: '9/19',
+                            borderRadius: '16px',
+                            border: '2px solid #2D2D2D',
                           }}
-                        />
+                        >
+                          {/* Phone notch */}
+                          <div 
+                            className="absolute top-0 left-0 right-0 flex items-center justify-center"
+                            style={{ 
+                              height: '16px', 
+                              backgroundColor: project.mockupBg,
+                            }}
+                          >
+                            <div style={{ width: '30px', height: '3px', borderRadius: '2px', backgroundColor: '#E8E9EC' }} />
+                          </div>
+                        </div>
                       )}
                     </div>
                     
-                    <p className="mt-3 text-center font-serif text-[0.7rem] italic text-[#C4C4C4]">
+                    <p className="mt-2 text-center font-serif text-[0.6rem] italic text-[#C4C4C4]">
                       {t('portfolioDisclaimer')}
                     </p>
                   </div>
-                )}
+                </div>
               </div>
             ))}
           </div>
@@ -425,42 +470,42 @@ export function MobileMenu() {
 
       {/* Plans Dialog */}
       <Dialog open={activeDialog === 'plans'} onOpenChange={(open) => !open && setActiveDialog(null)}>
-        <DialogContent className="h-[90vh] max-w-[95vw] overflow-y-auto rounded-t-2xl p-0">
+        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom">
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
             <button 
               onClick={() => setActiveDialog(null)}
-              className="flex items-center gap-2 font-sans text-[0.9rem] font-medium text-[#8C8C8C]"
+              className="flex items-center gap-2 font-sans text-[0.85rem] font-medium text-[#8C8C8C]"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={16} />
               {t('back')}
             </button>
-            <DialogTitle className="font-sans text-[1rem] font-semibold text-[#2D2D2D]">
+            <DialogTitle className="font-sans text-[0.9rem] font-semibold text-[#2D2D2D]">
               {t('plans')}
             </DialogTitle>
-            <div className="w-16" />
+            <div className="w-14" />
           </DialogHeader>
           
-          <div className="flex flex-col gap-4 p-4">
+          <div className="flex flex-col gap-3 p-4">
             {plans.map((plan) => {
               const Icon = plan.icon
               return (
                 <div
                   key={plan.id}
-                  className="flex flex-col rounded-2xl border border-[#E8E9EC] bg-white p-5"
+                  className="flex flex-col rounded-2xl border border-[#E8E9EC] bg-white p-4"
                 >
-                  <Icon size={28} color="#4DE8D8" />
-                  <h3 className="mt-3 font-sans text-[1.2rem] font-semibold text-[#2D2D2D]">
+                  <Icon size={24} color="#4DE8D8" />
+                  <h3 className="mt-2 font-sans text-[1.1rem] font-semibold text-[#2D2D2D]">
                     {t(plan.titleKey)}
                   </h3>
-                  <p className="mt-2 font-sans text-[0.85rem] leading-relaxed text-[#8C8C8C]">
+                  <p className="mt-1 font-sans text-[0.8rem] leading-relaxed text-[#8C8C8C]">
                     {t(plan.descKey)}
                   </p>
                   
-                  <div className="mt-4 flex flex-col gap-2">
+                  <div className="mt-3 flex flex-col gap-1.5">
                     {plan.features.map((feature, i) => (
                       <div key={i} className="flex items-center gap-2">
-                        <CheckCircle size={16} color="#4DE8D8" />
-                        <span className="font-sans text-[0.8rem] text-[#2D2D2D]">
+                        <CheckCircle size={14} color="#4DE8D8" />
+                        <span className="font-sans text-[0.75rem] text-[#2D2D2D]">
                           {t(feature)}
                         </span>
                       </div>
@@ -469,7 +514,7 @@ export function MobileMenu() {
                   
                   <Button
                     onClick={() => setActiveDialog('contact')}
-                    className="mt-4 w-full rounded-xl bg-[#4DE8D8] py-2.5 font-sans text-[0.9rem] font-medium text-white hover:bg-[#3BCFBF]"
+                    className="mt-3 w-full rounded-xl bg-[#4DE8D8] py-2 font-sans text-[0.85rem] font-medium text-white hover:bg-[#3BCFBF]"
                   >
                     {t('requestAnalysis')}
                   </Button>
@@ -482,25 +527,25 @@ export function MobileMenu() {
 
       {/* Contact Dialog */}
       <Dialog open={activeDialog === 'contact'} onOpenChange={(open) => !open && setActiveDialog(null)}>
-        <DialogContent className="h-[90vh] max-w-[95vw] overflow-y-auto rounded-t-2xl p-0">
+        <DialogContent className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0 data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom">
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
             <button 
               onClick={() => setActiveDialog(null)}
-              className="flex items-center gap-2 font-sans text-[0.9rem] font-medium text-[#8C8C8C]"
+              className="flex items-center gap-2 font-sans text-[0.85rem] font-medium text-[#8C8C8C]"
             >
-              <ArrowLeft size={18} />
+              <ArrowLeft size={16} />
               {t('back')}
             </button>
-            <DialogTitle className="font-sans text-[1rem] font-semibold text-[#2D2D2D]">
+            <DialogTitle className="font-sans text-[0.9rem] font-semibold text-[#2D2D2D]">
               {t('contact')}
             </DialogTitle>
-            <div className="w-16" />
+            <div className="w-14" />
           </DialogHeader>
           
           <div className="p-4">
-            <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-              <div className="flex items-baseline gap-2 border-b border-[#E8E9EC] pb-4">
-                <span className="font-serif text-[1.5rem] font-light italic text-[#2D2D2D]">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <div className="flex items-baseline gap-2 border-b border-[#E8E9EC] pb-3">
+                <span className="font-serif text-[1.3rem] font-light italic text-[#2D2D2D]">
                   my.
                 </span>
                 <input
@@ -509,46 +554,46 @@ export function MobileMenu() {
                   onChange={(e) => setBusinessName(e.target.value)}
                   placeholder="business"
                   autoFocus
-                  className="flex-1 bg-transparent font-mono text-[1.2rem] text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
+                  className="flex-1 bg-transparent font-mono text-[1.1rem] text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
                 />
               </div>
 
-              <div className="flex items-center gap-3 border-b border-[#E8E9EC] pb-3">
-                <Phone size={18} color="#4DE8D8" />
+              <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
+                <Phone size={16} color="#4DE8D8" />
                 <Input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder={t('phonePlaceholder')}
-                  className="border-none bg-transparent font-sans text-[1rem] shadow-none focus-visible:ring-0"
+                  className="border-none bg-transparent font-sans text-[0.9rem] shadow-none focus-visible:ring-0"
                 />
               </div>
 
-              <div className="flex items-center gap-3 border-b border-[#E8E9EC] pb-3">
-                <Mail size={18} color="#4DE8D8" />
+              <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
+                <Mail size={16} color="#4DE8D8" />
                 <Input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder={t('emailPlaceholder')}
-                  className="border-none bg-transparent font-sans text-[1rem] shadow-none focus-visible:ring-0"
+                  className="border-none bg-transparent font-sans text-[0.9rem] shadow-none focus-visible:ring-0"
                 />
               </div>
 
-              <div className="flex items-center gap-3 border-b border-[#E8E9EC] pb-3">
-                <Building2 size={18} color="#4DE8D8" />
+              <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
+                <Building2 size={16} color="#4DE8D8" />
                 <Input
                   type="text"
                   value={businessType}
                   onChange={(e) => setBusinessType(e.target.value)}
                   placeholder={t('businessTypePlaceholder')}
-                  className="border-none bg-transparent font-sans text-[1rem] shadow-none focus-visible:ring-0"
+                  className="border-none bg-transparent font-sans text-[0.9rem] shadow-none focus-visible:ring-0"
                 />
               </div>
 
               <Button
                 type="submit"
-                className="mt-2 w-full rounded-xl bg-[#4DE8D8] py-5 font-sans text-[1rem] font-medium text-white hover:bg-[#3BCFBF]"
+                className="mt-4 w-full rounded-xl bg-[#4DE8D8] py-4 font-sans text-[0.9rem] font-medium text-white hover:bg-[#3BCFBF]"
               >
                 {t('start')}
               </Button>
