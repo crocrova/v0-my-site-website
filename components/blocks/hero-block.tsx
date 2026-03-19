@@ -18,14 +18,12 @@ export function HeroBlock() {
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
 
   useEffect(() => {
-    // Sequential fade-in animation with 60ms stagger
     businessNames.forEach((_, index) => {
       setTimeout(() => {
         setLoadedItems(prev => [...prev, index])
       }, index * 60)
     })
 
-    // Start highlight cycling after all items loaded
     const totalLoadTime = businessNames.length * 60 + 300
     const highlightTimeout = setTimeout(() => {
       setHighlightedIndex(0)
@@ -37,7 +35,6 @@ export function HeroBlock() {
   useEffect(() => {
     if (highlightedIndex === null) return
 
-    // Cycle every 2 seconds
     const interval = setInterval(() => {
       setHighlightedIndex(prev => 
         prev === null ? 0 : (prev + 1) % businessNames.length
@@ -52,21 +49,20 @@ export function HeroBlock() {
       className="bento-block relative flex h-full w-full flex-col justify-center rounded-2xl bg-[#F5F6F8]"
       style={{ padding: '16px' }}
     >
-      {/* Only Sparkles icon - no other decorative elements */}
+      {/* Sparkles icon - TOP LEFT */}
       <Sparkles 
         className="absolute"
-        style={{ right: '16px', top: '16px' }}
-        size={18} 
+        style={{ left: '16px', top: '16px' }}
+        size={20} 
         color="#4DE8D8" 
       />
       
-      <div className="flex flex-col" style={{ gap: '2px' }}>
+      <div className="flex flex-col" style={{ gap: '2px', marginTop: '24px' }}>
         {businessNames.map((item, index) => (
           <div
             key={index}
             className="hero-name flex items-baseline"
             style={{
-              animationDelay: `${index * 60}ms`,
               opacity: loadedItems.includes(index) ? 1 : 0,
               transition: 'opacity 200ms ease-out',
             }}
