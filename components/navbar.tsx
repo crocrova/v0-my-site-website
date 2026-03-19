@@ -13,50 +13,65 @@ export function Navbar({ onPortfolioClick, onPlansClick, onContactClick }: Navba
   const { language, setLanguage, t } = useLanguage()
 
   return (
-    <div 
-      className="flex shrink-0 items-center justify-between rounded-2xl bg-[#F5F6F8]"
-      style={{ height: '48px', padding: '0 16px' }}
-    >
-      {/* Logo placeholder */}
-      <div 
-        id="navbar-logo"
-        className="flex h-8 w-20 items-center justify-center rounded bg-[#E8E9EC]"
-      >
-        <span className="font-sans text-[0.6rem] font-medium text-[#8C8C8C]">LOGO</span>
-      </div>
+    <div className="flex h-12 shrink-0 items-center justify-between rounded-2xl bg-[#F5F6F8] px-5">
+      {/* Logo */}
+      <img 
+        id="site-logo-nav" 
+        src="/logo-placeholder.svg" 
+        width={100} 
+        height={33} 
+        alt="MY.SITE" 
+      />
 
       {/* Navigation links */}
-      <nav className="flex items-center gap-5">
+      <nav className="flex items-center gap-6">
         <button
           onClick={onPortfolioClick}
-          className="font-sans text-[0.8rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
+          className="font-sans text-[0.85rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
         >
           {t('portfolio')}
         </button>
         <button
           onClick={onPlansClick}
-          className="font-sans text-[0.8rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
+          className="font-sans text-[0.85rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
         >
           {t('plans')}
         </button>
         <button
           onClick={onContactClick}
-          className="font-sans text-[0.8rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
+          className="font-sans text-[0.85rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
         >
           {t('contact')}
         </button>
       </nav>
 
       {/* Language toggle */}
-      <button
-        onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
-        className="flex items-center gap-1.5 rounded-lg px-2 py-1 transition-colors hover:bg-[#E8E9EC]"
-      >
-        <Globe size={16} className="text-[#4DE8D8]" />
-        <span className="font-sans text-[0.75rem] font-medium text-[#2D2D2D]">
-          {language.toUpperCase()}
-        </span>
-      </button>
+      <div className="flex items-center gap-2">
+        <Globe size={18} color="#4DE8D8" />
+        <div className="flex items-center gap-1 font-sans text-[0.8rem]">
+          <button
+            onClick={() => setLanguage('en')}
+            className={`transition-colors ${
+              language === 'en' 
+                ? 'font-semibold text-[#2D2D2D]' 
+                : 'text-[#C4C4C4] hover:text-[#8C8C8C]'
+            }`}
+          >
+            EN
+          </button>
+          <span className="text-[#C4C4C4]">/</span>
+          <button
+            onClick={() => setLanguage('es')}
+            className={`transition-colors ${
+              language === 'es' 
+                ? 'font-semibold text-[#2D2D2D]' 
+                : 'text-[#C4C4C4] hover:text-[#8C8C8C]'
+            }`}
+          >
+            ES
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

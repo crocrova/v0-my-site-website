@@ -40,50 +40,46 @@ const translations: Record<string, Record<Language, string>> = {
   cortezaSubtitle: { en: 'Fine Dining · La Paz', es: 'Alta Cocina · La Paz' },
   castilloSubtitle: { en: 'Law Firm · La Paz / Los Cabos', es: 'Despacho Legal · La Paz / Los Cabos' },
   
-  // Plans - renamed
-  planStandard: { en: 'Standard', es: 'Standard' },
-  planPro: { en: 'Pro', es: 'Pro' },
-  planEnterprise: { en: 'Enterprise', es: 'Enterprise' },
-  
-  planStandardDesc: { 
-    en: 'A professional landing page. Ideal for businesses starting their digital presence.', 
+  // Plans
+  starter: { en: 'Starter', es: 'Starter' },
+  standard: { en: 'Standard', es: 'Standard' },
+  pro: { en: 'Pro', es: 'Pro' },
+  starterDesc: { 
+    en: 'One powerful landing page. Perfect for businesses starting their digital presence.', 
     es: 'Una landing page profesional. Ideal para negocios que inician su presencia digital.' 
   },
-  planProDesc: { 
+  standardDesc: { 
     en: 'Up to 5 pages. For growing businesses that need a complete website.', 
     es: 'Hasta 5 páginas. Para negocios en crecimiento que necesitan un sitio completo.' 
   },
-  planEnterpriseDesc: { 
-    en: 'Up to 12 pages. Complete digital experience for established brands.', 
+  proDesc: { 
+    en: 'Up to 12 pages. Full digital experience for established brands.', 
     es: 'Hasta 12 páginas. Experiencia digital completa para marcas establecidas.' 
   },
+  requestAnalysis: { en: 'Request Analysis', es: 'Solicitar Análisis' },
   
   // Plan features
-  featureResponsive: { en: 'Responsive design', es: 'Diseño responsive' },
-  featureSEO: { en: 'SEO optimization', es: 'Optimización SEO' },
-  featureContact: { en: 'Contact form', es: 'Formulario de contacto' },
-  featureMobileFirst: { en: 'Mobile-first', es: 'Mobile-first' },
+  starterFeature1: { en: 'Custom responsive design', es: 'Diseño responsive personalizado' },
+  starterFeature2: { en: 'SEO optimization', es: 'Optimización SEO' },
+  starterFeature3: { en: 'Contact form integration', es: 'Integración de formulario de contacto' },
+  starterFeature4: { en: 'Mobile-first approach', es: 'Enfoque mobile-first' },
   
-  featureAllStandard: { en: 'Everything in Standard', es: 'Todo lo de Standard' },
-  featureFivePages: { en: 'Up to 5 pages', es: 'Hasta 5 páginas' },
-  featureBlog: { en: 'Blog or news', es: 'Blog o noticias' },
-  featureAnalytics: { en: 'Analytics', es: 'Analytics' },
+  standardFeature1: { en: 'Everything in Starter', es: 'Todo lo de Starter' },
+  standardFeature2: { en: 'Up to 5 unique pages', es: 'Hasta 5 páginas únicas' },
+  standardFeature3: { en: 'Blog or news section', es: 'Sección de blog o noticias' },
+  standardFeature4: { en: 'Analytics integration', es: 'Integración de analytics' },
   
-  featureAllPro: { en: 'Everything in Pro', es: 'Todo lo de Pro' },
-  featureTwelvePages: { en: 'Up to 12 pages', es: 'Hasta 12 páginas' },
-  featureEcommerce: { en: 'E-commerce', es: 'E-commerce' },
-  featurePrioritySupport: { en: 'Priority support', es: 'Soporte prioritario' },
-  
-  contactUs: { en: 'Contact us', es: 'Contáctanos' },
+  proFeature1: { en: 'Everything in Standard', es: 'Todo lo de Standard' },
+  proFeature2: { en: 'Up to 12 unique pages', es: 'Hasta 12 páginas únicas' },
+  proFeature3: { en: 'E-commerce capabilities', es: 'Capacidades de e-commerce' },
+  proFeature4: { en: 'Priority support', es: 'Soporte prioritario' },
   
   // Contact
-  tellUsYourBusiness: { en: 'Tell us your business name', es: 'Cuéntanos el nombre de tu negocio' },
+  tellUsYourBusiness: { en: 'Tell us your name', es: 'Cuéntanos de tu negocio' },
   phonePlaceholder: { en: '+52...', es: '+52...' },
   emailPlaceholder: { en: 'email', es: 'correo' },
   businessTypePlaceholder: { en: 'restaurant, clinic, hotel...', es: 'restaurante, clínica, hotel...' },
-  messagePlaceholder: { en: 'Additional message (optional)', es: 'Mensaje adicional (opcional)' },
   start: { en: 'Start', es: 'Empezar' },
-  send: { en: 'Send', es: 'Enviar' },
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)

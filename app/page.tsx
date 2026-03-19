@@ -20,18 +20,15 @@ export default function Home() {
 
   return (
     <LanguageProvider>
-      <main 
-        className="h-screen w-screen overflow-hidden bg-white"
-        style={{ padding: '8px' }}
-      >
+      <main className="h-screen w-screen overflow-hidden bg-white p-3">
         {/* Mobile Menu */}
-        <div className="h-full md:hidden">
+        <div className="md:hidden">
           <MobileMenu />
         </div>
 
         {/* Desktop Layout */}
         <div className="hidden h-full w-full flex-col md:flex" style={{ gap: '8px' }}>
-          {/* Navbar - always visible */}
+          {/* Navbar */}
           <Navbar 
             onPortfolioClick={() => setCurrentView('portfolio')}
             onPlansClick={() => setCurrentView('plans')}
@@ -39,23 +36,24 @@ export default function Home() {
           />
 
           {/* Main Content Area */}
-          <div className="relative flex-1 overflow-hidden">
+          <div className="relative flex-1">
             {/* Home View */}
             {currentView === 'home' && (
               <div 
                 className="absolute inset-0 grid grid-cols-[2fr_1fr] grid-rows-[7fr_3fr]"
                 style={{ 
                   gap: '8px',
-                  animation: 'fadeInView 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                 }}
               >
                 {/* Row 1 */}
                 <div 
                   id="hero-block"
-                  className="overflow-hidden"
                   style={{
                     opacity: 0,
-                    animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 0ms forwards',
+                    animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    animationDelay: '0ms',
+                    willChange: 'transform, opacity',
                   }}
                 >
                   <HeroBlock />
@@ -66,7 +64,9 @@ export default function Home() {
                     id="portfolio-block"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 50ms forwards',
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '60ms',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     <PortfolioBlock onClick={() => setCurrentView('portfolio')} />
@@ -75,7 +75,9 @@ export default function Home() {
                     id="plans-block"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 100ms forwards',
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '120ms',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     <PlansBlock onClick={() => setCurrentView('plans')} />
@@ -88,7 +90,9 @@ export default function Home() {
                     id="logo-block"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 150ms forwards',
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '180ms',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     <LogoBlock />
@@ -97,17 +101,21 @@ export default function Home() {
                     id="contact-block-wrapper"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards',
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '240ms',
+                      willChange: 'transform, opacity',
                     }}
                   >
                     <ContactBlock onClick={() => setCurrentView('contact')} />
                   </div>
                   <div 
-                    id="empty-block"
+                    id="language-block"
                     className="rounded-2xl bg-[#F5F6F8]"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 250ms forwards',
+                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                      animationDelay: '300ms',
+                      willChange: 'transform, opacity',
                     }}
                   />
                 </div>
@@ -119,7 +127,7 @@ export default function Home() {
               <div 
                 className="absolute inset-0"
                 style={{
-                  animation: 'fadeInView 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                 }}
               >
                 <PortfolioView onBack={() => setCurrentView('home')} />
@@ -131,7 +139,7 @@ export default function Home() {
               <div 
                 className="absolute inset-0"
                 style={{
-                  animation: 'fadeInView 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                 }}
               >
                 <PlansView 
@@ -146,7 +154,7 @@ export default function Home() {
               <div 
                 className="absolute inset-0"
                 style={{
-                  animation: 'fadeInView 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
                 }}
               >
                 <ContactView onBack={() => setCurrentView('home')} />
@@ -157,8 +165,12 @@ export default function Home() {
 
         <style jsx>{`
           @keyframes fadeInView {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
           }
           @keyframes fadeInScale {
             from {
