@@ -1,10 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft, Phone, Mail, Building2 } from 'lucide-react'
+import { ArrowLeft, Phone, Mail, Building2, Send } from 'lucide-react'
 import { useLanguage } from '@/lib/language-context'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 
 interface ContactViewProps {
   onBack: () => void
@@ -23,53 +21,35 @@ export function ContactView({ onBack }: ContactViewProps) {
   }
 
   return (
-    <div 
-      className="grid h-full grid-cols-[1fr_2fr_1fr]"
-      style={{ gap: '8px' }}
-    >
-      {/* Left spacer with back button */}
-      <div className="flex flex-col" style={{ gap: '8px' }}>
-        <div
-          className="bento-block block-cursor flex items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8]"
-          style={{
-            padding: '16px',
-            opacity: 0,
-            animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-            willChange: 'transform, opacity',
-          }}
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-[#F5F6F8]">
+      {/* Header */}
+      <div 
+        className="flex shrink-0 items-center justify-between border-b border-[#E8E9EC]"
+        style={{ padding: '12px 16px' }}
+      >
+        <button
           onClick={onBack}
+          className="flex items-center gap-2 font-sans text-[0.8rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
         >
-          <ArrowLeft size={18} color="#8C8C8C" />
-          <span className="font-sans font-medium text-[#8C8C8C]" style={{ fontSize: '0.8rem' }}>
-            {t('home')}
-          </span>
-        </div>
-        <div 
-          className="flex-1 rounded-2xl bg-[#F5F6F8]"
-          style={{
-            opacity: 0,
-            animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-            animationDelay: '60ms',
-            willChange: 'transform, opacity',
-          }}
-        />
+          <ArrowLeft size={16} />
+          {t('back')}
+        </button>
+        <h2 className="font-sans text-[0.9rem] font-semibold text-[#2D2D2D]">
+          {t('contact')}
+        </h2>
+        <div style={{ width: '60px' }} />
       </div>
 
-      {/* Center form */}
-      <div 
-        className="flex flex-col rounded-2xl bg-[#F5F6F8]"
-        style={{
-          padding: '20px',
-          opacity: 0,
-          animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-          animationDelay: '120ms',
-          willChange: 'transform, opacity',
-        }}
-      >
-        <form onSubmit={handleSubmit} className="flex h-full flex-col">
+      {/* Form Content */}
+      <div className="flex flex-1 items-center justify-center" style={{ padding: '16px' }}>
+        <form 
+          onSubmit={handleSubmit} 
+          className="flex w-full max-w-md flex-col rounded-xl bg-white shadow-sm"
+          style={{ padding: '24px' }}
+        >
           {/* Business Name - prominent */}
-          <div className="flex items-baseline gap-2 border-b border-[#E8E9EC] pb-3">
-            <span className="font-serif font-light italic text-[#2D2D2D]" style={{ fontSize: '1.3rem' }}>
+          <div className="flex items-baseline gap-2 border-b border-[#E8E9EC] pb-4">
+            <span className="font-serif text-[1.5rem] font-light italic text-[#2D2D2D]">
               my.
             </span>
             <input
@@ -78,106 +58,56 @@ export function ContactView({ onBack }: ContactViewProps) {
               onChange={(e) => setBusinessName(e.target.value)}
               placeholder="business"
               autoFocus
-              className="flex-1 bg-transparent font-mono text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
-              style={{ fontSize: '1.1rem' }}
+              className="flex-1 bg-transparent font-mono text-[1.2rem] text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
             />
           </div>
 
           {/* Other fields */}
-          <div className="mt-4 flex flex-col gap-3">
-            <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
-              <Phone size={16} color="#4DE8D8" />
-              <Input
+          <div className="mt-5 flex flex-col gap-4">
+            <div className="flex items-center gap-3 rounded-lg bg-[#F5F6F8] px-3 py-2.5">
+              <Phone size={18} className="text-[#4DE8D8]" />
+              <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder={t('phonePlaceholder')}
-                className="border-none bg-transparent font-sans shadow-none focus-visible:ring-0"
-                style={{ fontSize: '0.9rem' }}
+                className="flex-1 bg-transparent font-sans text-[0.9rem] text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
               />
             </div>
 
-            <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
-              <Mail size={16} color="#4DE8D8" />
-              <Input
+            <div className="flex items-center gap-3 rounded-lg bg-[#F5F6F8] px-3 py-2.5">
+              <Mail size={18} className="text-[#4DE8D8]" />
+              <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('emailPlaceholder')}
-                className="border-none bg-transparent font-sans shadow-none focus-visible:ring-0"
-                style={{ fontSize: '0.9rem' }}
+                className="flex-1 bg-transparent font-sans text-[0.9rem] text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
               />
             </div>
 
-            <div className="flex items-center gap-2 border-b border-[#E8E9EC] pb-2">
-              <Building2 size={16} color="#4DE8D8" />
-              <Input
+            <div className="flex items-center gap-3 rounded-lg bg-[#F5F6F8] px-3 py-2.5">
+              <Building2 size={18} className="text-[#4DE8D8]" />
+              <input
                 type="text"
                 value={businessType}
                 onChange={(e) => setBusinessType(e.target.value)}
                 placeholder={t('businessTypePlaceholder')}
-                className="border-none bg-transparent font-sans shadow-none focus-visible:ring-0"
-                style={{ fontSize: '0.9rem' }}
+                className="flex-1 bg-transparent font-sans text-[0.9rem] text-[#2D2D2D] placeholder:text-[#C4C4C4] focus:outline-none"
               />
             </div>
           </div>
 
           {/* Submit */}
-          <div className="mt-auto">
-            <Button
-              type="submit"
-              className="w-full rounded-xl bg-[#4DE8D8] py-4 font-sans font-medium text-white transition-colors hover:bg-[#3BCFBF]"
-              style={{ fontSize: '0.9rem' }}
-            >
-              {t('start')}
-            </Button>
-          </div>
+          <button
+            type="submit"
+            className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-[#4DE8D8] py-3 font-sans text-[0.9rem] font-medium text-white transition-colors hover:bg-[#3BCFBF]"
+          >
+            {t('start')}
+            <Send size={16} />
+          </button>
         </form>
       </div>
-
-      {/* Right spacer */}
-      <div className="flex flex-col" style={{ gap: '8px' }}>
-        <div 
-          className="flex-1 rounded-2xl bg-[#F5F6F8]"
-          style={{
-            opacity: 0,
-            animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-            animationDelay: '180ms',
-            willChange: 'transform, opacity',
-          }}
-        />
-        <div 
-          className="flex items-center justify-center rounded-2xl bg-[#F5F6F8]"
-          style={{
-            padding: '16px',
-            opacity: 0,
-            animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-            animationDelay: '240ms',
-            willChange: 'transform, opacity',
-          }}
-        >
-          <img 
-            id="site-logo" 
-            src="/logo-placeholder.svg" 
-            width={80} 
-            height={27} 
-            alt="MY.SITE" 
-          />
-        </div>
-      </div>
-
-      <style jsx>{`
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.98);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      `}</style>
     </div>
   )
 }

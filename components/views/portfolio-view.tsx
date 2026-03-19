@@ -1,415 +1,293 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Monitor, Smartphone, ExternalLink } from 'lucide-react'
 import { useLanguage } from '@/lib/language-context'
-import { Button } from '@/components/ui/button'
-
-interface Project {
-  id: number
-  name: string
-  labelKey: string
-  subtitleKey: string
-  bg: string
-  border?: string
-  nameFont: string
-  nameColor: string
-  labelColor: string
-  swatches: string[]
-  mockupBg: string
-}
-
-const projects: Project[] = [
-  {
-    id: 1,
-    name: 'TOPO',
-    labelKey: 'topoLabel',
-    subtitleKey: 'topoSubtitle',
-    bg: '#1A1A1A',
-    nameFont: 'font-sans font-bold',
-    nameColor: '#C8F000',
-    labelColor: 'rgba(200, 240, 0, 0.6)',
-    swatches: ['#C8F000', '#1A1A1A', '#FFFFFF'],
-    mockupBg: '#2A2A2A',
-  },
-  {
-    id: 2,
-    name: 'Bahía Capital',
-    labelKey: 'bahiaLabel',
-    subtitleKey: 'bahiaSubtitle',
-    bg: '#FAFAF8',
-    border: '1px solid #E8E3D6',
-    nameFont: 'font-serif font-medium italic',
-    nameColor: '#B8A88A',
-    labelColor: 'rgba(184, 168, 138, 0.6)',
-    swatches: ['#B8A88A', '#FAFAF8', '#2D2D2D'],
-    mockupBg: '#F0EDE6',
-  },
-  {
-    id: 3,
-    name: 'Clínica Bes',
-    labelKey: 'clinicaLabel',
-    subtitleKey: 'clinicaSubtitle',
-    bg: '#FFFFFF',
-    border: '1px solid #E8E9EC',
-    nameFont: 'font-sans font-medium',
-    nameColor: '#84B59F',
-    labelColor: 'rgba(132, 181, 159, 0.6)',
-    swatches: ['#84B59F', '#FFFFFF', '#2D2D2D'],
-    mockupBg: '#F5F9F7',
-  },
-  {
-    id: 4,
-    name: 'Corteza',
-    labelKey: 'cortezaLabel',
-    subtitleKey: 'cortezaSubtitle',
-    bg: '#1C1714',
-    nameFont: 'font-serif font-light italic',
-    nameColor: '#C89B60',
-    labelColor: 'rgba(200, 155, 96, 0.6)',
-    swatches: ['#C89B60', '#1C1714', '#F5E6D0'],
-    mockupBg: '#2A2218',
-  },
-  {
-    id: 5,
-    name: 'Castillo & Asociados',
-    labelKey: 'castilloLabel',
-    subtitleKey: 'castilloSubtitle',
-    bg: '#F8F9FC',
-    border: '1px solid #D4D8E8',
-    nameFont: 'font-sans font-semibold',
-    nameColor: '#1E2761',
-    labelColor: 'rgba(30, 39, 97, 0.6)',
-    swatches: ['#1E2761', '#F8F9FC', '#B8A88A'],
-    mockupBg: '#ECEEF5',
-  },
-]
 
 interface PortfolioViewProps {
   onBack: () => void
 }
 
+const projects = [
+  {
+    id: 'topo',
+    name: 'TOPO',
+    industry: { en: 'Restaurant', es: 'Restaurante' },
+    colors: ['#1A1A1A', '#D4A574', '#F5F0EB'],
+    url: 'topo.mx'
+  },
+  {
+    id: 'bahia-capital',
+    name: 'Bahía Capital',
+    industry: { en: 'Real Estate', es: 'Bienes Raíces' },
+    colors: ['#0A2540', '#4DE8D8', '#FFFFFF'],
+    url: 'bahiacapital.mx'
+  },
+  {
+    id: 'clinica-bes',
+    name: 'Clínica Bes',
+    industry: { en: 'Health Clinic', es: 'Clínica de Salud' },
+    colors: ['#2D5A4A', '#A8D5BA', '#FFFFFF'],
+    url: 'clinicabes.com'
+  },
+  {
+    id: 'corteza',
+    name: 'Corteza',
+    industry: { en: 'Coffee Shop', es: 'Cafetería' },
+    colors: ['#3D2B1F', '#C4A77D', '#FAF7F2'],
+    url: 'corteza.cafe'
+  },
+  {
+    id: 'castillo',
+    name: 'Castillo & Asociados',
+    industry: { en: 'Law Firm', es: 'Bufete Legal' },
+    colors: ['#1C2331', '#B8860B', '#FFFFFF'],
+    url: 'castillolaw.mx'
+  },
+]
+
 export function PortfolioView({ onBack }: PortfolioViewProps) {
-  const [selectedProject, setSelectedProject] = useState<number | null>(null)
+  const { language, t } = useLanguage()
+  const [selectedProject, setSelectedProject] = useState<string | null>(null)
   const [viewMode, setViewMode] = useState<'web' | 'mobile'>('web')
-  const { t } = useLanguage()
-
-  const selectedProjectData = selectedProject !== null 
-    ? projects.find(p => p.id === selectedProject) 
-    : null
-
-  const remainingProjects = selectedProject !== null
-    ? projects.filter(p => p.id !== selectedProject)
-    : projects
+  
+  const selected = projects.find(p => p.id === selectedProject)
+  const otherProjects = projects.filter(p => p.id !== selectedProject)
 
   return (
-    <div 
-      className="flex h-full w-full flex-col"
-      style={{ gap: '8px' }}
-    >
-      {selectedProject === null ? (
-        // Initial 3x2 grid - fits in 100vh
-        <div 
-          className="grid flex-1 grid-cols-3 grid-rows-2"
-          style={{ gap: '8px' }}
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-[#F5F6F8]">
+      {/* Header */}
+      <div 
+        className="flex shrink-0 items-center justify-between border-b border-[#E8E9EC]"
+        style={{ padding: '12px 16px' }}
+      >
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 font-sans text-[0.8rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
         >
-          {projects.map((project, index) => (
-            <div
-              key={project.id}
-              className="bento-block block-cursor flex flex-col justify-between rounded-2xl"
-              style={{
-                backgroundColor: project.bg,
-                border: project.border,
-                padding: '16px',
-                opacity: 0,
-                animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-                animationDelay: `${index * 60}ms`,
-                willChange: 'transform, opacity',
-              }}
-              onClick={() => setSelectedProject(project.id)}
-            >
-              <div>
-                <p 
-                  className={`${project.nameFont}`}
-                  style={{ color: project.nameColor, fontSize: '0.9rem' }}
-                >
-                  {project.name}
-                </p>
-                <div className="mt-1.5 flex gap-1">
-                  {project.swatches.map((color, i) => (
-                    <div 
-                      key={i}
-                      className="rounded-full"
-                      style={{ 
-                        width: '8px', 
-                        height: '8px',
-                        backgroundColor: color, 
-                        border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined 
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-              <p 
-                className="font-sans"
-                style={{ color: project.labelColor, fontSize: '0.6rem' }}
-              >
-                {t(project.labelKey)}
-              </p>
-            </div>
-          ))}
-          
-          {/* Home button */}
-          <div
-            className="bento-block block-cursor flex items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8]"
-            style={{
-              padding: '16px',
-              opacity: 0,
-              animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-              animationDelay: `${5 * 60}ms`,
-              willChange: 'transform, opacity',
-            }}
-            onClick={onBack}
-          >
-            <ArrowLeft size={18} color="#8C8C8C" />
-            <span className="font-sans font-medium text-[#8C8C8C]" style={{ fontSize: '0.8rem' }}>
-              {t('home')}
-            </span>
-          </div>
-        </div>
-      ) : (
-        // Selected project view: left column (20%) + detail panel (80%)
-        <div 
-          className="grid flex-1"
-          style={{ 
-            gridTemplateColumns: '20% 1fr',
-            gap: '8px',
-          }}
-        >
-          {/* Left column - remaining projects + home */}
+          <ArrowLeft size={16} />
+          {t('back')}
+        </button>
+        <h2 className="font-sans text-[0.9rem] font-semibold text-[#2D2D2D]">
+          {t('portfolio')}
+        </h2>
+        <div style={{ width: '60px' }} />
+      </div>
+
+      {/* Content */}
+      <div className="flex flex-1 overflow-hidden">
+        {!selectedProject ? (
+          /* Grid View - 3 columns x 2 rows */
           <div 
-            className="flex flex-col"
-            style={{ gap: '8px' }}
+            className="grid flex-1 grid-cols-3 grid-rows-2"
+            style={{ gap: '8px', padding: '8px' }}
           >
-            {remainingProjects.map((project, index) => (
-              <div
+            {projects.map((project, index) => (
+              <button
                 key={project.id}
-                className="bento-block block-cursor flex flex-1 flex-col justify-center rounded-2xl"
-                style={{
-                  backgroundColor: project.bg,
-                  border: project.border,
-                  padding: '10px',
+                onClick={() => setSelectedProject(project.id)}
+                className="group relative flex flex-col justify-end overflow-hidden rounded-xl bg-white transition-all hover:shadow-md"
+                style={{ 
+                  padding: '12px',
                   opacity: 0,
-                  animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-                  animationDelay: `${index * 60}ms`,
-                  willChange: 'transform, opacity',
-                }}
-                onClick={() => {
-                  setSelectedProject(project.id)
-                  setViewMode('web')
+                  animation: `fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+                  animationDelay: `${index * 50}ms`,
                 }}
               >
-                <p 
-                  className={`${project.nameFont}`}
-                  style={{ color: project.nameColor, fontSize: '0.75rem' }}
-                >
-                  {project.name}
-                </p>
-                <p 
-                  className="font-sans mt-0.5"
-                  style={{ color: project.labelColor, fontSize: '0.55rem' }}
-                >
-                  {t(project.labelKey)}
-                </p>
-              </div>
-            ))}
-            
-            {/* Home button */}
-            <div
-              className="bento-block block-cursor flex flex-1 items-center justify-center gap-1.5 rounded-2xl bg-[#F5F6F8]"
-              style={{
-                padding: '10px',
-                opacity: 0,
-                animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-                animationDelay: `${4 * 60}ms`,
-                willChange: 'transform, opacity',
-              }}
-              onClick={onBack}
-            >
-              <ArrowLeft size={16} color="#8C8C8C" />
-              <span className="font-sans font-medium text-[#8C8C8C]" style={{ fontSize: '0.7rem' }}>
-                {t('home')}
-              </span>
-            </div>
-          </div>
-
-          {/* Right panel - detail */}
-          {selectedProjectData && (
-            <div 
-              className="flex flex-col rounded-2xl bg-[#F5F6F8]"
-              style={{
-                padding: '16px',
-                opacity: 0,
-                animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-                animationDelay: '100ms',
-                willChange: 'transform, opacity',
-              }}
-            >
-              {/* Header row */}
-              <div className="flex items-start justify-between">
-                <div>
-                  <h2 
-                    className={`${selectedProjectData.nameFont}`}
-                    style={{ color: selectedProjectData.nameColor, fontSize: '1.5rem' }}
-                  >
-                    {selectedProjectData.name}
-                  </h2>
-                  <p className="mt-0.5 font-sans text-[#8C8C8C]" style={{ fontSize: '0.75rem' }}>
-                    {t(selectedProjectData.subtitleKey)}
-                  </p>
-                </div>
-                <img 
-                  id="site-logo-portfolio" 
-                  src="/logo-placeholder.svg" 
-                  width={60} 
-                  height={20} 
-                  alt="MY.SITE" 
+                {/* Placeholder for screenshot */}
+                <div 
+                  id={`project-thumb-${project.id}`}
+                  className="absolute inset-0 bg-gradient-to-b from-transparent to-black/5"
                 />
-              </div>
-
-              {/* Palette + Toggle row */}
-              <div className="mt-3 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  {selectedProjectData.swatches.map((color, i) => (
-                    <div key={i} className="flex flex-col items-center gap-0.5">
-                      <div 
-                        className="rounded-full"
+                
+                {/* Project info */}
+                <div className="relative z-10">
+                  <h3 className="font-sans text-[0.85rem] font-semibold text-[#2D2D2D]">
+                    {project.name}
+                  </h3>
+                  <p className="font-sans text-[0.7rem] text-[#8C8C8C]">
+                    {project.industry[language]}
+                  </p>
+                  {/* Color swatches */}
+                  <div className="mt-2 flex gap-1">
+                    {project.colors.map((color, i) => (
+                      <div
+                        key={i}
+                        className="rounded-full border border-black/10"
                         style={{ 
-                          width: '14px', 
-                          height: '14px',
-                          backgroundColor: color, 
-                          border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined 
+                          width: '10px', 
+                          height: '10px', 
+                          backgroundColor: color 
                         }}
                       />
-                      <span className="font-mono text-[#8C8C8C]" style={{ fontSize: '0.55rem' }}>
-                        {color}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="flex gap-1">
-                  <Button
-                    variant="ghost"
-                    className={`rounded-lg px-3 py-1 font-sans ${
-                      viewMode === 'web' 
-                        ? 'bg-white font-semibold text-[#2D2D2D]' 
-                        : 'text-[#C4C4C4]'
-                    }`}
-                    style={{ fontSize: '0.75rem' }}
-                    onClick={() => setViewMode('web')}
-                  >
-                    {t('web')}
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className={`rounded-lg px-3 py-1 font-sans ${
-                      viewMode === 'mobile' 
-                        ? 'bg-white font-semibold text-[#2D2D2D]' 
-                        : 'text-[#C4C4C4]'
-                    }`}
-                    style={{ fontSize: '0.75rem' }}
-                    onClick={() => setViewMode('mobile')}
-                  >
-                    {t('mobile')}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Mockup area - takes remaining space */}
-              <div className="mt-3 flex flex-1 items-center justify-center">
-                {viewMode === 'web' ? (
-                  <div 
-                    id={`portfolio-${selectedProjectData.id}-web`}
-                    className="relative w-full overflow-hidden rounded-xl border border-[#E8E9EC]"
-                    style={{ 
-                      backgroundColor: selectedProjectData.mockupBg,
-                      height: 'calc(100% - 40px)',
-                    }}
-                  >
-                    {/* Browser chrome */}
-                    <div 
-                      className="absolute top-0 left-0 right-0 flex items-center border-b border-[#E8E9EC] bg-[#F5F6F8]"
-                      style={{ 
-                        height: '28px', 
-                        padding: '0 12px',
-                        borderRadius: '12px 12px 0 0',
-                        gap: '6px',
-                      }}
-                    >
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#FF5F57' }} />
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
-                      <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#28C840' }} />
-                      <span className="ml-auto font-sans text-[#C4C4C4]" style={{ fontSize: '0.6rem' }}>
-                        my-site-preview
-                      </span>
-                    </div>
-                    {/* Live site content area */}
-                    <div style={{ paddingTop: '28px', height: '100%' }}>
-                      {/* Live site component will be embedded here later */}
-                    </div>
+                    ))}
                   </div>
-                ) : (
-                  <div 
-                    id={`portfolio-${selectedProjectData.id}-mobile`}
-                    className="relative overflow-hidden"
-                    style={{ 
-                      width: '220px',
-                      height: 'calc(100% - 20px)',
-                      backgroundColor: selectedProjectData.mockupBg,
-                      borderRadius: '24px',
-                      border: '3px solid #2D2D2D',
-                    }}
-                  >
-                    {/* Phone notch */}
-                    <div 
-                      className="absolute top-0 left-0 right-0 flex items-center justify-center"
-                      style={{ 
-                        height: '24px', 
-                        backgroundColor: selectedProjectData.mockupBg,
-                      }}
-                    >
-                      <div style={{ width: '40px', height: '4px', borderRadius: '2px', backgroundColor: '#E8E9EC' }} />
-                    </div>
-                    {/* Live site content area */}
-                    <div style={{ paddingTop: '24px', height: '100%' }}>
-                      {/* Live site component will be embedded here later */}
-                    </div>
+                </div>
+              </button>
+            ))}
+            
+            {/* Empty 6th cell */}
+            <div className="rounded-xl bg-[#ECEEF0]" />
+          </div>
+        ) : (
+          /* Detail View - Left sidebar + Right preview */
+          <div className="flex flex-1 overflow-hidden">
+            {/* Left sidebar - 20% width */}
+            <div 
+              className="flex shrink-0 flex-col border-r border-[#E8E9EC] bg-white"
+              style={{ width: '20%', padding: '8px' }}
+            >
+              {otherProjects.map((project, index) => (
+                <button
+                  key={project.id}
+                  onClick={() => setSelectedProject(project.id)}
+                  className="flex items-center justify-between rounded-lg px-3 py-2 text-left transition-colors hover:bg-[#F5F6F8]"
+                  style={{
+                    opacity: 0,
+                    animation: `fadeInScale 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+                    animationDelay: `${index * 30}ms`,
+                  }}
+                >
+                  <div>
+                    <p className="font-sans text-[0.75rem] font-medium text-[#2D2D2D]">
+                      {project.name}
+                    </p>
+                    <p className="font-sans text-[0.6rem] text-[#8C8C8C]">
+                      {project.industry[language]}
+                    </p>
                   </div>
-                )}
-              </div>
-
-              {/* Disclaimer */}
-              <p className="mt-2 text-center font-serif italic text-[#C4C4C4]" style={{ fontSize: '0.65rem' }}>
-                {t('portfolioDisclaimer')}
-              </p>
+                </button>
+              ))}
             </div>
-          )}
-        </div>
-      )}
 
-      <style jsx>{`
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.98);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      `}</style>
+            {/* Right preview - 80% width */}
+            <div 
+              className="flex flex-1 flex-col overflow-hidden"
+              style={{ padding: '16px' }}
+            >
+              {selected && (
+                <>
+                  {/* Project header */}
+                  <div className="mb-4 flex items-start justify-between">
+                    <div>
+                      <h3 className="font-sans text-[1.1rem] font-semibold text-[#2D2D2D]">
+                        {selected.name}
+                      </h3>
+                      <p className="font-sans text-[0.75rem] text-[#8C8C8C]">
+                        {selected.industry[language]}
+                      </p>
+                      {/* Color palette */}
+                      <div className="mt-2 flex gap-1.5">
+                        {selected.colors.map((color, i) => (
+                          <div
+                            key={i}
+                            className="rounded border border-black/10"
+                            style={{ 
+                              width: '20px', 
+                              height: '20px', 
+                              backgroundColor: color 
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* View toggle + Visit link */}
+                    <div className="flex items-center gap-3">
+                      <div className="flex rounded-lg bg-[#E8E9EC] p-1">
+                        <button
+                          onClick={() => setViewMode('web')}
+                          className={`rounded-md px-2 py-1 transition-colors ${
+                            viewMode === 'web' 
+                              ? 'bg-white text-[#2D2D2D] shadow-sm' 
+                              : 'text-[#8C8C8C]'
+                          }`}
+                        >
+                          <Monitor size={14} />
+                        </button>
+                        <button
+                          onClick={() => setViewMode('mobile')}
+                          className={`rounded-md px-2 py-1 transition-colors ${
+                            viewMode === 'mobile' 
+                              ? 'bg-white text-[#2D2D2D] shadow-sm' 
+                              : 'text-[#8C8C8C]'
+                          }`}
+                        >
+                          <Smartphone size={14} />
+                        </button>
+                      </div>
+                      
+                      <a
+                        href={`https://${selected.url}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1 font-sans text-[0.7rem] font-medium text-[#4DE8D8] transition-colors hover:text-[#3BCFBF]"
+                      >
+                        {t('visitSite')}
+                        <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Preview frame */}
+                  <div className="flex flex-1 items-center justify-center overflow-hidden rounded-xl bg-[#E8E9EC]">
+                    {viewMode === 'web' ? (
+                      /* Browser frame */
+                      <div 
+                        className="flex h-full w-full flex-col overflow-hidden rounded-lg bg-white shadow-lg"
+                        style={{ maxWidth: '100%', maxHeight: '100%' }}
+                      >
+                        {/* Browser chrome */}
+                        <div className="flex shrink-0 items-center gap-2 border-b border-[#E8E9EC] bg-[#F5F6F8] px-3 py-2">
+                          <div className="flex gap-1.5">
+                            <div className="h-2.5 w-2.5 rounded-full bg-[#FF5F57]" />
+                            <div className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
+                            <div className="h-2.5 w-2.5 rounded-full bg-[#28CA41]" />
+                          </div>
+                          <div className="ml-2 flex-1 rounded bg-white px-3 py-1">
+                            <span className="font-mono text-[0.65rem] text-[#8C8C8C]">
+                              {selected.url}
+                            </span>
+                          </div>
+                        </div>
+                        {/* Iframe placeholder */}
+                        <div 
+                          id={`preview-web-${selected.id}`}
+                          className="flex flex-1 items-center justify-center bg-[#FAFAFA]"
+                        >
+                          <span className="font-sans text-[0.8rem] text-[#C4C4C4]">
+                            {t('webPreview')}
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      /* Phone frame */
+                      <div 
+                        className="flex flex-col overflow-hidden rounded-[32px] bg-[#1A1A1A] shadow-xl"
+                        style={{ width: '280px', height: '100%', maxHeight: '560px', padding: '8px' }}
+                      >
+                        {/* Notch */}
+                        <div className="mx-auto mb-2 h-5 w-24 rounded-full bg-[#2D2D2D]" />
+                        {/* Screen */}
+                        <div 
+                          id={`preview-mobile-${selected.id}`}
+                          className="flex flex-1 items-center justify-center overflow-hidden rounded-[24px] bg-white"
+                        >
+                          <span className="font-sans text-[0.8rem] text-[#C4C4C4]">
+                            {t('mobilePreview')}
+                          </span>
+                        </div>
+                        {/* Home indicator */}
+                        <div className="mx-auto mt-2 h-1 w-28 rounded-full bg-[#2D2D2D]" />
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

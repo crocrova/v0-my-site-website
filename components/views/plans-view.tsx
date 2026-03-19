@@ -1,30 +1,27 @@
 'use client'
 
-import { ArrowLeft, CheckCircle, Zap, Target, Award } from 'lucide-react'
+import { ArrowLeft, Check } from 'lucide-react'
 import { useLanguage } from '@/lib/language-context'
-import { Button } from '@/components/ui/button'
 
 const plans = [
   {
     id: 'starter',
     titleKey: 'starter',
-    descKey: 'starterDesc',
-    icon: Zap,
-    features: ['starterFeature1', 'starterFeature2', 'starterFeature3', 'starterFeature4'],
+    price: '$499',
+    features: ['starterFeature1', 'starterFeature2', 'starterFeature3'],
   },
   {
     id: 'standard',
     titleKey: 'standard',
-    descKey: 'standardDesc',
-    icon: Target,
+    price: '$999',
+    popular: true,
     features: ['standardFeature1', 'standardFeature2', 'standardFeature3', 'standardFeature4'],
   },
   {
     id: 'pro',
     titleKey: 'pro',
-    descKey: 'proDesc',
-    icon: Award,
-    features: ['proFeature1', 'proFeature2', 'proFeature3', 'proFeature4'],
+    price: '$1,999',
+    features: ['proFeature1', 'proFeature2', 'proFeature3', 'proFeature4', 'proFeature5'],
   },
 ]
 
@@ -37,84 +34,82 @@ export function PlansView({ onBack, onRequestAnalysis }: PlansViewProps) {
   const { t } = useLanguage()
 
   return (
-    <div 
-      className="grid h-full grid-cols-4"
-      style={{ gap: '8px' }}
-    >
-      {/* Back button */}
-      <div
-        className="bento-block block-cursor flex items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8]"
-        style={{
-          padding: '16px',
-          opacity: 0,
-          animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-          willChange: 'transform, opacity',
-        }}
-        onClick={onBack}
+    <div className="flex h-full w-full flex-col overflow-hidden rounded-2xl bg-[#F5F6F8]">
+      {/* Header */}
+      <div 
+        className="flex shrink-0 items-center justify-between border-b border-[#E8E9EC]"
+        style={{ padding: '12px 16px' }}
       >
-        <ArrowLeft size={18} color="#8C8C8C" />
-        <span className="font-sans font-medium text-[#8C8C8C]" style={{ fontSize: '0.8rem' }}>
-          {t('home')}
-        </span>
+        <button
+          onClick={onBack}
+          className="flex items-center gap-2 font-sans text-[0.8rem] font-medium text-[#8C8C8C] transition-colors hover:text-[#2D2D2D]"
+        >
+          <ArrowLeft size={16} />
+          {t('back')}
+        </button>
+        <h2 className="font-sans text-[0.9rem] font-semibold text-[#2D2D2D]">
+          {t('plans')}
+        </h2>
+        <div style={{ width: '60px' }} />
       </div>
 
-      {/* Plan cards */}
-      {plans.map((plan, index) => {
-        const Icon = plan.icon
-        return (
+      {/* Plans Grid */}
+      <div 
+        className="grid flex-1 grid-cols-3"
+        style={{ gap: '8px', padding: '8px' }}
+      >
+        {plans.map((plan, index) => (
           <div
             key={plan.id}
-            className="bento-block flex flex-col rounded-2xl border border-[#E8E9EC] bg-white"
-            style={{
-              padding: '16px',
+            className={`flex flex-col rounded-xl bg-white ${plan.popular ? 'ring-2 ring-[#4DE8D8]' : ''}`}
+            style={{ 
+              padding: '20px',
               opacity: 0,
-              animation: `fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
-              animationDelay: `${(index + 1) * 60}ms`,
-              willChange: 'transform, opacity',
+              animation: `fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+              animationDelay: `${index * 50}ms`,
             }}
           >
-            <Icon size={24} color="#4DE8D8" />
-            <h3 className="mt-2 font-sans font-semibold text-[#2D2D2D]" style={{ fontSize: '1.1rem' }}>
+            {/* Popular badge */}
+            {plan.popular && (
+              <span className="mb-2 w-fit rounded-full bg-[#4DE8D8] px-2 py-0.5 font-sans text-[0.6rem] font-medium text-white">
+                {t('popular')}
+              </span>
+            )}
+            
+            {/* Title & Price */}
+            <h3 className="font-sans text-[1rem] font-semibold text-[#2D2D2D]">
               {t(plan.titleKey)}
             </h3>
-            <p className="mt-1 font-sans leading-relaxed text-[#8C8C8C]" style={{ fontSize: '0.7rem' }}>
-              {t(plan.descKey)}
+            <p className="mt-1 font-sans text-[1.5rem] font-bold text-[#2D2D2D]">
+              {plan.price}
             </p>
             
-            <div className="mt-3 flex flex-1 flex-col gap-1.5">
+            {/* Features */}
+            <div className="mt-4 flex flex-1 flex-col gap-2">
               {plan.features.map((feature, i) => (
-                <div key={i} className="flex items-center gap-1.5">
-                  <CheckCircle size={14} color="#4DE8D8" />
-                  <span className="font-sans text-[#2D2D2D]" style={{ fontSize: '0.65rem' }}>
+                <div key={i} className="flex items-start gap-2">
+                  <Check size={14} className="mt-0.5 shrink-0 text-[#4DE8D8]" />
+                  <span className="font-sans text-[0.75rem] text-[#8C8C8C]">
                     {t(feature)}
                   </span>
                 </div>
               ))}
             </div>
             
-            <Button
+            {/* CTA */}
+            <button
               onClick={onRequestAnalysis}
-              className="mt-3 w-full rounded-xl bg-[#4DE8D8] py-2 font-sans font-medium text-white transition-colors hover:bg-[#3BCFBF]"
-              style={{ fontSize: '0.75rem' }}
+              className={`mt-4 w-full rounded-lg py-2.5 font-sans text-[0.8rem] font-medium transition-colors ${
+                plan.popular 
+                  ? 'bg-[#4DE8D8] text-white hover:bg-[#3BCFBF]' 
+                  : 'bg-[#F5F6F8] text-[#2D2D2D] hover:bg-[#ECEEF0]'
+              }`}
             >
-              {t('requestAnalysis')}
-            </Button>
+              {t('getStarted')}
+            </button>
           </div>
-        )
-      })}
-
-      <style jsx>{`
-        @keyframes fadeInScale {
-          from {
-            opacity: 0;
-            transform: scale(0.98);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-      `}</style>
+        ))}
+      </div>
     </div>
   )
 }

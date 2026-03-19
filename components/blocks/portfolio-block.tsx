@@ -9,16 +9,17 @@ interface PortfolioBlockProps {
 
 export function PortfolioBlock({ onClick }: PortfolioBlockProps) {
   const { t } = useLanguage()
-
+  
   return (
-    <div 
-      className="bento-block block-cursor flex h-full w-full items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8] p-4"
+    <button
       onClick={onClick}
+      className="bento-block flex h-full w-full items-center justify-between rounded-2xl bg-[#F5F6F8] text-left transition-all hover:bg-[#ECEEF0]"
+      style={{ padding: '16px' }}
     >
-      <span className="font-sans text-[1.3rem] font-semibold text-[#2D2D2D]">
+      <span className="font-sans text-[0.95rem] font-semibold text-[#2D2D2D]">
         {t('portfolio')}
       </span>
-      <ArrowRight size={20} color="#4DE8D8" />
-    </div>
+      <ArrowRight size={18} className="text-[#8C8C8C]" />
+    </button>
   )
 }
