@@ -65,7 +65,10 @@ export function PlansView({ onBack, onRequestAnalysis }: PlansViewProps) {
             style={{ 
               padding: '20px',
               opacity: 0,
-              animation: `fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+              animationName: 'fadeInScale',
+              animationDuration: '300ms',
+              animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+              animationFillMode: 'forwards',
               animationDelay: `${index * 50}ms`,
             }}
           >

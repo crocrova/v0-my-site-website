@@ -55,8 +55,7 @@ export default function Home() {
                   className="overflow-hidden"
                   style={{
                     opacity: 0,
-                    animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                    animationDelay: '0ms',
+                    animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 0ms forwards',
                   }}
                 >
                   <HeroBlock />
@@ -67,8 +66,7 @@ export default function Home() {
                     id="portfolio-block"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '50ms',
+                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 50ms forwards',
                     }}
                   >
                     <PortfolioBlock onClick={() => setCurrentView('portfolio')} />
@@ -77,8 +75,7 @@ export default function Home() {
                     id="plans-block"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '100ms',
+                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 100ms forwards',
                     }}
                   >
                     <PlansBlock onClick={() => setCurrentView('plans')} />
@@ -91,8 +88,7 @@ export default function Home() {
                     id="logo-block"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '150ms',
+                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 150ms forwards',
                     }}
                   >
                     <LogoBlock />
@@ -101,8 +97,7 @@ export default function Home() {
                     id="contact-block-wrapper"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '200ms',
+                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 200ms forwards',
                     }}
                   >
                     <ContactBlock onClick={() => setCurrentView('contact')} />
@@ -112,8 +107,7 @@ export default function Home() {
                     className="rounded-2xl bg-[#F5F6F8]"
                     style={{
                       opacity: 0,
-                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '250ms',
+                      animation: 'fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) 250ms forwards',
                     }}
                   />
                 </div>

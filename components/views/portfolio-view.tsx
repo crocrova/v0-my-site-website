@@ -90,7 +90,10 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
                 style={{ 
                   padding: '12px',
                   opacity: 0,
-                  animation: `fadeInScale 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+                  animationName: 'fadeInScale',
+                  animationDuration: '300ms',
+                  animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                  animationFillMode: 'forwards',
                   animationDelay: `${index * 50}ms`,
                 }}
               >
@@ -144,7 +147,10 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
                   className="flex items-center justify-between rounded-lg px-3 py-2 text-left transition-colors hover:bg-[#F5F6F8]"
                   style={{
                     opacity: 0,
-                    animation: `fadeInScale 200ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
+                    animationName: 'fadeInScale',
+                    animationDuration: '200ms',
+                    animationTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                    animationFillMode: 'forwards',
                     animationDelay: `${index * 30}ms`,
                   }}
                 >
