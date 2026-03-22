@@ -17,69 +17,82 @@ const translations: Record<string, Record<Language, string>> = {
   contact: { en: 'Contact', es: 'Contacto' },
   home: { en: 'Home', es: 'Inicio' },
   back: { en: 'Back', es: 'Volver' },
-  
+
   // Portfolio
   web: { en: 'Web', es: 'Web' },
   mobile: { en: 'Mobile', es: 'Móvil' },
-  portfolioDisclaimer: { 
-    en: 'Visual reference · Client projects remain private', 
-    es: 'Referencia visual · Los proyectos de clientes permanecen privados' 
+  portfolioDisclaimer: {
+    en: 'Visual reference · Client projects remain private',
+    es: 'Referencia visual · Los proyectos de clientes son privados',
   },
-  
+
   // Project labels
   topoLabel: { en: 'Photogrammetry · Los Cabos', es: 'Fotogrametría · Los Cabos' },
   bahiaLabel: { en: 'Real Estate · La Paz', es: 'Bienes Raíces · La Paz' },
   clinicaLabel: { en: 'Dental Clinic · La Paz', es: 'Clínica Dental · La Paz' },
   cortezaLabel: { en: 'Fine Dining · La Paz', es: 'Alta Cocina · La Paz' },
-  castilloLabel: { en: 'Law Firm · La Paz', es: 'Despacho Legal · La Paz' },
-  
+  granoLabel: { en: 'Specialty Coffee · La Paz', es: 'Café de Especialidad · La Paz' },
+
   // Project subtitles for detail
   topoSubtitle: { en: 'Technical Photogrammetry · Los Cabos', es: 'Fotogrametría Técnica · Los Cabos' },
   bahiaSubtitle: { en: 'Luxury Real Estate · La Paz', es: 'Bienes Raíces de Lujo · La Paz' },
   clinicaSubtitle: { en: 'Aesthetic Dental · La Paz', es: 'Dental Estética · La Paz' },
   cortezaSubtitle: { en: 'Fine Dining · La Paz', es: 'Alta Cocina · La Paz' },
-  castilloSubtitle: { en: 'Law Firm · La Paz / Los Cabos', es: 'Despacho Legal · La Paz / Los Cabos' },
-  
-  // Plans
-  starter: { en: 'Starter', es: 'Starter' },
+  granoSubtitle: { en: 'Specialty Coffee · La Paz', es: 'Café de Especialidad · La Paz' },
+
+  // Plans (renamed: Standard, Pro, Enterprise)
   standard: { en: 'Standard', es: 'Standard' },
   pro: { en: 'Pro', es: 'Pro' },
-  starterDesc: { 
-    en: 'One powerful landing page. Perfect for businesses starting their digital presence.', 
-    es: 'Una landing page profesional. Ideal para negocios que inician su presencia digital.' 
+  enterprise: { en: 'Enterprise', es: 'Enterprise' },
+
+  standardDesc: {
+    en: 'A professional landing page.',
+    es: 'Una landing page profesional.',
   },
-  standardDesc: { 
-    en: 'Up to 5 pages. For growing businesses that need a complete website.', 
-    es: 'Hasta 5 páginas. Para negocios en crecimiento que necesitan un sitio completo.' 
+  proDesc: {
+    en: 'Up to 5 pages for growing businesses.',
+    es: 'Hasta 5 páginas para negocios en crecimiento.',
   },
-  proDesc: { 
-    en: 'Up to 12 pages. Full digital experience for established brands.', 
-    es: 'Hasta 12 páginas. Experiencia digital completa para marcas establecidas.' 
+  enterpriseDesc: {
+    en: 'Up to 12 pages. Complete digital experience.',
+    es: 'Hasta 12 páginas. Experiencia digital completa.',
   },
-  requestAnalysis: { en: 'Request Analysis', es: 'Solicitar Análisis' },
-  
-  // Plan features
-  starterFeature1: { en: 'Custom responsive design', es: 'Diseño responsive personalizado' },
-  starterFeature2: { en: 'SEO optimization', es: 'Optimización SEO' },
-  starterFeature3: { en: 'Contact form integration', es: 'Integración de formulario de contacto' },
-  starterFeature4: { en: 'Mobile-first approach', es: 'Enfoque mobile-first' },
-  
-  standardFeature1: { en: 'Everything in Starter', es: 'Todo lo de Starter' },
-  standardFeature2: { en: 'Up to 5 unique pages', es: 'Hasta 5 páginas únicas' },
-  standardFeature3: { en: 'Blog or news section', es: 'Sección de blog o noticias' },
-  standardFeature4: { en: 'Analytics integration', es: 'Integración de analytics' },
-  
+
+  // Plan features — Standard
+  standardFeature1: { en: 'Responsive design', es: 'Diseño responsive' },
+  standardFeature2: { en: 'SEO optimization', es: 'Optimización SEO' },
+  standardFeature3: { en: 'Contact form', es: 'Formulario de contacto' },
+  standardFeature4: { en: 'Mobile-first', es: 'Mobile-first' },
+
+  // Plan features — Pro
   proFeature1: { en: 'Everything in Standard', es: 'Todo lo de Standard' },
-  proFeature2: { en: 'Up to 12 unique pages', es: 'Hasta 12 páginas únicas' },
-  proFeature3: { en: 'E-commerce capabilities', es: 'Capacidades de e-commerce' },
-  proFeature4: { en: 'Priority support', es: 'Soporte prioritario' },
-  
-  // Contact
-  tellUsYourBusiness: { en: 'Tell us your name', es: 'Cuéntanos de tu negocio' },
+  proFeature2: { en: 'Up to 5 pages', es: 'Hasta 5 páginas' },
+  proFeature3: { en: 'Blog or news section', es: 'Blog o noticias' },
+  proFeature4: { en: 'Analytics', es: 'Analytics' },
+
+  // Plan features — Enterprise
+  enterpriseFeature1: { en: 'Everything in Pro', es: 'Todo lo de Pro' },
+  enterpriseFeature2: { en: 'Up to 12 pages', es: 'Hasta 12 páginas' },
+  enterpriseFeature3: { en: 'E-commerce', es: 'E-commerce' },
+  enterpriseFeature4: { en: 'Priority support', es: 'Soporte prioritario' },
+
+  // Contact actions
+  contactUs: { en: 'Contact us', es: 'Contáctanos' },
+  start: { en: 'Start', es: 'Empezar' },
+  send: { en: 'Send', es: 'Enviar' },
+
+  // Contact form
+  tellUsYourBusiness: { en: 'Tell us your business name', es: 'Cuéntanos el nombre de tu negocio' },
   phonePlaceholder: { en: '+52...', es: '+52...' },
   emailPlaceholder: { en: 'email', es: 'correo' },
   businessTypePlaceholder: { en: 'restaurant, clinic, hotel...', es: 'restaurante, clínica, hotel...' },
-  start: { en: 'Start', es: 'Empezar' },
+  messagePlaceholder: { en: 'Optional message...', es: 'Mensaje opcional...' },
+
+  // Info block
+  creativeDirector: { en: 'Creative Director', es: 'Director Creativo' },
+
+  // Legacy keys kept for compatibility
+  requestAnalysis: { en: 'Contact us', es: 'Contáctanos' },
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)

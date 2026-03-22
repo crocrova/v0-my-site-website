@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Sparkles } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 const businessNames = [
   { prefix: 'my.', name: 'site' },
@@ -13,87 +14,80 @@ const businessNames = [
   { prefix: 'my.', name: 'studio' },
 ]
 
+const EASE = [0.16, 1, 0.3, 1] as const
+
 export function HeroBlock() {
-  const [loadedItems, setLoadedItems] = useState<number[]>([])
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
 
+  // Start highlight cycling after stagger animation completes
   useEffect(() => {
-    // Sequential fade-in animation with 60ms stagger
-    businessNames.forEach((_, index) => {
-      setTimeout(() => {
-        setLoadedItems(prev => [...prev, index])
-      }, index * 60)
-    })
-
-    // Start highlight cycling after all items loaded
-    const totalLoadTime = businessNames.length * 60 + 300
-    const highlightTimeout = setTimeout(() => {
-      setHighlightedIndex(0)
-    }, totalLoadTime)
-
-    return () => clearTimeout(highlightTimeout)
+    const totalStagger = businessNames.length * 60 + 400
+    const t = setTimeout(() => setHighlightedIndex(0), totalStagger)
+    return () => clearTimeout(t)
   }, [])
 
   useEffect(() => {
     if (highlightedIndex === null) return
-
-    // Cycle every 2 seconds
     const interval = setInterval(() => {
-      setHighlightedIndex(prev => 
-        prev === null ? 0 : (prev + 1) % businessNames.length
-      )
+      setHighlightedIndex(prev => (prev === null ? 0 : (prev + 1) % businessNames.length))
     }, 2000)
-
     return () => clearInterval(interval)
   }, [highlightedIndex])
 
   return (
-    <div 
-      className="bento-block relative flex h-full w-full flex-col justify-center rounded-2xl bg-[#F5F6F8]"
-      style={{ padding: '16px' }}
+    <motion.div
+      className="relative flex h-full w-full flex-col justify-center rounded-2xl bg-[#F5F6F8]"
+      style={{ padding: '24px' }}
+      whileHover={{
+        scale: 1.015,
+        boxShadow: '0 8px 32px rgba(0,0,0,0.06)',
+      }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
     >
-      {/* Only Sparkles icon - no other decorative elements */}
-      <Sparkles 
+      {/* Icon top-right */}
+      <Sparkles
         className="absolute"
         style={{ right: '16px', top: '16px' }}
-        size={18} 
-        color="#4DE8D8" 
+        size={20}
+        color="#4DE8D8"
       />
-      
-      <div className="flex flex-col" style={{ gap: '2px' }}>
+
+      <div className="flex flex-col" style={{ gap: '4px' }}>
         {businessNames.map((item, index) => (
-          <div
+          <motion.div
             key={index}
-            className="hero-name flex items-baseline"
-            style={{
-              animationDelay: `${index * 60}ms`,
-              opacity: loadedItems.includes(index) ? 1 : 0,
-              transition: 'opacity 200ms ease-out',
+            className="flex items-baseline"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.4,
+              delay: index * 0.06,
+              ease: EASE,
             }}
           >
-            <span 
+            <motion.span
               className="font-serif font-light italic"
-              style={{ 
-                fontSize: '1.8rem',
+              style={{ fontSize: '2.2rem', lineHeight: 1.1 }}
+              animate={{
                 color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D',
-                transition: 'color 200ms ease-in-out'
               }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
               {item.prefix}
-            </span>
-            <span 
+            </motion.span>
+            <motion.span
               className="font-sans font-medium"
-              style={{ 
-                fontSize: '1.8rem',
+              style={{ fontSize: '2.2rem', lineHeight: 1.1 }}
+              animate={{
                 color: highlightedIndex === index ? '#4DE8D8' : '#2D2D2D',
-                transition: 'color 200ms ease-in-out'
               }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
               {item.name}
-            </span>
-          </div>
+            </motion.span>
+          </motion.div>
         ))}
       </div>
-    </div>
+    </motion.div>
   )
 }

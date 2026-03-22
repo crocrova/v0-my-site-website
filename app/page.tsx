@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { LanguageProvider } from '@/lib/language-context'
 import { Navbar } from '@/components/navbar'
 import { HeroBlock } from '@/components/blocks/hero-block'
@@ -8,12 +9,136 @@ import { PortfolioBlock } from '@/components/blocks/portfolio-block'
 import { PlansBlock } from '@/components/blocks/plans-block'
 import { LogoBlock } from '@/components/blocks/logo-block'
 import { ContactBlock } from '@/components/blocks/contact-block'
+import { InfoBlock } from '@/components/blocks/info-block'
 import { PortfolioView } from '@/components/views/portfolio-view'
 import { PlansView } from '@/components/views/plans-view'
 import { ContactView } from '@/components/views/contact-view'
 import { MobileMenu } from '@/components/mobile-menu'
 
 type View = 'home' | 'portfolio' | 'plans' | 'contact'
+
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
+
+// Variants for each bento block (stagger on entry)
+const blockVariants = {
+  hidden: { opacity: 0, scale: 0.96 },
+  visible: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.3, delay: i * 0.06, ease: EASE },
+  }),
+  exit: {
+    opacity: 0,
+    scale: 0.96,
+    transition: { duration: 0.25 },
+  },
+}
+
+// Wrapper for the whole view (controls coordinated entry/exit)
+const viewVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.1 },
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.96,
+    transition: { duration: 0.25 },
+  },
+}
+
+function HomeView({
+  onPortfolio,
+  onPlans,
+  onContact,
+}: {
+  onPortfolio: () => void
+  onPlans: () => void
+  onContact: () => void
+}) {
+  return (
+    <motion.div
+      key="home"
+      className="absolute inset-0 grid grid-cols-[2fr_1fr] grid-rows-[7fr_3fr]"
+      style={{ gap: '8px' }}
+      variants={viewVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
+    >
+      {/* Row 1 — Hero (spans full left col) */}
+      <motion.div
+        className="h-full"
+        custom={0}
+        variants={blockVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+      >
+        <HeroBlock />
+      </motion.div>
+
+      {/* Row 1 — Right col: Portfolio + Plans stacked */}
+      <div className="grid grid-rows-2" style={{ gap: '8px' }}>
+        <motion.div
+          className="h-full"
+          custom={1}
+          variants={blockVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <PortfolioBlock onClick={onPortfolio} />
+        </motion.div>
+        <motion.div
+          className="h-full"
+          custom={2}
+          variants={blockVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <PlansBlock onClick={onPlans} />
+        </motion.div>
+      </div>
+
+      {/* Row 2 — 3 bottom blocks */}
+      <div className="col-span-2 grid grid-cols-3" style={{ gap: '8px' }}>
+        <motion.div
+          className="h-full"
+          custom={3}
+          variants={blockVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <LogoBlock />
+        </motion.div>
+        <motion.div
+          className="h-full"
+          custom={4}
+          variants={blockVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <ContactBlock onClick={onContact} />
+        </motion.div>
+        <motion.div
+          className="h-full"
+          custom={5}
+          variants={blockVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <InfoBlock />
+        </motion.div>
+      </div>
+    </motion.div>
+  )
+}
 
 export default function Home() {
   const [currentView, setCurrentView] = useState<View>('home')
@@ -27,162 +152,71 @@ export default function Home() {
         </div>
 
         {/* Desktop Layout */}
-        <div className="hidden h-full w-full flex-col md:flex" style={{ gap: '8px' }}>
-          {/* Navbar */}
-          <Navbar 
+        <div className="hidden h-full w-full flex-col gap-2 md:flex">
+          {/* Navbar — always static, never animated */}
+          <Navbar
+            currentView={currentView}
             onPortfolioClick={() => setCurrentView('portfolio')}
             onPlansClick={() => setCurrentView('plans')}
             onContactClick={() => setCurrentView('contact')}
           />
 
-          {/* Main Content Area */}
+          {/* Content area */}
           <div className="relative flex-1">
-            {/* Home View */}
-            {currentView === 'home' && (
-              <div 
-                className="absolute inset-0 grid grid-cols-[2fr_1fr] grid-rows-[7fr_3fr]"
-                style={{ 
-                  gap: '8px',
-                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                }}
-              >
-                {/* Row 1 */}
-                <div 
-                  id="hero-block"
-                  style={{
-                    opacity: 0,
-                    animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                    animationDelay: '0ms',
-                    willChange: 'transform, opacity',
-                  }}
-                >
-                  <HeroBlock />
-                </div>
-                
-                <div className="grid grid-rows-2" style={{ gap: '8px' }}>
-                  <div 
-                    id="portfolio-block"
-                    style={{
-                      opacity: 0,
-                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '60ms',
-                      willChange: 'transform, opacity',
-                    }}
-                  >
-                    <PortfolioBlock onClick={() => setCurrentView('portfolio')} />
-                  </div>
-                  <div 
-                    id="plans-block"
-                    style={{
-                      opacity: 0,
-                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '120ms',
-                      willChange: 'transform, opacity',
-                    }}
-                  >
-                    <PlansBlock onClick={() => setCurrentView('plans')} />
-                  </div>
-                </div>
-                
-                {/* Row 2 */}
-                <div className="col-span-2 grid grid-cols-3" style={{ gap: '8px' }}>
-                  <div 
-                    id="logo-block"
-                    style={{
-                      opacity: 0,
-                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '180ms',
-                      willChange: 'transform, opacity',
-                    }}
-                  >
-                    <LogoBlock />
-                  </div>
-                  <div 
-                    id="contact-block-wrapper"
-                    style={{
-                      opacity: 0,
-                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '240ms',
-                      willChange: 'transform, opacity',
-                    }}
-                  >
-                    <ContactBlock onClick={() => setCurrentView('contact')} />
-                  </div>
-                  <div 
-                    id="language-block"
-                    className="rounded-2xl bg-[#F5F6F8]"
-                    style={{
-                      opacity: 0,
-                      animation: 'fadeInScale 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                      animationDelay: '300ms',
-                      willChange: 'transform, opacity',
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* Portfolio View */}
-            {currentView === 'portfolio' && (
-              <div 
-                className="absolute inset-0"
-                style={{
-                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                }}
-              >
-                <PortfolioView onBack={() => setCurrentView('home')} />
-              </div>
-            )}
-
-            {/* Plans View */}
-            {currentView === 'plans' && (
-              <div 
-                className="absolute inset-0"
-                style={{
-                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                }}
-              >
-                <PlansView 
-                  onBack={() => setCurrentView('home')} 
-                  onRequestAnalysis={() => setCurrentView('contact')}
+            <AnimatePresence mode="wait">
+              {currentView === 'home' && (
+                <HomeView
+                  key="home"
+                  onPortfolio={() => setCurrentView('portfolio')}
+                  onPlans={() => setCurrentView('plans')}
+                  onContact={() => setCurrentView('contact')}
                 />
-              </div>
-            )}
+              )}
 
-            {/* Contact View */}
-            {currentView === 'contact' && (
-              <div 
-                className="absolute inset-0"
-                style={{
-                  animation: 'fadeInView 400ms cubic-bezier(0.16, 1, 0.3, 1) forwards',
-                }}
-              >
-                <ContactView onBack={() => setCurrentView('home')} />
-              </div>
-            )}
+              {currentView === 'portfolio' && (
+                <motion.div
+                  key="portfolio"
+                  className="absolute inset-0"
+                  variants={viewVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  <PortfolioView onBack={() => setCurrentView('home')} />
+                </motion.div>
+              )}
+
+              {currentView === 'plans' && (
+                <motion.div
+                  key="plans"
+                  className="absolute inset-0"
+                  variants={viewVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  <PlansView
+                    onBack={() => setCurrentView('home')}
+                    onContact={() => setCurrentView('contact')}
+                  />
+                </motion.div>
+              )}
+
+              {currentView === 'contact' && (
+                <motion.div
+                  key="contact"
+                  className="absolute inset-0"
+                  variants={viewVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                >
+                  <ContactView onBack={() => setCurrentView('home')} />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
-
-        <style jsx>{`
-          @keyframes fadeInView {
-            from {
-              opacity: 0;
-            }
-            to {
-              opacity: 1;
-            }
-          }
-          @keyframes fadeInScale {
-            from {
-              opacity: 0;
-              transform: scale(0.98);
-            }
-            to {
-              opacity: 1;
-              transform: scale(1);
-            }
-          }
-        `}</style>
       </main>
     </LanguageProvider>
   )
