@@ -26,7 +26,8 @@ export const metadata: Metadata = {
   title: 'MY.SITE | Professional Web Design',
   description: 'Professional web design agency based in Los Cabos, Mexico. We create stunning websites for restaurants, clinics, hotels, and more.',
   icons: {
-    icon: '/favicon.png',
+    icon: [{ url: '/favicon.png', sizes: 'any' }],
+    apple: '/favicon.png',
   },
 }
 
