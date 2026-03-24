@@ -93,6 +93,73 @@ const translations: Record<string, Record<Language, string>> = {
 
   // Legacy keys kept for compatibility
   requestAnalysis: { en: 'Contact us', es: 'Contáctanos' },
+
+  // Project analysis — navbar
+  diagnosis: { en: 'Diagnosis', es: 'Diagnóstico' },
+  visualProposal: { en: 'Visual Proposal', es: 'Propuesta Visual' },
+  structure: { en: 'Structure', es: 'Estructura' },
+
+  // Project analysis — grid blocks
+  digitalPresence: { en: 'Current digital presence', es: 'Presencia digital actual' },
+  howItFeels: { en: 'How it feels · How it looks', es: 'Cómo se siente · Cómo se ve' },
+  sitemapGoals: { en: 'Sitemap · Goals · Advantage', es: 'Sitemap · Objetivos · Ventaja' },
+  tapToDiscover: { en: 'Tap to discover', es: 'Toca para descubrir' },
+
+  // Project analysis — diagnosis view
+  diagAddress: { en: 'Address', es: 'Dirección' },
+  diagPhone: { en: 'Phone', es: 'Teléfono' },
+  diagHours: { en: 'Hours', es: 'Horarios' },
+  diagGoogleMaps: { en: 'Google Maps', es: 'Google Maps' },
+  diagRating: { en: 'Google Rating', es: 'Rating Google' },
+  diagReviews: { en: 'reviews', es: 'reseñas' },
+  diagFollowers: { en: 'Followers', es: 'Seguidores' },
+  diagQuality: { en: 'Quality', es: 'Calidad' },
+  diagFacebook: { en: 'Facebook', es: 'Facebook' },
+  diagCustomerSay: { en: 'What your customers say', es: 'Lo que dicen tus clientes' },
+  diagWebPresence: { en: 'Web Presence', es: 'Presencia Web' },
+  diagNoWebsite: { en: 'No web presence', es: 'Sin presencia web' },
+  diagOpportunity: { en: 'Clear opportunity for digital differentiation', es: 'Oportunidad clara de diferenciación digital' },
+
+  // Project analysis — visual proposal view
+  paletteTitle: { en: 'Color Palette', es: 'Paleta de Color' },
+  typographyTitle: { en: 'Type System', es: 'Sistema Tipográfico' },
+  elementsTitle: { en: 'Proposed Visual Elements', es: 'Elementos Visuales Propuestos' },
+  previewTitle: { en: 'Web Preview', es: 'Preview Web' },
+  tabPalette: { en: 'Palette', es: 'Paleta' },
+  tabTypography: { en: 'Typography', es: 'Tipografía' },
+  tabMood: { en: 'Mood', es: 'Mood' },
+  tabElements: { en: 'Elements', es: 'Elementos' },
+  tabPreview: { en: 'Preview', es: 'Preview Web' },
+  typHeadlines: { en: 'HEADLINES', es: 'TITULARES' },
+  typBody: { en: 'BODY', es: 'CUERPO' },
+  typAccent: { en: 'ACCENT', es: 'ACENTO' },
+  typHeadlinesDesc: { en: 'Used in titles, section names and featured elements. Conveys elegance and editorial authority.', es: 'Se utiliza en títulos, nombres de secciones y elementos destacados. Transmite elegancia y autoridad editorial.' },
+  typBodyDesc: { en: 'Used in paragraphs, descriptions, buttons and navigation. Prioritizes readability and visual clarity.', es: 'Se utiliza en párrafos, descripciones, botones y navegación. Prioriza legibilidad y limpieza visual.' },
+  typAccentDesc: { en: 'Used in emphasis elements, labels and technical details. Adds typographic contrast.', es: 'Se utiliza en elementos de énfasis, etiquetas y detalles técnicos. Añade contraste tipográfico.' },
+  elemButtons: { en: 'Buttons', es: 'Botones' },
+  elemLighting: { en: 'Lighting', es: 'Iluminación' },
+  elemAnimations: { en: 'Animations', es: 'Animaciones' },
+  elemSiteType: { en: 'Site type', es: 'Tipo de sitio' },
+  elemSectionNote: { en: 'each section = 100vh', es: 'cada sección = 100vh' },
+  moodReference: { en: 'Reference: ', es: 'Referencia: ' },
+  previewInDev: { en: 'In development', es: 'En desarrollo' },
+  previewBuilding: { en: 'Your personalized site is being built.', es: 'Tu sitio personalizado se está construyendo.' },
+  previewAccess: { en: 'You will receive access for review when the project starts.', es: 'Recibirás acceso para revisión al iniciar el proyecto.' },
+  previewAvailable: { en: 'Site available', es: 'Sitio disponible' },
+
+  // Project analysis — structure view
+  tabSitemap: { en: 'Sitemap', es: 'Sitemap' },
+  tabObjectives: { en: 'Objectives', es: 'Objetivos' },
+  tabFeatures: { en: 'Differentiators', es: 'Diferenciadores' },
+  tabAdvantage: { en: 'Your Advantage', es: 'Tu Ventaja' },
+  tabCompetitors: { en: 'Competition', es: 'Competencia' },
+  sitemapTitle: { en: 'Site Architecture', es: 'Arquitectura del Sitio' },
+  objectivesTitle: { en: 'Digital Impact', es: 'Impacto Digital' },
+  featuresTitle: { en: 'Differentiators', es: 'Diferenciadores' },
+  advantageLabel: { en: 'Your Strength', es: 'Tu Fortaleza' },
+  competitorsTitle: { en: 'Competitive Landscape', es: 'Panorama Competitivo' },
+  competitorStrength: { en: 'Their digital strength:', es: 'Su fortaleza digital:' },
+  competitorOpportunity: { en: 'Your opportunity:', es: 'Tu oportunidad:' },
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
