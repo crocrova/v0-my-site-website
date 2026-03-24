@@ -360,7 +360,7 @@ function AnalysisLogoBlock({ project }: { project: ProjectAnalysis }) {
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       {project.logoUrl ? (
-        <img src={project.logoUrl} alt={project.clientName} style={{ maxHeight: 60, maxWidth: '80%', objectFit: 'contain' }} />
+        <img src={project.logoUrl} alt={project.clientName} style={{ maxHeight: 120, maxWidth: '80%', objectFit: 'contain' }} />
       ) : (
         <span className="font-serif italic font-light" style={{ fontSize: '1.5rem', color: colors.textSecondary }}>
           {project.clientName}
