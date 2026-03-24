@@ -568,8 +568,8 @@ export default function TopoSite() {
             src="/images/topo/logo.png"
             alt="TOPO Logo"
             style={{
-              height: '70px',
-              width: '70px',
+              height: '100px',
+              width: '100px',
               objectFit: 'contain',
               marginBottom: 4,
             }}
