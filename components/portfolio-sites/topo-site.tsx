@@ -448,9 +448,8 @@ export default function TopoSite() {
           src="/images/topo/logo.png"
           alt="TOPO"
           style={{
-            height: 28,
+            height: 24,
             width: 'auto',
-            filter: 'brightness(0) invert(1)',
           }}
         />
         {/* Nav links + CTA */}
@@ -564,20 +563,16 @@ export default function TopoSite() {
             backdropFilter: 'blur(0px)',
           }}
         >
-          {/* Logo — crop SVG whitespace with overflow:hidden container */}
-          <div style={{ overflow: 'hidden', alignSelf: 'flex-start', height: 100, marginBottom: 4 }}>
-            <img
-              src="/images/topo/logo.png"
-              alt="TOPO Logo"
-              style={{
-                height: 300,
-                width: 'auto',
-                marginTop: -80,
-                filter: 'brightness(0) invert(1)',
-                display: 'block',
-              }}
-            />
-          </div>
+          {/* Logo */}
+          <img
+            src="/images/topo/logo.png"
+            alt="TOPO Logo"
+            style={{
+              height: 80,
+              width: 'auto',
+              marginBottom: 4,
+            }}
+          />
 
           {/* Byline */}
           <div
