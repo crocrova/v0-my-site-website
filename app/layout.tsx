@@ -23,25 +23,10 @@ const spaceMono = Space_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'MY.SITE | Professional Web Design Agency',
+  title: 'MY.SITE | Professional Web Design',
   description: 'Professional web design agency based in Los Cabos, Mexico. We create stunning websites for restaurants, clinics, hotels, and more.',
-  generator: 'v0.app',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/favicon.png',
   },
 }
 
