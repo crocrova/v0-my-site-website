@@ -445,7 +445,7 @@ export default function TopoSite() {
       >
         {/* Logo */}
         <img
-          src="/images/topo/logo.svg"
+          src="/images/topo/logo.png"
           alt="TOPO"
           style={{
             height: 28,
@@ -567,7 +567,7 @@ export default function TopoSite() {
           {/* Logo — crop SVG whitespace with overflow:hidden container */}
           <div style={{ overflow: 'hidden', alignSelf: 'flex-start', height: 100, marginBottom: 4 }}>
             <img
-              src="/images/topo/logo.svg"
+              src="/images/topo/logo.png"
               alt="TOPO Logo"
               style={{
                 height: 300,
