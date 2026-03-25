@@ -10,19 +10,29 @@ const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 type VisualTab = 'palette' | 'typography' | 'mood' | 'elements' | 'preview'
 
-// Tabs are rendered dynamically with t() in the component
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+  return isMobile
+}
 
 // ─── Palette ──────────────────────────────────────────────────────────────────
 
 function PaletteContent({ project }: { project: ProjectAnalysis }) {
   const { colors, visualProposal } = project
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-6" style={{ fontSize: '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-6" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: colors.text }}>
         {t('paletteTitle')}
       </p>
-      <div className="flex flex-wrap gap-3 flex-1 content-start">
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
         {visualProposal.palette.map((color) => (
           <div
             key={color.hex}
@@ -30,19 +40,17 @@ function PaletteContent({ project }: { project: ProjectAnalysis }) {
               backgroundColor: colors.backgroundBlock,
               border: `1px solid ${colors.border}`,
               borderRadius: 16,
-              padding: 20,
-              width: 'calc(50% - 6px)',
-              minWidth: 140,
+              padding: isMobile ? 14 : 20,
               display: 'flex',
               flexDirection: 'column',
-              gap: 10,
+              gap: 8,
             }}
           >
             <div
               className="rounded-full"
               style={{
-                width: 56,
-                height: 56,
+                width: isMobile ? 44 : 56,
+                height: isMobile ? 44 : 56,
                 backgroundColor: color.hex,
                 border: `1px solid ${colors.border}`,
                 boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
@@ -76,6 +84,7 @@ function TypographyContent({ project }: { project: ProjectAnalysis }) {
   const { colors, visualProposal } = project
   const { typography } = visualProposal
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const families = [typography.heading, typography.body, typography.accent].filter(Boolean)
@@ -91,8 +100,7 @@ function TypographyContent({ project }: { project: ProjectAnalysis }) {
     backgroundColor: colors.backgroundBlock,
     border: `1px solid ${colors.border}`,
     borderRadius: 16,
-    padding: 24,
-    flex: 1,
+    padding: isMobile ? 16 : 24,
     display: 'flex',
     flexDirection: 'column',
     gap: 12,
@@ -102,21 +110,21 @@ function TypographyContent({ project }: { project: ProjectAnalysis }) {
     {
       label: t('typHeadlines'),
       font: typography.heading,
-      nameSize: '2.5rem',
+      nameSize: isMobile ? '1.8rem' : '2.5rem',
       specimenFont: `'${typography.heading}', serif`,
       explanation: t('typHeadlinesDesc'),
     },
     {
       label: t('typBody'),
       font: typography.body,
-      nameSize: '1.5rem',
+      nameSize: isMobile ? '1.2rem' : '1.5rem',
       specimenFont: `'${typography.body}', sans-serif`,
       explanation: t('typBodyDesc'),
     },
     ...(typography.accent ? [{
       label: t('typAccent'),
       font: typography.accent,
-      nameSize: '1.5rem',
+      nameSize: isMobile ? '1.2rem' : '1.5rem',
       specimenFont: `'${typography.accent}', monospace`,
       explanation: t('typAccentDesc'),
     }] : []),
@@ -124,16 +132,14 @@ function TypographyContent({ project }: { project: ProjectAnalysis }) {
 
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-6" style={{ fontSize: '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-6" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: colors.text }}>
         {t('typographyTitle')}
       </p>
-      <div className="flex gap-4 flex-1">
+      {/* Mobile: vertical stack; Desktop: horizontal row */}
+      <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 12 : 16, flex: 1 }}>
         {cards.map((card) => (
           <div key={card.label} style={cardStyle}>
-            <p
-              className="font-sans font-semibold uppercase"
-              style={{ fontSize: '0.6rem', color: colors.accent, letterSpacing: '2px' }}
-            >
+            <p className="font-sans font-semibold uppercase" style={{ fontSize: '0.6rem', color: colors.accent, letterSpacing: '2px' }}>
               {card.label}
             </p>
             <p style={{ fontFamily: card.specimenFont, fontSize: card.nameSize, color: colors.text, lineHeight: 1.1 }}>
@@ -158,15 +164,15 @@ function MoodContent({ project }: { project: ProjectAnalysis }) {
   const { colors, visualProposal } = project
   const { mood } = visualProposal
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
   return (
-    <div className="flex h-full flex-col items-center justify-center">
-      {/* Words */}
-      <div className="flex flex-col items-center gap-6">
+    <div className="flex h-full flex-col items-center justify-center" style={{ paddingBottom: isMobile ? 24 : 0 }}>
+      <div className="flex flex-col items-center gap-4">
         {mood.words.map((word, i) => (
           <div key={word} className="flex flex-col items-center">
             <motion.p
               className="font-serif italic"
-              style={{ fontSize: '3rem', fontWeight: 300, color: colors.accent }}
+              style={{ fontSize: isMobile ? '2rem' : '3rem', fontWeight: 300, color: colors.accent }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: i * 0.15, ease: EASE }}
@@ -174,22 +180,20 @@ function MoodContent({ project }: { project: ProjectAnalysis }) {
               {word}
             </motion.p>
             {i < mood.words.length - 1 && (
-              <div style={{ width: 1, height: 32, backgroundColor: colors.border, marginTop: 8 }} />
+              <div style={{ width: 1, height: 24, backgroundColor: colors.border, marginTop: 6 }} />
             )}
           </div>
         ))}
       </div>
-      {/* Description */}
       <motion.p
-        className="font-sans text-center mt-10"
-        style={{ fontSize: '0.88rem', fontWeight: 300, color: colors.text, maxWidth: 500, lineHeight: 1.75 }}
+        className="font-sans text-center mt-8"
+        style={{ fontSize: isMobile ? '0.8rem' : '0.88rem', fontWeight: 300, color: colors.text, maxWidth: 480, lineHeight: 1.75 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
       >
         {mood.description}
       </motion.p>
-      {/* Reference */}
       <motion.p
         className="font-sans text-center mt-4"
         style={{ fontSize: '0.68rem', color: colors.textSecondary, maxWidth: 440, lineHeight: 1.6 }}
@@ -209,8 +213,8 @@ function MoodContent({ project }: { project: ProjectAnalysis }) {
 function FadeDemo({ accentColor }: { accentColor: string }) {
   const [vis, setVis] = useState(true)
   useEffect(() => {
-    const t = setInterval(() => setVis(v => !v), 2200)
-    return () => clearInterval(t)
+    const timer = setInterval(() => setVis(v => !v), 2200)
+    return () => clearInterval(timer)
   }, [])
   return (
     <div className="flex items-center justify-center" style={{ height: 60 }}>
@@ -238,24 +242,29 @@ function ElementsContent({ project }: { project: ProjectAnalysis }) {
   const { proposedElements, webType } = visualProposal
   const bg = colors.backgroundDark
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
 
   const quadrantStyle: React.CSSProperties = {
     backgroundColor: bg,
     borderRadius: 12,
-    padding: 20,
+    padding: isMobile ? 14 : 20,
     display: 'flex',
     flexDirection: 'column',
     gap: 12,
-    flex: 1,
-    minWidth: 0,
   }
 
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-6" style={{ fontSize: '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-4" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: colors.text }}>
         {t('elementsTitle')}
       </p>
-      <div className="flex-1 grid grid-cols-2 grid-rows-2" style={{ gap: 12 }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+        gridTemplateRows: isMobile ? 'auto' : '1fr 1fr',
+        gap: 12,
+        flex: 1,
+      }}>
         {/* 1 — Botones */}
         <div style={quadrantStyle}>
           <p className="font-sans uppercase tracking-widest" style={{ fontSize: '0.5rem', color: colors.textSecondary }}>
@@ -265,17 +274,10 @@ function ElementsContent({ project }: { project: ProjectAnalysis }) {
             <motion.button
               whileHover={{ boxShadow: `0 0 24px ${colors.accent}55` }}
               style={{
-                border: `1px solid ${colors.accent}`,
-                backgroundColor: 'transparent',
-                color: colors.textLight,
-                padding: '10px 20px',
-                borderRadius: 4,
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-                fontSize: '0.65rem',
-                fontFamily: 'var(--font-jakarta)',
-                cursor: 'pointer',
-                transition: 'box-shadow 0.3s',
+                border: `1px solid ${colors.accent}`, backgroundColor: 'transparent',
+                color: colors.textLight, padding: '10px 20px', borderRadius: 4,
+                letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.65rem',
+                fontFamily: 'var(--font-jakarta)', cursor: 'pointer', transition: 'box-shadow 0.3s',
               }}
             >
               Reserve Now
@@ -283,17 +285,10 @@ function ElementsContent({ project }: { project: ProjectAnalysis }) {
             <motion.button
               whileHover={{ backgroundColor: colors.accent }}
               style={{
-                backgroundColor: `${colors.accent}22`,
-                border: `1px solid ${colors.accent}44`,
-                color: colors.accent,
-                padding: '10px 20px',
-                borderRadius: 4,
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-                fontSize: '0.65rem',
-                fontFamily: 'var(--font-jakarta)',
-                cursor: 'pointer',
-                transition: 'background-color 0.3s',
+                backgroundColor: `${colors.accent}22`, border: `1px solid ${colors.accent}44`,
+                color: colors.accent, padding: '10px 20px', borderRadius: 4,
+                letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.65rem',
+                fontFamily: 'var(--font-jakarta)', cursor: 'pointer', transition: 'background-color 0.3s',
               }}
             >
               View Menu
@@ -309,14 +304,9 @@ function ElementsContent({ project }: { project: ProjectAnalysis }) {
           <p className="font-sans uppercase tracking-widest" style={{ fontSize: '0.5rem', color: colors.textSecondary, position: 'relative', zIndex: 1 }}>
             {t('elemLighting')}
           </p>
-          {/* Spotlight */}
           <div style={{
-            position: 'absolute',
-            top: '-20%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 200,
-            height: 200,
+            position: 'absolute', top: '-20%', left: '50%', transform: 'translateX(-50%)',
+            width: 200, height: 200,
             background: `radial-gradient(circle, ${colors.accent}35 0%, transparent 65%)`,
             pointerEvents: 'none',
           }} />
@@ -349,33 +339,20 @@ function ElementsContent({ project }: { project: ProjectAnalysis }) {
             {t('elemSiteType')}
           </p>
           <div className="flex flex-col items-center justify-center flex-1 gap-3">
-            <span
-              className="font-sans font-bold"
-              style={{
-                backgroundColor: colors.accent,
-                color: colors.backgroundDark,
-                padding: '8px 20px',
-                borderRadius: 4,
-                fontSize: '0.7rem',
-                letterSpacing: '1px',
-                textTransform: 'uppercase',
-              }}
-            >
+            <span className="font-sans font-bold" style={{
+              backgroundColor: colors.accent, color: colors.backgroundDark,
+              padding: '8px 20px', borderRadius: 4, fontSize: '0.7rem',
+              letterSpacing: '1px', textTransform: 'uppercase',
+            }}>
               {webType}
             </span>
-            {/* Mini scroll diagram */}
             <div className="flex flex-col items-center gap-1">
               {Array.from({ length: 3 }).map((_, i) => (
-                <div
-                  key={i}
-                  style={{
-                    width: 48,
-                    height: 12,
-                    backgroundColor: i === 0 ? `${colors.accent}60` : `${colors.accent}20`,
-                    borderRadius: 3,
-                    border: `1px solid ${colors.accent}30`,
-                  }}
-                />
+                <div key={i} style={{
+                  width: 48, height: 12,
+                  backgroundColor: i === 0 ? `${colors.accent}60` : `${colors.accent}20`,
+                  borderRadius: 3, border: `1px solid ${colors.accent}30`,
+                }} />
               ))}
               <p className="font-sans" style={{ fontSize: '0.5rem', color: colors.textSecondary, marginTop: 4 }}>
                 {t('elemSectionNote')}
@@ -404,17 +381,12 @@ function PreviewContent({ project }: { project: ProjectAnalysis }) {
       </p>
       <div
         className="flex-1 flex flex-col rounded-xl overflow-hidden"
-        style={{ border: `1px solid ${colors.border}`, boxShadow: '0 8px 32px rgba(0,0,0,0.08)', minHeight: 0 }}
+        style={{ border: `1px solid ${colors.border}`, boxShadow: '0 8px 32px rgba(0,0,0,0.08)', minHeight: 200 }}
       >
         {/* Browser chrome */}
         <div style={{
-          height: 32,
-          flexShrink: 0,
-          backgroundColor: '#EDEFF2',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 10px',
-          gap: 5,
+          height: 32, flexShrink: 0, backgroundColor: '#EDEFF2',
+          display: 'flex', alignItems: 'center', padding: '0 10px', gap: 5,
           borderBottom: '1px solid #E0E2E7',
         }}>
           <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#FF5F57' }} />
@@ -429,25 +401,18 @@ function PreviewContent({ project }: { project: ProjectAnalysis }) {
           </div>
         </div>
         {/* Screen */}
-        <div
-          className="flex-1 flex flex-col items-center justify-center gap-4"
-          style={{ backgroundColor: colors.backgroundDark, minHeight: 0 }}
-        >
+        <div className="flex-1 flex flex-col items-center justify-center gap-4"
+          style={{ backgroundColor: colors.backgroundDark, minHeight: 120 }}>
           {preview.isUnlocked ? (
             <p className="font-sans" style={{ color: colors.textSecondary, fontSize: '0.8rem' }}>
               {t('previewAvailable')}
             </p>
           ) : (
             <>
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
-              >
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}>
                 <Loader2 size={40} color={colors.accent} />
               </motion.div>
-              <p className="font-sans font-medium" style={{ fontSize: '1rem', color: colors.textLight }}>
-                {t('previewInDev')}
-              </p>
+              <p className="font-sans font-medium" style={{ fontSize: '1rem', color: colors.textLight }}>{t('previewInDev')}</p>
               <p className="font-sans text-center" style={{ fontSize: '0.7rem', color: colors.textSecondary, maxWidth: 280, lineHeight: 1.65 }}>
                 {t('previewBuilding')}
               </p>
@@ -473,6 +438,7 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
   const [selectedTab, setSelectedTab] = useState<VisualTab>('palette')
   const { colors } = project
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
 
   const TABS: { id: VisualTab; label: string }[] = [
     { id: 'palette', label: t('tabPalette') },
@@ -485,6 +451,83 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
   const blockBg = colors.backgroundBlock
   const blockBorder = colors.border
 
+  const tabContent = (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={selectedTab}
+        className="h-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        style={{ ...(isMobile ? { paddingBottom: 24 } : {}) }}
+      >
+        {selectedTab === 'palette' && <PaletteContent project={project} />}
+        {selectedTab === 'typography' && <TypographyContent project={project} />}
+        {selectedTab === 'mood' && <MoodContent project={project} />}
+        {selectedTab === 'elements' && <ElementsContent project={project} />}
+        {selectedTab === 'preview' && <PreviewContent project={project} />}
+      </motion.div>
+    </AnimatePresence>
+  )
+
+  // ── Mobile: horizontal tabs scrollable ──────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0, paddingBottom: 80 }}>
+        {/* Back button fixed */}
+        <button
+          onClick={onBack}
+          style={{
+            position: 'fixed', top: 16, left: 16, zIndex: 60,
+            display: 'flex', alignItems: 'center', gap: 6,
+            backgroundColor: blockBg, border: `1px solid ${blockBorder}`,
+            borderRadius: 20, padding: '8px 14px',
+            cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+          }}
+        >
+          <ArrowLeft size={14} color={colors.textSecondary} />
+          <span className="font-sans font-medium" style={{ fontSize: '0.75rem', color: colors.textSecondary }}>
+            {t('back')}
+          </span>
+        </button>
+
+        {/* Spacer */}
+        <div style={{ height: 60 }} />
+
+        {/* Horizontal tabs */}
+        <div style={{
+          display: 'flex', gap: 8, overflowX: 'auto', padding: '4px 0 12px',
+          scrollbarWidth: 'none',
+        }}>
+          {TABS.map(tab => {
+            const isActive = selectedTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setSelectedTab(tab.id)}
+                style={{
+                  padding: '8px 16px', borderRadius: 20, cursor: 'pointer',
+                  backgroundColor: isActive ? colors.accent : blockBg,
+                  color: isActive ? colors.textLight : colors.textSecondary,
+                  fontSize: '0.7rem', fontFamily: 'var(--font-jakarta)', fontWeight: isActive ? 600 : 400,
+                  whiteSpace: 'nowrap', flexShrink: 0,
+                  border: isActive ? 'none' : `1px solid ${blockBorder}`,
+                }}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Content */}
+        <div style={{ minHeight: 300 }}>{tabContent}</div>
+      </div>
+    )
+  }
+
+  // ── Desktop: left tabs + right panel ────────────────────────────────────────
   return (
     <div className="grid h-full w-full" style={{ gridTemplateColumns: '20% 1fr', gap: 8 }}>
       {/* Left column */}
@@ -508,14 +551,10 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
               onClick={() => setSelectedTab(tab.id)}
               whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.05)' }}
             >
-              <span
-                className="font-sans"
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive ? colors.text : colors.textSecondary,
-                }}
-              >
+              <span className="font-sans" style={{
+                fontSize: '0.75rem', fontWeight: isActive ? 600 : 400,
+                color: isActive ? colors.text : colors.textSecondary,
+              }}>
                 {tab.label}
               </span>
             </motion.div>
@@ -540,28 +579,13 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
 
       {/* Right panel */}
       <motion.div
-        className="rounded-2xl overflow-hidden"
+        className="rounded-2xl overflow-auto"
         style={{ backgroundColor: blockBg, border: `1px solid ${blockBorder}`, padding: 28, height: '100%', minHeight: 0 }}
         initial={{ opacity: 0, x: 16 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3, delay: 0.1, ease: EASE }}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedTab}
-            className="h-full"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {selectedTab === 'palette' && <PaletteContent project={project} />}
-            {selectedTab === 'typography' && <TypographyContent project={project} />}
-            {selectedTab === 'mood' && <MoodContent project={project} />}
-            {selectedTab === 'elements' && <ElementsContent project={project} />}
-            {selectedTab === 'preview' && <PreviewContent project={project} />}
-          </motion.div>
-        </AnimatePresence>
+        {tabContent}
       </motion.div>
     </div>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   ArrowLeft, Zap, Globe,
@@ -8,6 +8,17 @@ import {
 } from 'lucide-react'
 import type { ProjectAnalysis } from '@/lib/project-data'
 import { useLanguage } from '@/lib/language-context'
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+  return isMobile
+}
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -29,6 +40,7 @@ const SECTION_BADGES: Record<string, string> = {
 function SitemapContent({ project }: { project: ProjectAnalysis }) {
   const { colors, structureProposal } = project
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
   const sitemap = structureProposal.sitemap
 
   const root = sitemap[0]
@@ -74,6 +86,25 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
         <p className="font-sans" style={{ fontSize: '0.57rem', color: colors.textSecondary, lineHeight: 1.4, fontWeight: 300 }}>
           {section.description}
         </p>
+      </div>
+    )
+  }
+
+  // Mobile: simple vertical list
+  if (isMobile) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+        <p className="font-serif mb-4" style={{ fontSize: '1.2rem', fontWeight: 400, color: colors.text }}>
+          {t('sitemapTitle')}
+        </p>
+        {sitemap.map((section, i) => (
+          <div key={section.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+            <SitemapCard section={section} />
+            {i < sitemap.length - 1 && (
+              <div style={{ width: LINE, height: 12, backgroundColor: colors.border, marginLeft: 16 }} />
+            )}
+          </div>
+        ))}
       </div>
     )
   }
@@ -331,6 +362,7 @@ export function StructureView({ project, onBack }: StructureViewProps) {
   const [selectedTab, setSelectedTab] = useState<StructureTab>('sitemap')
   const { colors } = project
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
 
   const TABS: { id: StructureTab; label: string }[] = [
     { id: 'sitemap', label: t('tabSitemap') },
@@ -343,6 +375,81 @@ export function StructureView({ project, onBack }: StructureViewProps) {
   const blockBg = colors.backgroundBlock
   const blockBorder = colors.border
 
+  const tabContent = (
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={selectedTab}
+        style={{ ...(isMobile ? {} : { height: '100%', overflow: 'auto' }) }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        {selectedTab === 'sitemap' && <SitemapContent project={project} />}
+        {selectedTab === 'objectives' && <ObjectivesContent project={project} />}
+        {selectedTab === 'features' && <FeaturesContent project={project} />}
+        {selectedTab === 'advantage' && <AdvantageContent project={project} />}
+        {selectedTab === 'competitors' && <CompetitorsContent project={project} />}
+      </motion.div>
+    </AnimatePresence>
+  )
+
+  // ── Mobile: horizontal tabs ──────────────────────────────────────────────────
+  if (isMobile) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0, paddingBottom: 80 }}>
+        {/* Back button fixed */}
+        <button
+          onClick={onBack}
+          style={{
+            position: 'fixed', top: 16, left: 16, zIndex: 60,
+            display: 'flex', alignItems: 'center', gap: 6,
+            backgroundColor: blockBg, border: `1px solid ${blockBorder}`,
+            borderRadius: 20, padding: '8px 14px',
+            cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+          }}
+        >
+          <ArrowLeft size={14} color={colors.textSecondary} />
+          <span className="font-sans font-medium" style={{ fontSize: '0.75rem', color: colors.textSecondary }}>
+            {t('back')}
+          </span>
+        </button>
+
+        <div style={{ height: 60 }} />
+
+        {/* Horizontal tabs */}
+        <div style={{
+          display: 'flex', gap: 8, overflowX: 'auto', padding: '4px 0 12px',
+          scrollbarWidth: 'none',
+        }}>
+          {TABS.map(tab => {
+            const isActive = selectedTab === tab.id
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setSelectedTab(tab.id)}
+                style={{
+                  padding: '8px 16px', borderRadius: 20, border: isActive ? 'none' : `1px solid ${blockBorder}`,
+                  cursor: 'pointer',
+                  backgroundColor: isActive ? colors.accent : blockBg,
+                  color: isActive ? colors.textLight : colors.textSecondary,
+                  fontSize: '0.7rem', fontFamily: 'var(--font-jakarta)', fontWeight: isActive ? 600 : 400,
+                  whiteSpace: 'nowrap', flexShrink: 0,
+                }}
+              >
+                {tab.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Content */}
+        <div style={{ minHeight: 300 }}>{tabContent}</div>
+      </div>
+    )
+  }
+
+  // ── Desktop: left tabs + right panel ────────────────────────────────────────
   return (
     <div className="grid h-full w-full" style={{ gridTemplateColumns: '20% 1fr', gap: 8 }}>
       {/* Left column */}
@@ -366,14 +473,10 @@ export function StructureView({ project, onBack }: StructureViewProps) {
               onClick={() => setSelectedTab(tab.id)}
               whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.05)' }}
             >
-              <span
-                className="font-sans"
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: isActive ? 600 : 400,
-                  color: isActive ? colors.text : colors.textSecondary,
-                }}
-              >
+              <span className="font-sans" style={{
+                fontSize: '0.75rem', fontWeight: isActive ? 600 : 400,
+                color: isActive ? colors.text : colors.textSecondary,
+              }}>
                 {tab.label}
               </span>
             </motion.div>
@@ -404,22 +507,7 @@ export function StructureView({ project, onBack }: StructureViewProps) {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3, delay: 0.1, ease: EASE }}
       >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedTab}
-            className="h-full overflow-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {selectedTab === 'sitemap' && <SitemapContent project={project} />}
-            {selectedTab === 'objectives' && <ObjectivesContent project={project} />}
-            {selectedTab === 'features' && <FeaturesContent project={project} />}
-            {selectedTab === 'advantage' && <AdvantageContent project={project} />}
-            {selectedTab === 'competitors' && <CompetitorsContent project={project} />}
-          </motion.div>
-        </AnimatePresence>
+        {tabContent}
       </motion.div>
     </div>
   )
