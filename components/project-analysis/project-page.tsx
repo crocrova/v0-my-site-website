@@ -272,12 +272,12 @@ function AnalysisLogoBlock({ project }: { project: ProjectAnalysis }) {
   return (
     <motion.div
       className="flex h-full w-full items-center justify-center rounded-2xl"
-      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: isMobile ? '20px 16px' : 16 }}
+      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: 16 }}
       whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       {project.logoUrl ? (
-        <img src={project.logoUrl} alt={project.clientName} style={{ maxHeight: isMobile ? 80 : 120, maxWidth: '80%', objectFit: 'contain' }} />
+        <img src={project.logoUrl} alt={project.clientName} style={{ maxHeight: isMobile ? 48 : 120, maxWidth: '80%', objectFit: 'contain' }} />
       ) : (
         <span className="font-serif italic font-light" style={{ fontSize: '1.5rem', color: colors.textSecondary }}>
           {project.clientName}
@@ -392,7 +392,7 @@ function AnalysisGridMobile({
     },
     {
       key: 'logo',
-      height: 'auto',
+      height: 80,
       el: <AnalysisLogoBlock project={project} />,
     },
     {
