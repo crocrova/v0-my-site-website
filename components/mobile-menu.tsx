@@ -6,7 +6,6 @@ import {
   CheckCircle, ArrowRight, Sparkles, Send, MousePointer2,
 } from 'lucide-react'
 import { useLanguage } from '@/lib/language-context'
-import { Button } from '@/components/ui/button'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Sheet,
@@ -78,8 +77,7 @@ const plans = [
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false)
   const [activeDialog, setActiveDialog] = useState<'portfolio' | 'plans' | 'contact' | null>(null)
-  const [expandedProject, setExpandedProject] = useState<number | null>(null)
-  const [viewMode, setViewMode] = useState<'web' | 'mobile'>('web')
+  const [portfolioSelectedId, setPortfolioSelectedId] = useState(projects[0].id)
   const [contactPhase, setContactPhase] = useState<1 | 2>(1)
   const [businessName, setBusinessName] = useState('')
   const [phone, setPhone] = useState('')
@@ -262,7 +260,7 @@ export function MobileMenu() {
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
             <button
-              onClick={() => { setExpandedProject(null); setActiveDialog(null) }}
+              onClick={() => setActiveDialog(null)}
               className="flex items-center gap-2 font-sans text-[0.85rem] font-medium text-[#8C8C8C]"
             >
               <ArrowLeft size={16} />
@@ -274,126 +272,105 @@ export function MobileMenu() {
             <div className="w-14" />
           </DialogHeader>
 
-          <div className="flex flex-col gap-3 p-4">
-            {projects.map((project) => (
-              <div key={project.id}>
-                <motion.div
-                  className="cursor-pointer rounded-2xl p-4"
-                  style={{ backgroundColor: project.bg, border: (project as any).border }}
-                  onClick={() => setExpandedProject(expandedProject === project.id ? null : project.id)}
-                  whileHover={{ scale: 1.01, boxShadow: '0 4px 16px rgba(0,0,0,0.06)' }}
-                  transition={{ duration: 0.25 }}
-                >
-                  <p className={project.nameFont} style={{ color: project.nameColor, fontSize: '1rem' }}>
-                    {project.name}
-                  </p>
-                  <div className="mt-1.5 flex gap-1.5">
-                    {project.swatches.map((color, i) => (
-                      <div
-                        key={i}
-                        className="rounded-full"
-                        style={{
-                          width: '10px', height: '10px', backgroundColor: color,
-                          border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined,
-                        }}
-                      />
-                    ))}
-                  </div>
-                  <p className="mt-1.5 font-sans" style={{ color: project.labelColor, fontSize: '0.65rem' }}>
-                    {t(project.labelKey)}
-                  </p>
-                </motion.div>
-
-                {/* Expandable detail */}
-                <AnimatePresence>
-                  {expandedProject === project.id && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.35 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="mt-2 rounded-2xl bg-[#F5F6F8] p-4">
-                        <p className="font-sans text-[0.8rem] text-[#8C8C8C]">{t(project.subtitleKey)}</p>
-                        <div className="mt-2 flex items-center gap-3">
-                          {project.swatches.map((color, i) => (
-                            <div key={i} className="flex flex-col items-center gap-0.5">
-                              <div
-                                className="rounded-full"
-                                style={{
-                                  width: '14px', height: '14px', backgroundColor: color,
-                                  border: color === '#FFFFFF' ? '1px solid #E8E9EC' : undefined,
-                                }}
-                              />
-                              <span className="font-mono text-[0.5rem] text-[#8C8C8C]">{color}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="mt-3 flex gap-2">
-                          {(['web', 'mobile'] as const).map((mode) => (
-                            <button
-                              key={mode}
-                              className="rounded-lg px-3 py-1 font-sans text-[0.75rem]"
-                              style={{
-                                backgroundColor: viewMode === mode ? 'white' : 'transparent',
-                                color: viewMode === mode ? '#2D2D2D' : '#C4C4C4',
-                                fontWeight: viewMode === mode ? 600 : 400,
-                              }}
-                              onClick={(e) => { e.stopPropagation(); setViewMode(mode) }}
-                            >
-                              {t(mode)}
-                            </button>
-                          ))}
-                        </div>
-                        {/* Mockup */}
-                        <div className="mt-3 flex justify-center">
-                          {viewMode === 'web' ? (
-                            <div
-                              className="relative w-full overflow-hidden rounded-xl border border-[#E8E9EC]"
-                              style={{ backgroundColor: project.mockupBg, aspectRatio: '16/10' }}
-                            >
-                              <div
-                                className="absolute left-0 right-0 top-0 flex items-center border-b border-[#E8E9EC] bg-[#F5F6F8]"
-                                style={{ height: '20px', padding: '0 8px', gap: '4px' }}
-                              >
-                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#FF5F57' }} />
-                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
-                                <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#28C840' }} />
-                              </div>
-                            </div>
-                          ) : (
-                            <div
-                              className="relative overflow-hidden"
-                              style={{
-                                backgroundColor: project.mockupBg, width: '120px',
-                                aspectRatio: '9/19', borderRadius: '16px', border: '2px solid #2D2D2D',
-                              }}
-                            >
-                              <div
-                                className="absolute left-0 right-0 top-0 flex items-center justify-center"
-                                style={{ height: '16px', backgroundColor: project.mockupBg }}
-                              >
-                                <div style={{ width: '30px', height: '3px', borderRadius: '2px', backgroundColor: '#E8E9EC' }} />
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        <p className="mt-2 text-center font-serif text-[0.6rem] italic text-[#C4C4C4]">
-                          {t('portfolioDisclaimer')}
-                        </p>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+          {/* Horizontal scrollable tabs */}
+          <div
+            style={{ display: 'flex', overflowX: 'auto', gap: 8, padding: '12px 16px 4px', scrollbarWidth: 'none' } as React.CSSProperties}
+          >
+            {projects.map(p => (
+              <button
+                key={p.id}
+                onClick={() => setPortfolioSelectedId(p.id)}
+                style={{
+                  padding: '6px 14px', borderRadius: 20, border: 'none', cursor: 'pointer', flexShrink: 0,
+                  backgroundColor: p.id === portfolioSelectedId ? '#2D2D2D' : '#F5F6F8',
+                  color: p.id === portfolioSelectedId ? '#FFFFFF' : '#8C8C8C',
+                  fontFamily: 'var(--font-jakarta)', fontSize: '0.78rem',
+                  fontWeight: p.id === portfolioSelectedId ? 600 : 400,
+                  transition: 'all 180ms',
+                }}
+              >
+                {p.name}
+              </button>
             ))}
           </div>
+
+          {/* Selected project content */}
+          <AnimatePresence mode="wait">
+            {projects.filter(p => p.id === portfolioSelectedId).map(project => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                style={{ padding: '16px 16px 32px', display: 'flex', flexDirection: 'column', gap: 12 }}
+              >
+                {/* Project name + swatches */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                  <p className={project.nameFont} style={{ color: project.nameColor, fontSize: '1.1rem' }}>
+                    {project.name}
+                  </p>
+                  <div style={{ display: 'flex', gap: 5, alignItems: 'center' }}>
+                    {project.swatches.map((color, i) => (
+                      <div key={i} style={{
+                        width: 9, height: 9, borderRadius: '50%', backgroundColor: color,
+                        border: color === '#FFFFFF' || color === '#FAFAF8' ? '1px solid #E8E9EC' : undefined,
+                      }} />
+                    ))}
+                  </div>
+                </div>
+                <p className="font-sans" style={{ color: project.labelColor, fontSize: '0.65rem', marginTop: -4 }}>
+                  {t(project.labelKey)}
+                </p>
+
+                {/* Phone frame mockup */}
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0' }}>
+                  <div style={{
+                    width: 160, height: 340, backgroundColor: '#1A1A1A', borderRadius: 30,
+                    boxShadow: '0 20px 60px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.1)',
+                    position: 'relative', overflow: 'hidden', flexShrink: 0,
+                  }}>
+                    {/* Dynamic Island */}
+                    <div style={{
+                      position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)',
+                      width: 52, height: 16, backgroundColor: '#000', borderRadius: 10, zIndex: 10,
+                    }} />
+                    {/* Screen */}
+                    <div style={{
+                      position: 'absolute', top: 8, left: 8, right: 8, bottom: 8,
+                      borderRadius: 22, overflow: 'hidden', backgroundColor: project.mockupBg,
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    }}>
+                      <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: project.swatches[0], opacity: 0.25 }} />
+                      <p className={project.nameFont} style={{ color: project.nameColor, fontSize: '0.65rem' }}>
+                        {project.name}
+                      </p>
+                      <div style={{ display: 'flex', gap: 4 }}>
+                        {project.swatches.slice(0, 3).map((color, i) => (
+                          <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: color, opacity: 0.6 }} />
+                        ))}
+                      </div>
+                    </div>
+                    {/* Home indicator */}
+                    <div style={{
+                      position: 'absolute', bottom: 6, left: '50%', transform: 'translateX(-50%)',
+                      width: 52, height: 3, backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 2, zIndex: 10,
+                    }} />
+                  </div>
+                </div>
+
+                {/* Disclaimer */}
+                <p style={{ textAlign: 'center', fontSize: '0.55rem', fontFamily: 'var(--font-jakarta)', color: '#C8C8C8' }}>
+                  {t('portfolioDisclaimer')}
+                </p>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </DialogContent>
       </Dialog>
 
       {/* ─── Plans Dialog ─── */}
-      <Dialog open={activeDialog === 'plans'} onOpenChange={(open) => !open && setActiveDialog(null)}>
+      <Dialog open={activeDialog === 'plans'} onOpenChange={(open) => { if (!open && activeDialog === 'plans') setActiveDialog(null) }}>
         <DialogContent
           className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0"
           aria-describedby={undefined}
@@ -440,7 +417,7 @@ export function MobileMenu() {
       </Dialog>
 
       {/* ─── Contact Dialog ─── */}
-      <Dialog open={activeDialog === 'contact'} onOpenChange={(open) => !open && setActiveDialog(null)}>
+      <Dialog open={activeDialog === 'contact'} onOpenChange={(open) => { if (!open && activeDialog === 'contact') setActiveDialog(null) }}>
         <DialogContent
           className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0"
           aria-describedby={undefined}
