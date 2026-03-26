@@ -248,14 +248,24 @@ export function MobileMenu() {
       <div className="rounded-2xl bg-[#F5F6F8] p-5">
         <p className="font-sans text-[0.85rem] font-medium text-[#2D2D2D]">Carlos Orozco</p>
         <p className="font-sans text-[0.75rem] text-[#8C8C8C]">{t('creativeDirector')}</p>
-        <p className="mt-2 font-sans text-[0.8rem] text-[#8C8C8C]">612 219 2946</p>
-        <p className="font-sans text-[0.8rem] text-[#8C8C8C]">my.site@oroz.construction</p>
+        <div className="mt-2 flex flex-col gap-0.5">
+          <p className="font-sans text-[0.8rem] text-[#8C8C8C]">612 219 2946</p>
+          <p className="font-sans text-[0.8rem] text-[#8C8C8C]">my.site@oroz.construction</p>
+        </div>
+        <button
+          onClick={() => openDialog('contact')}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl py-3 font-sans text-[0.8rem] font-medium text-white"
+          style={{ backgroundColor: '#4DE8D8' }}
+        >
+          <Send size={14} />
+          {t('contactUs')}
+        </button>
       </div>
 
       {/* ─── Portfolio Dialog ─── */}
       <Dialog open={activeDialog === 'portfolio'} onOpenChange={(open) => !open && setActiveDialog(null)}>
         <DialogContent
-          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
+          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl rounded-b-none border-0 bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
@@ -324,7 +334,11 @@ export function MobileMenu() {
                 </p>
 
                 {/* Web mockup */}
-                <div style={{ width: '100%', aspectRatio: '16/10', borderRadius: 12, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+                <div style={{
+                  width: '100%', height: 200, borderRadius: 12, overflow: 'hidden',
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+                  display: 'flex', flexDirection: 'column',
+                }}>
                   {/* Browser chrome */}
                   <div style={{
                     height: 28, flexShrink: 0, backgroundColor: '#EDEFF2',
@@ -346,7 +360,6 @@ export function MobileMenu() {
                   <div style={{
                     flex: 1, backgroundColor: project.mockupBg,
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
-                    height: 'calc(100% - 28px)',
                   }}>
                     <div style={{ width: 40, height: 40, borderRadius: '50%', backgroundColor: project.swatches[0], opacity: 0.2 }} />
                     <p className={project.nameFont} style={{ color: project.nameColor, fontSize: '0.75rem' }}>
@@ -374,7 +387,7 @@ export function MobileMenu() {
       {/* ─── Plans Dialog ─── */}
       <Dialog open={activeDialog === 'plans'} onOpenChange={(open) => { if (!open && activeDialog === 'plans') setActiveDialog(null) }}>
         <DialogContent
-          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
+          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl rounded-b-none border-0 bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
@@ -421,7 +434,7 @@ export function MobileMenu() {
       {/* ─── Contact Dialog ─── */}
       <Dialog open={activeDialog === 'contact'} onOpenChange={(open) => { if (!open && activeDialog === 'contact') setActiveDialog(null) }}>
         <DialogContent
-          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
+          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl rounded-b-none border-0 bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
