@@ -3,17 +3,21 @@
 import { useState, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { LanguageProvider, useLanguage } from '@/lib/language-context'
-import { Globe, Sparkles, Search, Palette, Mail, ArrowRight, Layers } from 'lucide-react'
+import { Globe, Sparkles, Search, Palette, ArrowRight, Layers, ExternalLink, Loader2 } from 'lucide-react'
 import type { ProjectAnalysis } from '@/lib/project-data'
-
-// Analysis views
 import { DiagnosisView } from './diagnosis-view'
 import { VisualProposalView } from './visual-proposal-view'
 import { StructureView } from './structure-view'
 
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-type AnalysisView = 'grid' | 'diagnosis' | 'visualProposal' | 'structure'
+// MY.SITE home colors — used throughout, NOT client brand colors
+const HOME = {
+  bg: '#FFFFFF',
+  block: '#F5F6F8',
+  accent: '#4DE8D8',
+  text: '#2D2D2D',
+  textSecondary: '#8C8C8C',
+  textLight: '#C4C4C4',
+}
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -32,7 +36,7 @@ const viewVariants = {
   exit: { opacity: 0, transition: { duration: 0.2 } },
 }
 
-// ─── Hook: detect mobile ──────────────────────────────────────────────────────
+type AnalysisView = 'grid' | 'visualProposal' | 'diagnosis' | 'structure'
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false)
@@ -48,100 +52,67 @@ function useIsMobile() {
 // ─── Navbar ───────────────────────────────────────────────────────────────────
 
 function ProjectNavbar({
-  analysisView, project,
-  onDiagnosis, onVisual, onStructure,
+  analysisView,
+  onVisual,
+  onDiagnosis,
+  onStructure,
 }: {
   analysisView: AnalysisView
-  project: ProjectAnalysis
-  onDiagnosis: () => void
   onVisual: () => void
+  onDiagnosis: () => void
   onStructure: () => void
 }) {
   const { language, setLanguage, t } = useLanguage()
-  const { colors } = project
   const isMobile = useIsMobile()
-
-  const links = [
-    { key: 'diagnosis', label: t('diagnosis'), active: analysisView === 'diagnosis', onClick: onDiagnosis },
-    { key: 'visual', label: t('visualProposal'), active: analysisView === 'visualProposal', onClick: onVisual },
-    { key: 'structure', label: t('structure'), active: analysisView === 'structure', onClick: onStructure },
-  ]
 
   return (
     <motion.div
       className="flex shrink-0 items-center justify-between rounded-2xl px-4"
-      style={{
-        backgroundColor: colors.backgroundBlock,
-        border: `1px solid ${colors.border}`,
-        minHeight: isMobile ? 44 : 48,
-      }}
+      style={{ backgroundColor: HOME.block, minHeight: isMobile ? 44 : 48 }}
     >
-      {/* Logo — linkeable */}
-      <a
-        href="https://mysite.oroz.construction"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ textDecoration: 'none' }}
-      >
-        <img src="/logo-placeholder.svg" width={isMobile ? 80 : 100} height={isMobile ? 26 : 33} alt="MY.SITE" />
+      {/* Logo */}
+      <a href="https://mysite.oroz.construction" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+        <img src="/logo-placeholder.svg" width={isMobile ? 70 : 100} height={isMobile ? 23 : 33} alt="MY.SITE" />
       </a>
 
-      {/* Nav links — hidden on mobile */}
+      {/* Nav links — desktop only */}
       {!isMobile && (
         <nav className="flex items-center gap-6">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key="analysis-links"
-              className="flex items-center gap-6"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              {links.map(({ key, label, active, onClick }) => (
-                <button
-                  key={key}
-                  onClick={onClick}
-                  className="relative flex flex-col items-center gap-0.5 pb-1"
-                >
-                  <span
-                    className="font-sans text-[0.85rem] transition-colors duration-200"
-                    style={{ color: active ? colors.text : '#8C8C8C', fontWeight: active ? 600 : 500 }}
-                  >
-                    {label}
-                  </span>
-                  <span
-                    className="rounded-full transition-all duration-200"
-                    style={{
-                      width: 4, height: 4,
-                      backgroundColor: colors.accent,
-                      opacity: active ? 1 : 0,
-                      transform: active ? 'scale(1)' : 'scale(0)',
-                    }}
-                  />
-                </button>
-              ))}
-            </motion.div>
-          </AnimatePresence>
+          {[
+            { key: 'visualProposal', label: t('visualProposal'), active: analysisView === 'visualProposal', onClick: onVisual },
+            { key: 'diagnosis', label: t('diagnosis'), active: analysisView === 'diagnosis', onClick: onDiagnosis },
+            { key: 'structure', label: t('structure'), active: analysisView === 'structure', onClick: onStructure },
+          ].map(({ key, label, active, onClick }) => (
+            <button key={key} onClick={onClick} className="relative flex flex-col items-center gap-0.5 pb-1">
+              <span
+                className="font-sans text-[0.85rem] transition-colors duration-200"
+                style={{ color: active ? HOME.text : HOME.textSecondary, fontWeight: active ? 600 : 500 }}
+              >
+                {label}
+              </span>
+              <span
+                className="rounded-full transition-all duration-200"
+                style={{ width: 4, height: 4, backgroundColor: HOME.accent, opacity: active ? 1 : 0 }}
+              />
+            </button>
+          ))}
         </nav>
       )}
 
       {/* Language toggle */}
       <div className="flex items-center gap-2">
-        <Globe size={isMobile ? 14 : 18} color={colors.accent} />
+        <Globe size={isMobile ? 14 : 18} color={HOME.accent} />
         <div className="flex items-center gap-1 font-sans" style={{ fontSize: isMobile ? '0.7rem' : '0.8rem' }}>
           <button
             onClick={() => setLanguage('en')}
-            style={{ color: language === 'en' ? colors.text : '#C4C4C4', fontWeight: language === 'en' ? 600 : 400 }}
-            className="transition-colors duration-150"
+            style={{ color: language === 'en' ? HOME.text : HOME.textLight, fontWeight: language === 'en' ? 600 : 400 }}
           >
             EN
           </button>
-          <span style={{ color: '#C4C4C4' }}>/</span>
+          <span style={{ color: HOME.textLight }}>/</span>
           <button
             onClick={() => setLanguage('es')}
-            style={{ color: language === 'es' ? colors.text : '#C4C4C4', fontWeight: language === 'es' ? 600 : 400 }}
-            className="transition-colors duration-150"
+            style={{ color: language === 'es' ? HOME.text : HOME.textLight, fontWeight: language === 'es' ? 600 : 400 }}
           >
             ES
           </button>
@@ -151,16 +122,16 @@ function ProjectNavbar({
   )
 }
 
-// ─── Analysis grid blocks ─────────────────────────────────────────────────────
+// ─── Identidad Block (Hero) ────────────────────────────────────────────────────
 
 function IdentidadBlock({ project }: { project: ProjectAnalysis }) {
-  const { keywords, colors } = project
+  const { keywords } = project
   const isMobile = useIsMobile()
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null)
 
   useEffect(() => {
-    const t = setTimeout(() => setHighlightedIndex(0), keywords.length * 60 + 400)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setHighlightedIndex(0), keywords.length * 60 + 400)
+    return () => clearTimeout(timer)
   }, [keywords.length])
 
   useEffect(() => {
@@ -174,17 +145,12 @@ function IdentidadBlock({ project }: { project: ProjectAnalysis }) {
   return (
     <motion.div
       className="relative flex h-full w-full flex-col justify-center rounded-2xl"
-      style={{ padding: isMobile ? 20 : 24, backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}` }}
+      style={{ padding: isMobile ? 20 : 24, backgroundColor: HOME.block }}
       whileHover={{ scale: 1.01, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
-      <Sparkles className="absolute" style={{ right: 14, top: 14 }} size={18} color={colors.accent} />
-      <div
-        className="flex flex-col"
-        style={{
-          gap: isMobile ? 2 : 4,
-        }}
-      >
+      <Sparkles className="absolute" style={{ right: 14, top: 14 }} size={18} color={HOME.accent} />
+      <div className="flex flex-col" style={{ gap: isMobile ? 2 : 4 }}>
         {keywords.map((keyword, index) => (
           <motion.div
             key={index}
@@ -196,7 +162,7 @@ function IdentidadBlock({ project }: { project: ProjectAnalysis }) {
             <motion.span
               className="font-serif font-light italic"
               style={{ fontSize: isMobile ? '1.4rem' : '2.2rem', lineHeight: 1.1 }}
-              animate={{ color: highlightedIndex === index ? colors.accent : colors.text }}
+              animate={{ color: highlightedIndex === index ? HOME.accent : HOME.text }}
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
               my.
@@ -204,7 +170,7 @@ function IdentidadBlock({ project }: { project: ProjectAnalysis }) {
             <motion.span
               className="font-sans font-medium"
               style={{ fontSize: isMobile ? '1.4rem' : '2.2rem', lineHeight: 1.1 }}
-              animate={{ color: highlightedIndex === index ? colors.accent : colors.text }}
+              animate={{ color: highlightedIndex === index ? HOME.accent : HOME.text }}
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             >
               {keyword}
@@ -216,70 +182,67 @@ function IdentidadBlock({ project }: { project: ProjectAnalysis }) {
   )
 }
 
+// ─── Analysis Nav Block ───────────────────────────────────────────────────────
+
 function AnalysisNavBlock({
-  icon: Icon, title, subtitle, project, onClick, highlighted = false,
+  icon: Icon,
+  title,
+  subtitle,
+  onClick,
 }: {
   icon: React.ComponentType<{ size?: number; color?: string }>
   title: string
   subtitle: string
-  project: ProjectAnalysis
   onClick: () => void
-  highlighted?: boolean
 }) {
-  const { colors } = project
   const isMobile = useIsMobile()
-
-  const bg = highlighted ? colors.accent : colors.backgroundBlock
-  const textColor = highlighted ? colors.textLight : colors.text
-  const subColor = highlighted ? `${colors.textLight}CC` : colors.textSecondary
-  const iconColor = highlighted ? colors.textLight : colors.accent
-  const borderStyle = highlighted ? 'none' : `1px solid ${colors.border}`
 
   return (
     <motion.div
       className="relative flex h-full w-full cursor-pointer items-center gap-2 rounded-2xl"
       style={{
-        backgroundColor: bg,
-        border: borderStyle,
+        backgroundColor: HOME.block,
         padding: isMobile ? 20 : 16,
       }}
       onClick={onClick}
-      whileHover={{ scale: 1.015 }}
-      transition={highlighted ? { duration: 2, repeat: Infinity, ease: 'easeInOut' } : { duration: 0.3, ease: 'easeOut' }}
-      animate={highlighted ? {
-        boxShadow: [
-          `0 0 0px ${colors.accent}00`,
-          `0 0 20px ${colors.accent}40`,
-          `0 0 0px ${colors.accent}00`,
-        ],
-      } : {}}
+      whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       <div className="absolute" style={{ right: isMobile ? 12 : 16, top: isMobile ? 12 : 16 }}>
-        <Icon size={isMobile ? 16 : 20} color={iconColor} />
+        <Icon size={isMobile ? 16 : 20} color={HOME.accent} />
       </div>
       <div className="flex flex-1 flex-col">
-        <span className="font-sans font-semibold" style={{ fontSize: isMobile ? '1rem' : '1.3rem', color: textColor }}>{title}</span>
-        <span className="font-sans" style={{ fontSize: isMobile ? '0.65rem' : '0.75rem', color: subColor }}>{subtitle}</span>
+        <span className="font-sans font-semibold" style={{ fontSize: isMobile ? '1rem' : '1.3rem', color: HOME.text }}>
+          {title}
+        </span>
+        <span className="font-sans" style={{ fontSize: isMobile ? '0.65rem' : '0.75rem', color: HOME.textSecondary }}>
+          {subtitle}
+        </span>
       </div>
-      <ArrowRight size={isMobile ? 16 : 20} color={iconColor} />
+      <ArrowRight size={isMobile ? 16 : 20} color={HOME.accent} />
     </motion.div>
   )
 }
 
+// ─── Logo Block ───────────────────────────────────────────────────────────────
+
 function AnalysisLogoBlock({ project }: { project: ProjectAnalysis }) {
-  const { colors } = project
   const isMobile = useIsMobile()
   return (
     <motion.div
       className="flex h-full w-full items-center justify-center rounded-2xl"
-      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: 16 }}
+      style={{ backgroundColor: HOME.block, padding: 16 }}
       whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       {project.logoUrl ? (
-        <img src={project.logoUrl} alt={project.clientName} style={{ maxHeight: isMobile ? 48 : 120, maxWidth: '80%', objectFit: 'contain' }} />
+        <img
+          src={project.logoUrl}
+          alt={project.clientName}
+          style={{ maxHeight: isMobile ? 48 : 120, maxWidth: '80%', objectFit: 'contain' }}
+        />
       ) : (
-        <span className="font-serif italic font-light" style={{ fontSize: '1.5rem', color: colors.textSecondary }}>
+        <span className="font-serif italic font-light" style={{ fontSize: '1.5rem', color: HOME.textSecondary }}>
           {project.clientName}
         </span>
       )}
@@ -287,29 +250,52 @@ function AnalysisLogoBlock({ project }: { project: ProjectAnalysis }) {
   )
 }
 
-function AnalysisContactBlock({ project }: { project: ProjectAnalysis }) {
-  const { colors } = project
-  const { t } = useLanguage()
+// ─── CTA Block ────────────────────────────────────────────────────────────────
+
+function CTABlock({ project }: { project: ProjectAnalysis }) {
   const isMobile = useIsMobile()
+  const isUnlocked = project.preview?.isUnlocked ?? false
+  const clientName = project.clientName.toLowerCase().replace(/\s+/g, '')
+
+  if (isUnlocked) {
+    return (
+      <motion.div
+        className="flex h-full w-full cursor-pointer items-center justify-center gap-3 rounded-2xl"
+        style={{ backgroundColor: '#2D2D2D', padding: isMobile ? 20 : 16 }}
+        onClick={() => {
+          const url = (project.preview as { isUnlocked: boolean; url?: string }).url
+          if (url) window.open(url, '_blank')
+        }}
+        whileHover={{ scale: 1.015 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      >
+        <span className="font-sans font-semibold" style={{ fontSize: isMobile ? '1rem' : '1.1rem', color: '#FFFFFF' }}>
+          Ir a my.{clientName}
+        </span>
+        <ExternalLink size={isMobile ? 16 : 18} color={HOME.accent} />
+      </motion.div>
+    )
+  }
+
   return (
     <motion.div
-      className="relative flex h-full w-full flex-col justify-center rounded-2xl"
-      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: isMobile ? 20 : 16 }}
-      whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className="flex h-full w-full flex-col items-center justify-center gap-3 rounded-2xl"
+      style={{ backgroundColor: '#2D2D2D', padding: isMobile ? 20 : 16 }}
     >
-      <Mail className="absolute" style={{ right: 14, top: 14 }} size={18} color={colors.accent} />
-      <div className="flex flex-col gap-0.5">
-        <p className="font-sans" style={{ fontSize: '0.85rem', fontWeight: 500, color: colors.text }}>Carlos Orozco</p>
-        <p className="font-sans" style={{ fontSize: '0.75rem', color: colors.textSecondary }}>{t('creativeDirector')}</p>
-        <p className="font-sans" style={{ fontSize: '0.8rem', color: colors.textSecondary, marginTop: 6 }}>612 219 2946</p>
-        <p className="font-sans" style={{ fontSize: '0.8rem', color: colors.textSecondary }}>my.site@oroz.construction</p>
-      </div>
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
+      >
+        <Loader2 size={isMobile ? 20 : 24} color={HOME.accent} />
+      </motion.div>
+      <span className="font-sans text-center" style={{ fontSize: isMobile ? '0.75rem' : '0.82rem', color: '#FFFFFF', fontWeight: 500 }}>
+        Tu sitio web se está construyendo
+      </span>
     </motion.div>
   )
 }
 
-// ─── Analysis Grid — Desktop ──────────────────────────────────────────────────
+// ─── Desktop Grid ─────────────────────────────────────────────────────────────
 
 function AnalysisGridDesktop({
   project, onDiagnosis, onVisual, onStructure,
@@ -335,33 +321,33 @@ function AnalysisGridDesktop({
         <IdentidadBlock project={project} />
       </motion.div>
 
-      {/* Right col: Diagnóstico + Propuesta Visual */}
+      {/* Right col: Propuesta Visual + Diagnóstico stacked */}
       <div className="grid grid-rows-2" style={{ gap: 8 }}>
         <motion.div className="h-full" custom={1} variants={blockVariants} initial="hidden" animate="visible" exit="exit">
-          <AnalysisNavBlock icon={Search} title={t('diagnosis')} subtitle={t('digitalPresence')} project={project} onClick={onDiagnosis} />
+          <AnalysisNavBlock icon={Palette} title={t('visualProposal')} subtitle={t('howItFeels')} onClick={onVisual} />
         </motion.div>
         <motion.div className="h-full" custom={2} variants={blockVariants} initial="hidden" animate="visible" exit="exit">
-          <AnalysisNavBlock icon={Palette} title={t('visualProposal')} subtitle={t('howItFeels')} project={project} onClick={onVisual} highlighted />
+          <AnalysisNavBlock icon={Search} title={t('diagnosis')} subtitle={t('digitalPresence')} onClick={onDiagnosis} />
         </motion.div>
       </div>
 
-      {/* Row 2: Logo | Estructura | Contacto */}
+      {/* Row 2: Logo | CTA | Estructura */}
       <div className="col-span-2 grid grid-cols-3" style={{ gap: 8 }}>
         <motion.div className="h-full" custom={3} variants={blockVariants} initial="hidden" animate="visible" exit="exit">
           <AnalysisLogoBlock project={project} />
         </motion.div>
         <motion.div className="h-full" custom={4} variants={blockVariants} initial="hidden" animate="visible" exit="exit">
-          <AnalysisNavBlock icon={Layers} title={t('structure')} subtitle={t('sitemapGoals')} project={project} onClick={onStructure} />
+          <CTABlock project={project} />
         </motion.div>
         <motion.div className="h-full" custom={5} variants={blockVariants} initial="hidden" animate="visible" exit="exit">
-          <AnalysisContactBlock project={project} />
+          <AnalysisNavBlock icon={Layers} title={t('structure')} subtitle={t('sitemapGoals')} onClick={onStructure} />
         </motion.div>
       </div>
     </motion.div>
   )
 }
 
-// ─── Analysis Grid — Mobile ───────────────────────────────────────────────────
+// ─── Mobile Grid ──────────────────────────────────────────────────────────────
 
 function AnalysisGridMobile({
   project, onDiagnosis, onVisual, onStructure,
@@ -373,37 +359,36 @@ function AnalysisGridMobile({
 }) {
   const { t } = useLanguage()
 
-  // Mobile order: Identidad, Visión Creativa (highlighted), Diagnóstico, Estructura, Logo, Contacto
   const blocks = [
     {
       key: 'identidad',
-      height: 'auto',
+      height: undefined as number | undefined,
       el: <IdentidadBlock project={project} />,
     },
     {
       key: 'visual',
-      height: 'auto',
-      el: <AnalysisNavBlock icon={Palette} title={t('visualProposal')} subtitle={t('howItFeels')} project={project} onClick={onVisual} highlighted />,
+      height: undefined as number | undefined,
+      el: <AnalysisNavBlock icon={Palette} title={t('visualProposal')} subtitle={t('howItFeels')} onClick={onVisual} />,
     },
     {
       key: 'diagnosis',
-      height: 'auto',
-      el: <AnalysisNavBlock icon={Search} title={t('diagnosis')} subtitle={t('digitalPresence')} project={project} onClick={onDiagnosis} />,
-    },
-    {
-      key: 'logo',
-      height: 80,
-      el: <AnalysisLogoBlock project={project} />,
+      height: undefined as number | undefined,
+      el: <AnalysisNavBlock icon={Search} title={t('diagnosis')} subtitle={t('digitalPresence')} onClick={onDiagnosis} />,
     },
     {
       key: 'structure',
-      height: 'auto',
-      el: <AnalysisNavBlock icon={Layers} title={t('structure')} subtitle={t('sitemapGoals')} project={project} onClick={onStructure} />,
+      height: undefined as number | undefined,
+      el: <AnalysisNavBlock icon={Layers} title={t('structure')} subtitle={t('sitemapGoals')} onClick={onStructure} />,
     },
     {
-      key: 'contact',
-      height: 'auto',
-      el: <AnalysisContactBlock project={project} />,
+      key: 'cta',
+      height: 88 as number | undefined,
+      el: <CTABlock project={project} />,
+    },
+    {
+      key: 'logo',
+      height: 80 as number | undefined,
+      el: <AnalysisLogoBlock project={project} />,
     },
   ]
 
@@ -419,7 +404,7 @@ function AnalysisGridMobile({
       {blocks.map(({ key, height, el }, i) => (
         <motion.div
           key={key}
-          style={{ height: typeof height === 'number' ? height : undefined, minHeight: typeof height === 'string' ? 72 : undefined }}
+          style={{ height: height !== undefined ? height : undefined, minHeight: height === undefined ? 72 : undefined }}
           custom={i}
           variants={blockVariants}
           initial="hidden"
@@ -433,20 +418,12 @@ function AnalysisGridMobile({
   )
 }
 
-// ─── Expanded view wrapper (mobile fullscreen) ────────────────────────────────
+// ─── Expanded view wrapper ────────────────────────────────────────────────────
 
-function ExpandedView({
-  children, isMobile,
-}: {
-  children: React.ReactNode
-  isMobile: boolean
-}) {
+function ExpandedView({ children, isMobile }: { children: React.ReactNode; isMobile: boolean }) {
   if (isMobile) {
     return (
-      <div style={{
-        position: 'fixed', inset: 0, zIndex: 50,
-        overflowY: 'auto', overflowX: 'hidden',
-      }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 50, overflowY: 'auto', overflowX: 'hidden', backgroundColor: HOME.bg }}>
         {children}
       </div>
     )
@@ -475,7 +452,7 @@ function ProjectPageInner({ project }: { project: ProjectAnalysis }) {
   return (
     <div
       style={{
-        backgroundColor: project.colors.background,
+        backgroundColor: HOME.bg,
         minHeight: '100vh',
         height: isMobile ? 'auto' : '100vh',
         overflow: isMobile ? 'visible' : 'hidden',
@@ -490,10 +467,9 @@ function ProjectPageInner({ project }: { project: ProjectAnalysis }) {
           height: isMobile ? 'auto' : '100%',
         }}
       >
-        {/* Navbar — always visible, not inside AnimatePresence */}
+        {/* Navbar — always visible */}
         <ProjectNavbar
           analysisView={analysisView}
-          project={project}
           onDiagnosis={() => setAnalysisView('diagnosis')}
           onVisual={() => setAnalysisView('visualProposal')}
           onStructure={() => setAnalysisView('structure')}
@@ -501,7 +477,6 @@ function ProjectPageInner({ project }: { project: ProjectAnalysis }) {
 
         {/* Content */}
         {isMobile ? (
-          // ── MOBILE: no relative container, direct render ──
           <>
             {analysisView === 'grid' && (
               <AnalysisGridMobile
@@ -513,7 +488,7 @@ function ProjectPageInner({ project }: { project: ProjectAnalysis }) {
             )}
             {isExpanded && (
               <ExpandedView isMobile>
-                <div style={{ backgroundColor: project.colors.background, minHeight: '100vh', padding: '12px' }}>
+                <div style={{ backgroundColor: HOME.bg, minHeight: '100vh', padding: '12px' }}>
                   {analysisView === 'diagnosis' && (
                     <DiagnosisView project={project} onBack={() => setAnalysisView('grid')} />
                   )}
@@ -528,7 +503,6 @@ function ProjectPageInner({ project }: { project: ProjectAnalysis }) {
             )}
           </>
         ) : (
-          // ── DESKTOP: relative container with AnimatePresence ──
           <div className="relative flex-1" style={{ minHeight: 0 }}>
             <AnimatePresence mode="wait">
               {analysisView === 'grid' && (

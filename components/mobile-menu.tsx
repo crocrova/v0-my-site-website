@@ -255,7 +255,7 @@ export function MobileMenu() {
       {/* ─── Portfolio Dialog ─── */}
       <Dialog open={activeDialog === 'portfolio'} onOpenChange={(open) => !open && setActiveDialog(null)}>
         <DialogContent
-          className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0"
+          className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[90vh] overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
@@ -323,39 +323,41 @@ export function MobileMenu() {
                   {t(project.labelKey)}
                 </p>
 
-                {/* Phone frame mockup */}
-                <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0' }}>
+                {/* Web mockup */}
+                <div style={{ width: '100%', aspectRatio: '16/10', borderRadius: 12, overflow: 'hidden', boxShadow: '0 8px 32px rgba(0,0,0,0.12)' }}>
+                  {/* Browser chrome */}
                   <div style={{
-                    width: 160, height: 340, backgroundColor: '#1A1A1A', borderRadius: 30,
-                    boxShadow: '0 20px 60px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.1)',
-                    position: 'relative', overflow: 'hidden', flexShrink: 0,
+                    height: 28, flexShrink: 0, backgroundColor: '#EDEFF2',
+                    display: 'flex', alignItems: 'center', padding: '0 10px', gap: 5,
+                    borderBottom: '1px solid #E0E2E7',
                   }}>
-                    {/* Dynamic Island */}
+                    <div style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#FF5F57' }} />
+                    <div style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
+                    <div style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: '#28C840' }} />
                     <div style={{
-                      position: 'absolute', top: 10, left: '50%', transform: 'translateX(-50%)',
-                      width: 52, height: 16, backgroundColor: '#000', borderRadius: 10, zIndex: 10,
-                    }} />
-                    {/* Screen */}
-                    <div style={{
-                      position: 'absolute', top: 8, left: 8, right: 8, bottom: 8,
-                      borderRadius: 22, overflow: 'hidden', backgroundColor: project.mockupBg,
-                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
+                      flex: 1, margin: '0 8px', backgroundColor: '#F5F6F8', borderRadius: 4,
+                      padding: '2px 10px', fontSize: '0.42rem', fontFamily: 'var(--font-jakarta)',
+                      color: '#9CA3AF', textAlign: 'center',
                     }}>
-                      <div style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: project.swatches[0], opacity: 0.25 }} />
-                      <p className={project.nameFont} style={{ color: project.nameColor, fontSize: '0.65rem' }}>
-                        {project.name}
-                      </p>
-                      <div style={{ display: 'flex', gap: 4 }}>
-                        {project.swatches.slice(0, 3).map((color, i) => (
-                          <div key={i} style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: color, opacity: 0.6 }} />
-                        ))}
-                      </div>
+                      my.{project.name.toLowerCase().replace(/\s+/g, '')}.com
                     </div>
-                    {/* Home indicator */}
-                    <div style={{
-                      position: 'absolute', bottom: 6, left: '50%', transform: 'translateX(-50%)',
-                      width: 52, height: 3, backgroundColor: 'rgba(255,255,255,0.3)', borderRadius: 2, zIndex: 10,
-                    }} />
+                  </div>
+                  {/* Screen */}
+                  <div style={{
+                    flex: 1, backgroundColor: project.mockupBg,
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    height: 'calc(100% - 28px)',
+                  }}>
+                    <div style={{ width: 40, height: 40, borderRadius: '50%', backgroundColor: project.swatches[0], opacity: 0.2 }} />
+                    <p className={project.nameFont} style={{ color: project.nameColor, fontSize: '0.75rem' }}>
+                      {project.name}
+                    </p>
+                    <div style={{ display: 'flex', gap: 5 }}>
+                      {project.swatches.slice(0, 3).map((color, i) => (
+                        <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: color, opacity: 0.65,
+                          border: color === '#FFFFFF' || color === '#FAFAF8' ? '1px solid #E8E9EC' : undefined }} />
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -372,7 +374,7 @@ export function MobileMenu() {
       {/* ─── Plans Dialog ─── */}
       <Dialog open={activeDialog === 'plans'} onOpenChange={(open) => { if (!open && activeDialog === 'plans') setActiveDialog(null) }}>
         <DialogContent
-          className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0"
+          className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[90vh] overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
@@ -419,7 +421,7 @@ export function MobileMenu() {
       {/* ─── Contact Dialog ─── */}
       <Dialog open={activeDialog === 'contact'} onOpenChange={(open) => { if (!open && activeDialog === 'contact') setActiveDialog(null) }}>
         <DialogContent
-          className="fixed inset-x-0 bottom-0 top-auto h-[90vh] max-w-full translate-y-0 overflow-y-auto rounded-t-2xl p-0"
+          className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[90vh] overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">

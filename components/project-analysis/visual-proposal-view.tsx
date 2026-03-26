@@ -8,7 +8,7 @@ import { useLanguage } from '@/lib/language-context'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
-type VisualTab = 'palette' | 'typography' | 'mood' | 'elements' | 'preview'
+type VisualTab = 'palette' | 'typography' | 'mood' | 'elements'
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false)
@@ -435,13 +435,12 @@ interface VisualProposalViewProps {
 }
 
 export function VisualProposalView({ project, onBack }: VisualProposalViewProps) {
-  const [selectedTab, setSelectedTab] = useState<VisualTab>('preview')
+  const [selectedTab, setSelectedTab] = useState<VisualTab>('palette')
   const { colors } = project
   const { t } = useLanguage()
   const isMobile = useIsMobile()
 
   const TABS: { id: VisualTab; label: string }[] = [
-    { id: 'preview', label: t('tabPreview') },
     { id: 'palette', label: t('tabPalette') },
     { id: 'typography', label: t('tabTypography') },
     { id: 'mood', label: t('tabMood') },
@@ -466,7 +465,6 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
         {selectedTab === 'typography' && <TypographyContent project={project} />}
         {selectedTab === 'mood' && <MoodContent project={project} />}
         {selectedTab === 'elements' && <ElementsContent project={project} />}
-        {selectedTab === 'preview' && <PreviewContent project={project} />}
       </motion.div>
     </AnimatePresence>
   )
