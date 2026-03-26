@@ -112,7 +112,7 @@ export function MobileMenu() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col gap-3 pb-6" style={{ padding: '12px' }}>
+    <div className="flex h-screen flex-col gap-3 overflow-y-auto pb-6" style={{ padding: '12px' }}>
       {/* Mobile Header */}
       <div className="flex h-11 shrink-0 items-center justify-between rounded-2xl bg-[#F5F6F8] px-4">
         <img src="/logo-placeholder.svg" width={70} height={23} alt="MY.SITE" />
@@ -305,14 +305,9 @@ export function MobileMenu() {
           </div>
 
           {/* Selected project content */}
-          <AnimatePresence mode="wait">
-            {projects.filter(p => p.id === portfolioSelectedId).map(project => (
-              <motion.div
+          {projects.filter(p => p.id === portfolioSelectedId).map(project => (
+              <div
                 key={project.id}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
                 style={{ padding: '16px 16px 32px', display: 'flex', flexDirection: 'column', gap: 12 }}
               >
                 {/* Project name + swatches */}
@@ -378,9 +373,8 @@ export function MobileMenu() {
                 <p style={{ textAlign: 'center', fontSize: '0.55rem', fontFamily: 'var(--font-jakarta)', color: '#C8C8C8' }}>
                   {t('portfolioDisclaimer')}
                 </p>
-              </motion.div>
+              </div>
             ))}
-          </AnimatePresence>
         </DialogContent>
       </Dialog>
 
