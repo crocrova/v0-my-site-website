@@ -12,6 +12,17 @@ import TopoSite from '@/components/portfolio-sites/topo-site'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+  return isMobile
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Project {
@@ -432,6 +443,104 @@ function MobileMockup({ project }: { project: Project }) {
   )
 }
 
+// ─── Mobile Layout ────────────────────────────────────────────────────────────
+
+function PortfolioViewMobile({ onBack }: { onBack: () => void }) {
+  const [selectedId, setSelectedId] = useState(projects[0].id)
+  const [viewMode, setViewMode] = useState<'web' | 'mobile'>('mobile')
+  const { t } = useLanguage()
+  const selected = projects.find(p => p.id === selectedId)!
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingBottom: 32 }}>
+      {/* Back */}
+      <button
+        onClick={onBack}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 6,
+          background: 'none', border: 'none', cursor: 'pointer',
+          fontFamily: 'var(--font-jakarta)', fontSize: '0.85rem',
+          color: '#8C8C8C', padding: '4px 0',
+        }}
+      >
+        <ArrowLeft size={16} color="#8C8C8C" />
+        {t('home')}
+      </button>
+
+      {/* Horizontal scrollable tabs */}
+      <div style={{ display: 'flex', overflowX: 'auto', gap: 8, scrollbarWidth: 'none' } as React.CSSProperties}>
+        {projects.map(p => (
+          <button
+            key={p.id}
+            onClick={() => setSelectedId(p.id)}
+            style={{
+              padding: '6px 14px', borderRadius: 20, border: 'none', cursor: 'pointer', flexShrink: 0,
+              backgroundColor: p.id === selectedId ? '#2D2D2D' : '#F5F6F8',
+              color: p.id === selectedId ? '#FFFFFF' : '#8C8C8C',
+              fontFamily: 'var(--font-jakarta)', fontSize: '0.78rem',
+              fontWeight: p.id === selectedId ? 600 : 400,
+              transition: 'all 180ms',
+            }}
+          >
+            {p.name}
+          </button>
+        ))}
+      </div>
+
+      {/* Mockup */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`${selectedId}-${viewMode}`}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          style={{
+            height: viewMode === 'mobile' ? 430 : 300,
+            display: 'flex', justifyContent: 'center', alignItems: 'center',
+          }}
+        >
+          {viewMode === 'web' ? (
+            <div style={{ width: '100%', height: '100%' }}>
+              <WebMockup project={selected} />
+            </div>
+          ) : (
+            <MobileMockup project={selected} />
+          )}
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Web/Mobile toggle */}
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', gap: 2, backgroundColor: 'rgba(0,0,0,0.05)', borderRadius: 7, padding: 2 }}>
+          {(['web', 'mobile'] as const).map(mode => (
+            <button
+              key={mode}
+              onClick={() => setViewMode(mode)}
+              style={{
+                padding: '4px 16px', borderRadius: 5, border: 'none', cursor: 'pointer',
+                fontSize: '0.75rem', fontFamily: 'var(--font-jakarta)',
+                fontWeight: viewMode === mode ? 600 : 400,
+                color: viewMode === mode ? '#2D2D2D' : '#A8A8A8',
+                backgroundColor: viewMode === mode ? '#FFFFFF' : 'transparent',
+                boxShadow: viewMode === mode ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                transition: 'all 180ms',
+              }}
+            >
+              {t(mode)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Disclaimer */}
+      <p style={{ textAlign: 'center', fontSize: '0.55rem', fontFamily: 'var(--font-jakarta)', color: '#C8C8C8' }}>
+        {t('portfolioDisclaimer')}
+      </p>
+    </div>
+  )
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 interface PortfolioViewProps {
@@ -443,6 +552,7 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
   const [viewMode, setViewMode] = useState<'web' | 'mobile'>('web')
   const [narrow, setNarrow] = useState(false)
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
 
   // Responsive: track window width
   useEffect(() => {
@@ -451,6 +561,8 @@ export function PortfolioView({ onBack }: PortfolioViewProps) {
     window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
+  if (isMobile) return <PortfolioViewMobile onBack={onBack} />
 
   const selectedProjectData = selectedProject !== null
     ? projects.find(p => p.id === selectedProject)

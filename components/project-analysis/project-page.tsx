@@ -183,7 +183,6 @@ function IdentidadBlock({ project }: { project: ProjectAnalysis }) {
         className="flex flex-col"
         style={{
           gap: isMobile ? 2 : 4,
-          ...(isMobile ? { display: 'grid', gridTemplateColumns: '1fr 1fr' } : {}),
         }}
       >
         {keywords.map((keyword, index) => (
@@ -238,7 +237,7 @@ function AnalysisNavBlock({
 
   return (
     <motion.div
-      className="relative flex h-full w-full cursor-pointer items-center justify-center gap-2 rounded-2xl"
+      className="relative flex h-full w-full cursor-pointer items-center gap-2 rounded-2xl"
       style={{
         backgroundColor: bg,
         border: borderStyle,
@@ -258,7 +257,7 @@ function AnalysisNavBlock({
       <div className="absolute" style={{ right: isMobile ? 12 : 16, top: isMobile ? 12 : 16 }}>
         <Icon size={isMobile ? 16 : 20} color={iconColor} />
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-1 flex-col">
         <span className="font-sans font-semibold" style={{ fontSize: isMobile ? '1rem' : '1.3rem', color: textColor }}>{title}</span>
         <span className="font-sans" style={{ fontSize: isMobile ? '0.65rem' : '0.75rem', color: subColor }}>{subtitle}</span>
       </div>
@@ -273,12 +272,12 @@ function AnalysisLogoBlock({ project }: { project: ProjectAnalysis }) {
   return (
     <motion.div
       className="flex h-full w-full items-center justify-center rounded-2xl"
-      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: isMobile ? '24px 16px' : 16 }}
+      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: isMobile ? '20px 16px' : 16 }}
       whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       {project.logoUrl ? (
-        <img src={project.logoUrl} alt={project.clientName} style={{ maxHeight: 120, maxWidth: '80%', objectFit: 'contain' }} />
+        <img src={project.logoUrl} alt={project.clientName} style={{ maxHeight: isMobile ? 80 : 120, maxWidth: '80%', objectFit: 'contain' }} />
       ) : (
         <span className="font-serif italic font-light" style={{ fontSize: '1.5rem', color: colors.textSecondary }}>
           {project.clientName}
@@ -393,7 +392,7 @@ function AnalysisGridMobile({
     },
     {
       key: 'logo',
-      height: 140,
+      height: 'auto',
       el: <AnalysisLogoBlock project={project} />,
     },
     {

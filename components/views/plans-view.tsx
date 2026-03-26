@@ -1,8 +1,20 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { ArrowLeft, CheckCircle, Send } from 'lucide-react'
 import { useLanguage } from '@/lib/language-context'
 import { motion } from 'framer-motion'
+
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+  return isMobile
+}
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -43,6 +55,62 @@ interface PlansViewProps {
 
 export function PlansView({ onBack, onContact }: PlansViewProps) {
   const { t } = useLanguage()
+  const isMobile = useIsMobile()
+
+  if (isMobile) {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingBottom: 32 }}>
+        {plans.map((plan, index) => (
+          <motion.div
+            key={plan.id}
+            className="flex flex-col rounded-2xl bg-[#F5F6F8]"
+            style={{ padding: 20 }}
+            custom={index}
+            initial="hidden"
+            animate="visible"
+            variants={blockVariants}
+          >
+            <h3 className="font-sans font-semibold text-[#2D2D2D]" style={{ fontSize: '1.1rem' }}>
+              {t(plan.titleKey)}
+            </h3>
+            <p className="mt-1 font-sans leading-relaxed text-[#8C8C8C]" style={{ fontSize: '0.8rem' }}>
+              {t(plan.descKey)}
+            </p>
+            <div className="mt-3 flex flex-col gap-1.5">
+              {plan.features.map((feature, i) => (
+                <div key={i} className="flex items-center gap-2">
+                  <CheckCircle size={14} color="#4DE8D8" className="shrink-0" />
+                  <span className="font-sans text-[#2D2D2D]" style={{ fontSize: '0.75rem' }}>{t(feature)}</span>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={onContact}
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3 font-sans font-medium text-white"
+              style={{ fontSize: '0.85rem', backgroundColor: '#4DE8D8', border: 'none', cursor: 'pointer' }}
+            >
+              <Send size={14} />
+              {t('contactUs')}
+            </button>
+          </motion.div>
+        ))}
+        <motion.div
+          className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl bg-[#F5F6F8]"
+          style={{ height: 48 }}
+          custom={3}
+          initial="hidden"
+          animate="visible"
+          variants={blockVariants}
+          onClick={onBack}
+          whileHover={{ scale: 1.008, backgroundColor: '#EDEEF1' }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        >
+          <ArrowLeft size={18} color="#8C8C8C" />
+          <span className="font-sans font-medium text-[#8C8C8C]" style={{ fontSize: '0.9rem' }}>{t('home')}</span>
+        </motion.div>
+      </div>
+    )
+  }
 
   return (
     <div className="flex h-full w-full flex-col" style={{ gap: '8px' }}>

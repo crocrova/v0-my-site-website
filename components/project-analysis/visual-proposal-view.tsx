@@ -441,11 +441,11 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
   const isMobile = useIsMobile()
 
   const TABS: { id: VisualTab; label: string }[] = [
+    { id: 'preview', label: t('tabPreview') },
     { id: 'palette', label: t('tabPalette') },
     { id: 'typography', label: t('tabTypography') },
     { id: 'mood', label: t('tabMood') },
     { id: 'elements', label: t('tabElements') },
-    { id: 'preview', label: t('tabPreview') },
   ]
 
   const blockBg = colors.backgroundBlock
