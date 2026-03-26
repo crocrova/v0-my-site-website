@@ -7,6 +7,11 @@ import {
 } from 'lucide-react'
 import { useLanguage } from '@/lib/language-context'
 import { motion, AnimatePresence } from 'framer-motion'
+import TopoSite from '@/components/portfolio-sites/topo-site'
+import BahiaCapitalSite from '@/components/portfolio-sites/bahia-capital-site'
+import ClinicaBesSite from '@/components/portfolio-sites/clinica-bes-site'
+import CortezaSite from '@/components/portfolio-sites/corteza-site'
+import GranoSite from '@/components/portfolio-sites/grano-site'
 import {
   Sheet,
   SheetContent,
@@ -53,11 +58,19 @@ const projects = [
     nameColor: '#C89B60', labelColor: 'rgba(200, 155, 96, 0.6)', swatches: ['#C89B60', '#1C1714', '#F5E6D0'], mockupBg: '#2A2218',
   },
   {
-    id: 5, name: 'Castillo & Asociados', labelKey: 'castilloLabel', subtitleKey: 'castilloSubtitle',
-    bg: '#F8F9FC', border: '1px solid #D4D8E8', nameFont: 'font-sans font-semibold',
-    nameColor: '#1E2761', labelColor: 'rgba(30, 39, 97, 0.6)', swatches: ['#1E2761', '#F8F9FC', '#B8A88A'], mockupBg: '#ECEEF5',
+    id: 5, name: 'Grano', labelKey: 'granoLabel', subtitleKey: 'granoSubtitle',
+    bg: '#FAF6F1', border: '1px solid #E8DDD0', nameFont: 'font-sans font-extrabold uppercase',
+    nameColor: '#C67C4E', labelColor: 'rgba(198, 124, 78, 0.6)', swatches: ['#C67C4E', '#FAF6F1', '#2C1810'], mockupBg: '#F3ECE2',
   },
 ]
+
+const SITE_MAP: Record<number, React.ComponentType> = {
+  1: TopoSite,
+  2: BahiaCapitalSite,
+  3: ClinicaBesSite,
+  4: CortezaSite,
+  5: GranoSite,
+}
 
 const plans = [
   {
@@ -351,21 +364,23 @@ export function MobileMenu() {
                       my.{project.name.toLowerCase().replace(/\s+/g, '')}.com
                     </div>
                   </div>
-                  {/* Screen */}
+                  {/* Screen — real site component scaled to fit */}
                   <div style={{
-                    flex: 1, backgroundColor: project.mockupBg,
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8,
+                    flex: 1, overflow: 'hidden', backgroundColor: project.mockupBg, position: 'relative',
                   }}>
-                    <div style={{ width: 40, height: 40, borderRadius: '50%', backgroundColor: project.swatches[0], opacity: 0.2 }} />
-                    <p className={project.nameFont} style={{ color: project.nameColor, fontSize: '0.75rem' }}>
-                      {project.name}
-                    </p>
-                    <div style={{ display: 'flex', gap: 5 }}>
-                      {project.swatches.slice(0, 3).map((color, i) => (
-                        <div key={i} style={{ width: 7, height: 7, borderRadius: '50%', backgroundColor: color, opacity: 0.65,
-                          border: color === '#FFFFFF' || color === '#FAFAF8' ? '1px solid #E8E9EC' : undefined }} />
-                      ))}
-                    </div>
+                    {(() => {
+                      const SiteComponent = SITE_MAP[project.id]
+                      return SiteComponent ? (
+                        <div style={{
+                          position: 'absolute', top: 0, left: 0,
+                          width: 1200, height: 800,
+                          transform: 'scale(0.286)', transformOrigin: 'top left',
+                          pointerEvents: 'none',
+                        }}>
+                          <SiteComponent />
+                        </div>
+                      ) : null
+                    })()}
                   </div>
                 </div>
 
