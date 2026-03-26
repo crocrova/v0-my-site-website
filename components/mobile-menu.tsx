@@ -255,7 +255,7 @@ export function MobileMenu() {
       {/* ─── Portfolio Dialog ─── */}
       <Dialog open={activeDialog === 'portfolio'} onOpenChange={(open) => !open && setActiveDialog(null)}>
         <DialogContent
-          className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[90vh] overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
+          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
@@ -374,7 +374,7 @@ export function MobileMenu() {
       {/* ─── Plans Dialog ─── */}
       <Dialog open={activeDialog === 'plans'} onOpenChange={(open) => { if (!open && activeDialog === 'plans') setActiveDialog(null) }}>
         <DialogContent
-          className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[90vh] overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
+          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
@@ -421,7 +421,7 @@ export function MobileMenu() {
       {/* ─── Contact Dialog ─── */}
       <Dialog open={activeDialog === 'contact'} onOpenChange={(open) => { if (!open && activeDialog === 'contact') setActiveDialog(null) }}>
         <DialogContent
-          className="fixed bottom-0 left-0 right-0 z-50 w-full max-h-[90vh] overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
+          className="fixed bottom-0 left-0 right-0 top-auto z-50 w-full max-h-[90vh] translate-x-0 translate-y-0 overflow-y-auto rounded-t-2xl bg-white p-0 shadow-lg"
           aria-describedby={undefined}
         >
           <DialogHeader className="sticky top-0 z-10 flex flex-row items-center justify-between border-b border-[#E8E9EC] bg-white p-4">
