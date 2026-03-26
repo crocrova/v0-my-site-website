@@ -435,7 +435,7 @@ interface VisualProposalViewProps {
 }
 
 export function VisualProposalView({ project, onBack }: VisualProposalViewProps) {
-  const [selectedTab, setSelectedTab] = useState<VisualTab>('palette')
+  const [selectedTab, setSelectedTab] = useState<VisualTab>('preview')
   const { colors } = project
   const { t } = useLanguage()
   const isMobile = useIsMobile()

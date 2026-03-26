@@ -174,7 +174,7 @@ function IdentidadBlock({ project }: { project: ProjectAnalysis }) {
   return (
     <motion.div
       className="relative flex h-full w-full flex-col justify-center rounded-2xl"
-      style={{ padding: isMobile ? 16 : 24, backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}` }}
+      style={{ padding: isMobile ? 20 : 24, backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}` }}
       whileHover={{ scale: 1.01, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
@@ -242,7 +242,7 @@ function AnalysisNavBlock({
       style={{
         backgroundColor: bg,
         border: borderStyle,
-        padding: isMobile ? '12px 14px' : 16,
+        padding: isMobile ? 20 : 16,
       }}
       onClick={onClick}
       whileHover={{ scale: 1.015 }}
@@ -269,10 +269,11 @@ function AnalysisNavBlock({
 
 function AnalysisLogoBlock({ project }: { project: ProjectAnalysis }) {
   const { colors } = project
+  const isMobile = useIsMobile()
   return (
     <motion.div
-      className="flex h-full w-full items-center justify-center rounded-2xl p-4"
-      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}` }}
+      className="flex h-full w-full items-center justify-center rounded-2xl"
+      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: isMobile ? '24px 16px' : 16 }}
       whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
@@ -294,7 +295,7 @@ function AnalysisContactBlock({ project }: { project: ProjectAnalysis }) {
   return (
     <motion.div
       className="relative flex h-full w-full flex-col justify-center rounded-2xl"
-      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: isMobile ? '12px 14px' : 16 }}
+      style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}`, padding: isMobile ? 20 : 16 }}
       whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
     >
@@ -391,14 +392,14 @@ function AnalysisGridMobile({
       el: <AnalysisNavBlock icon={Search} title={t('diagnosis')} subtitle={t('digitalPresence')} project={project} onClick={onDiagnosis} />,
     },
     {
-      key: 'structure',
-      height: 'auto',
-      el: <AnalysisNavBlock icon={Layers} title={t('structure')} subtitle={t('sitemapGoals')} project={project} onClick={onStructure} />,
-    },
-    {
       key: 'logo',
       height: 140,
       el: <AnalysisLogoBlock project={project} />,
+    },
+    {
+      key: 'structure',
+      height: 'auto',
+      el: <AnalysisNavBlock icon={Layers} title={t('structure')} subtitle={t('sitemapGoals')} project={project} onClick={onStructure} />,
     },
     {
       key: 'contact',
@@ -410,7 +411,7 @@ function AnalysisGridMobile({
   return (
     <motion.div
       key="analysis-grid-mobile"
-      style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingBottom: 24 }}
+      style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingBottom: 24 }}
       variants={viewVariants}
       initial="hidden"
       animate="visible"
@@ -476,18 +477,17 @@ function ProjectPageInner({ project }: { project: ProjectAnalysis }) {
     <div
       style={{
         backgroundColor: project.colors.background,
-        // Desktop: full viewport, no scroll. Mobile: auto height, scrollable
         minHeight: '100vh',
         height: isMobile ? 'auto' : '100vh',
-        overflow: isMobile ? 'auto' : 'hidden',
-        padding: isMobile ? '8px' : '12px',
+        overflow: isMobile ? 'visible' : 'hidden',
+        padding: '12px',
       }}
     >
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 8,
+          gap: isMobile ? 12 : 8,
           height: isMobile ? 'auto' : '100%',
         }}
       >
