@@ -2,13 +2,22 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, Loader2 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import type { ProjectAnalysis } from '@/lib/project-data'
 import { useLanguage } from '@/lib/language-context'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 type VisualTab = 'palette' | 'typography' | 'mood' | 'elements'
+
+const UI = {
+  bgBlock: '#F5F6F8',
+  accent: '#4DE8D8',
+  text: '#2D2D2D',
+  textSecondary: '#8C8C8C',
+  border: '#E8E8E8',
+  textLight: '#FFFFFF',
+}
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false)
@@ -21,58 +30,78 @@ function useIsMobile() {
   return isMobile
 }
 
+function isLight(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16) / 255
+  const g = parseInt(hex.slice(3, 5), 16) / 255
+  const b = parseInt(hex.slice(5, 7), 16) / 255
+  return (0.299 * r + 0.587 * g + 0.114 * b) > 0.5
+}
+
 // ─── Palette ──────────────────────────────────────────────────────────────────
 
 function PaletteContent({ project }: { project: ProjectAnalysis }) {
-  const { colors, visualProposal } = project
+  const { visualProposal } = project
   const { t } = useLanguage()
   const isMobile = useIsMobile()
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-6" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-6" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: UI.text }}>
         {t('paletteTitle')}
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-        {visualProposal.palette.map((color) => (
-          <div
-            key={color.hex}
-            style={{
-              backgroundColor: colors.backgroundBlock,
-              border: `1px solid ${colors.border}`,
-              borderRadius: 16,
-              padding: isMobile ? 14 : 20,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}
-          >
-            <div
-              className="rounded-full"
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 12 }}>
+        {visualProposal.palette.map((color, index) => {
+          const light = isLight(color.hex)
+          const textCol = light ? '#2D2D2D' : '#FFFFFF'
+          const textFade = light ? 'rgba(45,45,45,0.45)' : 'rgba(255,255,255,0.45)'
+          return (
+            <motion.div
+              key={color.hex}
               style={{
-                width: isMobile ? 44 : 56,
-                height: isMobile ? 44 : 56,
                 backgroundColor: color.hex,
-                border: `1px solid ${colors.border}`,
-                boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
-                flexShrink: 0,
+                borderRadius: 16,
+                padding: 20,
+                height: 140,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
               }}
-            />
-            <div className="flex flex-col gap-1">
-              <p className="font-sans font-medium" style={{ fontSize: '0.8rem', color: colors.text, lineHeight: 1.2 }}>
-                {color.name}
-              </p>
-              <p className="font-mono" style={{ fontSize: '0.6rem', color: colors.textSecondary, letterSpacing: '0.5px' }}>
-                {color.hex}
-              </p>
-              <p className="font-sans" style={{ fontSize: '0.55rem', color: colors.textSecondary, lineHeight: 1.4 }}>
-                {color.role}
-              </p>
-              <p className="font-serif italic" style={{ fontSize: '0.6rem', color: colors.accent, lineHeight: 1.4 }}>
-                {color.emotion}
-              </p>
-            </div>
-          </div>
-        ))}
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, delay: index * 0.06, ease: EASE }}
+            >
+              {/* Top right: number watermark */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <span
+                  className="font-sans"
+                  style={{
+                    fontSize: '2.5rem',
+                    fontWeight: 700,
+                    color: textCol,
+                    opacity: 0.3,
+                    lineHeight: 1,
+                  }}
+                >
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+              </div>
+              {/* Bottom left: info */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span className="font-sans" style={{ fontSize: '0.9rem', fontWeight: 600, color: textCol, lineHeight: 1.2 }}>
+                  {color.name}
+                </span>
+                <span className="font-mono" style={{ fontSize: '0.65rem', fontWeight: 400, color: textFade, letterSpacing: '0.5px' }}>
+                  {color.hex}
+                </span>
+                <span className="font-sans" style={{ fontSize: '0.6rem', fontWeight: 400, color: textFade, lineHeight: 1.4 }}>
+                  {color.role}
+                </span>
+                <span className="font-serif italic" style={{ fontSize: '0.6rem', fontWeight: 400, color: textFade, lineHeight: 1.4 }}>
+                  {color.emotion}
+                </span>
+              </div>
+            </motion.div>
+          )
+        })}
       </div>
     </div>
   )
@@ -97,8 +126,8 @@ function TypographyContent({ project }: { project: ProjectAnalysis }) {
   }, [typography.heading, typography.body, typography.accent])
 
   const cardStyle: React.CSSProperties = {
-    backgroundColor: colors.backgroundBlock,
-    border: `1px solid ${colors.border}`,
+    backgroundColor: UI.bgBlock,
+    border: `1px solid ${UI.border}`,
     borderRadius: 16,
     padding: isMobile ? 16 : 24,
     display: 'flex',
@@ -132,14 +161,13 @@ function TypographyContent({ project }: { project: ProjectAnalysis }) {
 
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-6" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-6" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: UI.text }}>
         {t('typographyTitle')}
       </p>
-      {/* Mobile: vertical stack; Desktop: horizontal row */}
       <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 12 : 16, flex: 1 }}>
         {cards.map((card) => (
           <div key={card.label} style={cardStyle}>
-            <p className="font-sans font-semibold uppercase" style={{ fontSize: '0.6rem', color: colors.accent, letterSpacing: '2px' }}>
+            <p className="font-sans font-semibold uppercase" style={{ fontSize: '0.6rem', color: UI.accent, letterSpacing: '2px' }}>
               {card.label}
             </p>
             <p style={{ fontFamily: card.specimenFont, fontSize: card.nameSize, color: colors.text, lineHeight: 1.1 }}>
@@ -148,7 +176,7 @@ function TypographyContent({ project }: { project: ProjectAnalysis }) {
             <p style={{ fontFamily: card.specimenFont, fontSize: '1.2rem', color: colors.textSecondary }}>
               Aa Bb Cc 1 2 3
             </p>
-            <p className="font-sans mt-auto" style={{ fontSize: '0.65rem', color: colors.textSecondary, lineHeight: 1.6, fontWeight: 300 }}>
+            <p className="font-sans mt-auto" style={{ fontSize: '0.65rem', color: UI.textSecondary, lineHeight: 1.6, fontWeight: 300 }}>
               {card.explanation}
             </p>
           </div>
@@ -180,14 +208,14 @@ function MoodContent({ project }: { project: ProjectAnalysis }) {
               {word}
             </motion.p>
             {i < mood.words.length - 1 && (
-              <div style={{ width: 1, height: 24, backgroundColor: colors.border, marginTop: 6 }} />
+              <div style={{ width: 1, height: 24, backgroundColor: UI.border, marginTop: 6 }} />
             )}
           </div>
         ))}
       </div>
       <motion.p
         className="font-sans text-center mt-8"
-        style={{ fontSize: isMobile ? '0.8rem' : '0.88rem', fontWeight: 300, color: colors.text, maxWidth: 480, lineHeight: 1.75 }}
+        style={{ fontSize: isMobile ? '0.8rem' : '0.88rem', fontWeight: 300, color: UI.text, maxWidth: 480, lineHeight: 1.75 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
@@ -196,12 +224,12 @@ function MoodContent({ project }: { project: ProjectAnalysis }) {
       </motion.p>
       <motion.p
         className="font-sans text-center mt-4"
-        style={{ fontSize: '0.68rem', color: colors.textSecondary, maxWidth: 440, lineHeight: 1.6 }}
+        style={{ fontSize: '0.68rem', color: UI.textSecondary, maxWidth: 440, lineHeight: 1.6 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6, delay: 0.65, ease: EASE }}
       >
-        <span style={{ color: colors.border }}>{t('moodReference')}</span>
+        <span style={{ color: UI.border }}>{t('moodReference')}</span>
         {mood.reference}
       </motion.p>
     </div>
@@ -255,7 +283,7 @@ function ElementsContent({ project }: { project: ProjectAnalysis }) {
 
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-4" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-4" style={{ fontSize: isMobile ? '1.2rem' : '1.5rem', fontWeight: 400, color: UI.text }}>
         {t('elementsTitle')}
       </p>
       <div style={{
@@ -368,65 +396,6 @@ function ElementsContent({ project }: { project: ProjectAnalysis }) {
   )
 }
 
-// ─── Preview ──────────────────────────────────────────────────────────────────
-
-function PreviewContent({ project }: { project: ProjectAnalysis }) {
-  const { colors, preview } = project
-  const { t } = useLanguage()
-  const domain = `${project.clientName}.com`
-  return (
-    <div className="flex h-full flex-col">
-      <p className="font-serif mb-4" style={{ fontSize: '1.5rem', fontWeight: 400, color: colors.text }}>
-        {t('previewTitle')}
-      </p>
-      <div
-        className="flex-1 flex flex-col rounded-xl overflow-hidden"
-        style={{ border: `1px solid ${colors.border}`, boxShadow: '0 8px 32px rgba(0,0,0,0.08)', minHeight: 200 }}
-      >
-        {/* Browser chrome */}
-        <div style={{
-          height: 32, flexShrink: 0, backgroundColor: '#EDEFF2',
-          display: 'flex', alignItems: 'center', padding: '0 10px', gap: 5,
-          borderBottom: '1px solid #E0E2E7',
-        }}>
-          <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#FF5F57' }} />
-          <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#FFBD2E' }} />
-          <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: '#28C840' }} />
-          <div style={{
-            flex: 1, margin: '0 8px', backgroundColor: '#F5F6F8', borderRadius: 4,
-            padding: '2px 10px', fontSize: '0.48rem', fontFamily: 'var(--font-jakarta)',
-            color: '#9CA3AF', textAlign: 'center',
-          }}>
-            {domain}
-          </div>
-        </div>
-        {/* Screen */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-4"
-          style={{ backgroundColor: colors.backgroundDark, minHeight: 120 }}>
-          {preview.isUnlocked ? (
-            <p className="font-sans" style={{ color: colors.textSecondary, fontSize: '0.8rem' }}>
-              {t('previewAvailable')}
-            </p>
-          ) : (
-            <>
-              <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}>
-                <Loader2 size={40} color={colors.accent} />
-              </motion.div>
-              <p className="font-sans font-medium" style={{ fontSize: '1rem', color: colors.textLight }}>{t('previewInDev')}</p>
-              <p className="font-sans text-center" style={{ fontSize: '0.7rem', color: colors.textSecondary, maxWidth: 280, lineHeight: 1.65 }}>
-                {t('previewBuilding')}
-              </p>
-              <p className="font-sans text-center" style={{ fontSize: '0.6rem', color: `${colors.textSecondary}99`, maxWidth: 260, lineHeight: 1.65 }}>
-                {t('previewAccess')}
-              </p>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 interface VisualProposalViewProps {
@@ -436,7 +405,6 @@ interface VisualProposalViewProps {
 
 export function VisualProposalView({ project, onBack }: VisualProposalViewProps) {
   const [selectedTab, setSelectedTab] = useState<VisualTab>('palette')
-  const { colors } = project
   const { t } = useLanguage()
   const isMobile = useIsMobile()
 
@@ -446,9 +414,6 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
     { id: 'mood', label: t('tabMood') },
     { id: 'elements', label: t('tabElements') },
   ]
-
-  const blockBg = colors.backgroundBlock
-  const blockBorder = colors.border
 
   const tabContent = (
     <AnimatePresence mode="wait">
@@ -479,13 +444,13 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
           style={{
             position: 'fixed', top: 16, left: 16, zIndex: 60,
             display: 'flex', alignItems: 'center', gap: 6,
-            backgroundColor: blockBg, border: `1px solid ${blockBorder}`,
+            backgroundColor: UI.bgBlock, border: `1px solid ${UI.border}`,
             borderRadius: 20, padding: '8px 14px',
             cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
           }}
         >
-          <ArrowLeft size={14} color={colors.textSecondary} />
-          <span className="font-sans font-medium" style={{ fontSize: '0.75rem', color: colors.textSecondary }}>
+          <ArrowLeft size={14} color={UI.textSecondary} />
+          <span className="font-sans font-medium" style={{ fontSize: '0.75rem', color: UI.textSecondary }}>
             {t('back')}
           </span>
         </button>
@@ -506,11 +471,11 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
                 onClick={() => setSelectedTab(tab.id)}
                 style={{
                   padding: '8px 16px', borderRadius: 20, cursor: 'pointer',
-                  backgroundColor: isActive ? colors.accent : blockBg,
-                  color: isActive ? colors.textLight : colors.textSecondary,
+                  backgroundColor: isActive ? UI.accent : UI.bgBlock,
+                  color: isActive ? '#FFFFFF' : UI.textSecondary,
                   fontSize: '0.7rem', fontFamily: 'var(--font-jakarta)', fontWeight: isActive ? 600 : 400,
                   whiteSpace: 'nowrap', flexShrink: 0,
-                  border: isActive ? 'none' : `1px solid ${blockBorder}`,
+                  border: isActive ? 'none' : `1px solid ${UI.border}`,
                 }}
               >
                 {tab.label}
@@ -537,9 +502,9 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
               key={tab.id}
               className="cursor-pointer rounded-2xl flex items-center flex-1"
               style={{
-                backgroundColor: blockBg,
-                border: `1px solid ${blockBorder}`,
-                borderLeft: isActive ? `3px solid ${colors.accent}` : `3px solid transparent`,
+                backgroundColor: UI.bgBlock,
+                border: `1px solid ${UI.border}`,
+                borderLeft: isActive ? `3px solid ${UI.accent}` : `3px solid transparent`,
                 padding: '0 16px',
                 minHeight: 0,
               }}
@@ -551,7 +516,7 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
             >
               <span className="font-sans" style={{
                 fontSize: '0.75rem', fontWeight: isActive ? 600 : 400,
-                color: isActive ? colors.text : colors.textSecondary,
+                color: isActive ? UI.text : UI.textSecondary,
               }}>
                 {tab.label}
               </span>
@@ -561,15 +526,15 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
         {/* Volver */}
         <motion.div
           className="cursor-pointer rounded-2xl flex items-center justify-center gap-2"
-          style={{ backgroundColor: blockBg, border: `1px solid ${blockBorder}`, minHeight: 48 }}
+          style={{ backgroundColor: UI.bgBlock, border: `1px solid ${UI.border}`, minHeight: 48 }}
           initial={{ opacity: 0, x: -8 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3, delay: TABS.length * 0.06, ease: EASE }}
           onClick={onBack}
           whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.05)' }}
         >
-          <ArrowLeft size={14} color={colors.textSecondary} />
-          <span className="font-sans font-medium" style={{ fontSize: '0.72rem', color: colors.textSecondary }}>
+          <ArrowLeft size={14} color={UI.textSecondary} />
+          <span className="font-sans font-medium" style={{ fontSize: '0.72rem', color: UI.textSecondary }}>
             {t('back')}
           </span>
         </motion.div>
@@ -578,7 +543,7 @@ export function VisualProposalView({ project, onBack }: VisualProposalViewProps)
       {/* Right panel */}
       <motion.div
         className="rounded-2xl overflow-auto"
-        style={{ backgroundColor: blockBg, border: `1px solid ${blockBorder}`, padding: 28, height: '100%', minHeight: 0 }}
+        style={{ backgroundColor: UI.bgBlock, border: `1px solid ${UI.border}`, padding: 28, height: '100%', minHeight: 0 }}
         initial={{ opacity: 0, x: 16 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3, delay: 0.1, ease: EASE }}

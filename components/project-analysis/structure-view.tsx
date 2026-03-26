@@ -22,6 +22,16 @@ function useIsMobile() {
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
+const UI = {
+  bgBlock: '#F5F6F8',
+  bgDark: '#2D2D2D',
+  accent: '#4DE8D8',
+  text: '#2D2D2D',
+  textSecondary: '#8C8C8C',
+  textLight: '#FFFFFF',
+  border: '#E8E8E8',
+}
+
 type StructureTab = 'sitemap' | 'objectives' | 'features' | 'advantage' | 'competitors'
 
 // Lucide icon map for sitemap
@@ -31,21 +41,20 @@ const ICON_MAP: Record<string, React.ComponentType<{ size?: number; color?: stri
 
 // ─── Sitemap ──────────────────────────────────────────────────────────────────
 
-// Badges for sections that have special features
 const SECTION_BADGES: Record<string, string> = {
   Drinks: 'Acceso por QR',
   Reserve: 'Integración WhatsApp',
 }
 
 function SitemapContent({ project }: { project: ProjectAnalysis }) {
-  const { colors, structureProposal } = project
+  const { structureProposal } = project
   const { t } = useLanguage()
   const isMobile = useIsMobile()
   const sitemap = structureProposal.sitemap
 
   const root = sitemap[0]
-  const row1 = sitemap.slice(1, 4)   // 3 items
-  const row2 = sitemap.slice(4, 6)   // 2 items
+  const row1 = sitemap.slice(1, 4)
+  const row2 = sitemap.slice(4, 6)
   const LINE = 1.5
 
   const SitemapCard = ({ section }: { section: typeof sitemap[0] }) => {
@@ -54,16 +63,16 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
     return (
       <div
         style={{
-          backgroundColor: colors.backgroundBlock,
-          border: `1px solid ${colors.border}`,
+          backgroundColor: UI.bgBlock,
+          border: `1px solid ${UI.border}`,
           borderRadius: 10,
           padding: '10px 12px',
           width: '100%',
         }}
       >
         <div className="flex items-center gap-2 mb-1">
-          <Icon size={13} color={colors.accent} />
-          <p className="font-sans font-semibold" style={{ fontSize: '0.72rem', color: colors.text }}>
+          <Icon size={13} color={UI.accent} />
+          <p className="font-sans font-semibold" style={{ fontSize: '0.72rem', color: UI.text }}>
             {section.name}
           </p>
           {badge && (
@@ -71,8 +80,8 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
               className="font-sans"
               style={{
                 fontSize: '0.48rem',
-                backgroundColor: `${colors.accent}18`,
-                color: colors.accent,
+                backgroundColor: `${UI.accent}18`,
+                color: UI.accent,
                 borderRadius: 6,
                 padding: '1px 6px',
                 marginLeft: 'auto',
@@ -83,7 +92,7 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
             </span>
           )}
         </div>
-        <p className="font-sans" style={{ fontSize: '0.57rem', color: colors.textSecondary, lineHeight: 1.4, fontWeight: 300 }}>
+        <p className="font-sans" style={{ fontSize: '0.57rem', color: UI.textSecondary, lineHeight: 1.4, fontWeight: 300 }}>
           {section.description}
         </p>
       </div>
@@ -94,14 +103,14 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
   if (isMobile) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-        <p className="font-serif mb-4" style={{ fontSize: '1.2rem', fontWeight: 400, color: colors.text }}>
+        <p className="font-serif mb-4" style={{ fontSize: '1.2rem', fontWeight: 400, color: UI.text }}>
           {t('sitemapTitle')}
         </p>
         {sitemap.map((section, i) => (
           <div key={section.name} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
             <SitemapCard section={section} />
             {i < sitemap.length - 1 && (
-              <div style={{ width: LINE, height: 12, backgroundColor: colors.border, marginLeft: 16 }} />
+              <div style={{ width: LINE, height: 12, backgroundColor: UI.border, marginLeft: 16 }} />
             )}
           </div>
         ))}
@@ -111,7 +120,7 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
 
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-4" style={{ fontSize: '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-4" style={{ fontSize: '1.5rem', fontWeight: 400, color: UI.text }}>
         {t('sitemapTitle')}
       </p>
 
@@ -123,22 +132,21 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
         </div>
 
         {/* Root → Row 1 connector */}
-        <div style={{ width: LINE, height: 14, backgroundColor: colors.border, flexShrink: 0 }} />
+        <div style={{ width: LINE, height: 14, backgroundColor: UI.border, flexShrink: 0 }} />
 
         {/* Row 1 */}
         {row1.length > 0 && (
           <div className="w-full relative" style={{ flexShrink: 0 }}>
-            {/* Horizontal branch */}
             <div style={{
               position: 'absolute', top: 0,
               left: `${100 / (2 * row1.length)}%`,
               right: `${100 / (2 * row1.length)}%`,
-              height: LINE, backgroundColor: colors.border,
+              height: LINE, backgroundColor: UI.border,
             }} />
             <div className="flex" style={{ gap: 8 }}>
               {row1.map((section) => (
                 <div key={section.name} className="flex flex-col items-center" style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ width: LINE, height: 14, backgroundColor: colors.border, flexShrink: 0 }} />
+                  <div style={{ width: LINE, height: 14, backgroundColor: UI.border, flexShrink: 0 }} />
                   <SitemapCard section={section} />
                 </div>
               ))}
@@ -149,21 +157,18 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
         {/* Row 1 → Row 2 connector */}
         {row2.length > 0 && (
           <>
-            <div style={{ width: LINE, height: 14, backgroundColor: colors.border, flexShrink: 0 }} />
-
-            {/* Row 2 */}
+            <div style={{ width: LINE, height: 14, backgroundColor: UI.border, flexShrink: 0 }} />
             <div style={{ width: '68%', position: 'relative', flexShrink: 0 }}>
-              {/* Horizontal branch */}
               <div style={{
                 position: 'absolute', top: 0,
                 left: `${100 / (2 * row2.length)}%`,
                 right: `${100 / (2 * row2.length)}%`,
-                height: LINE, backgroundColor: colors.border,
+                height: LINE, backgroundColor: UI.border,
               }} />
               <div className="flex" style={{ gap: 8 }}>
                 {row2.map((section) => (
                   <div key={section.name} className="flex flex-col items-center" style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ width: LINE, height: 14, backgroundColor: colors.border, flexShrink: 0 }} />
+                    <div style={{ width: LINE, height: 14, backgroundColor: UI.border, flexShrink: 0 }} />
                     <SitemapCard section={section} />
                   </div>
                 ))}
@@ -180,11 +185,11 @@ function SitemapContent({ project }: { project: ProjectAnalysis }) {
 // ─── Objectives ───────────────────────────────────────────────────────────────
 
 function ObjectivesContent({ project }: { project: ProjectAnalysis }) {
-  const { colors, structureProposal } = project
+  const { structureProposal } = project
   const { t } = useLanguage()
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-5" style={{ fontSize: '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-5" style={{ fontSize: '1.5rem', fontWeight: 400, color: UI.text }}>
         {t('objectivesTitle')}
       </p>
       <div className="flex flex-col gap-3 flex-1 overflow-auto">
@@ -197,20 +202,20 @@ function ObjectivesContent({ project }: { project: ProjectAnalysis }) {
             <motion.div
               key={i}
               className="flex items-start gap-4 rounded-xl p-4"
-              style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}` }}
+              style={{ backgroundColor: UI.bgBlock, border: `1px solid ${UI.border}` }}
               initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.35, delay: i * 0.07, ease: EASE }}
             >
-              <p className="font-serif font-medium shrink-0" style={{ fontSize: '1.4rem', color: colors.accent, lineHeight: 1 }}>
+              <p className="font-serif font-medium shrink-0" style={{ fontSize: '1.4rem', color: UI.accent, lineHeight: 1 }}>
                 {num}
               </p>
               <div>
-                <p className="font-sans" style={{ fontSize: '0.78rem', color: colors.text, fontWeight: 500, lineHeight: 1.4 }}>
+                <p className="font-sans" style={{ fontSize: '0.78rem', color: UI.text, fontWeight: 500, lineHeight: 1.4 }}>
                   {text}
                 </p>
                 {context && (
-                  <p className="font-sans mt-1" style={{ fontSize: '0.62rem', color: colors.textSecondary, lineHeight: 1.5, fontWeight: 300 }}>
+                  <p className="font-sans mt-1" style={{ fontSize: '0.62rem', color: UI.textSecondary, lineHeight: 1.5, fontWeight: 300 }}>
                     {context}
                   </p>
                 )}
@@ -226,11 +231,11 @@ function ObjectivesContent({ project }: { project: ProjectAnalysis }) {
 // ─── Special Features ─────────────────────────────────────────────────────────
 
 function FeaturesContent({ project }: { project: ProjectAnalysis }) {
-  const { colors, structureProposal } = project
+  const { structureProposal } = project
   const { t } = useLanguage()
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-5" style={{ fontSize: '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-5" style={{ fontSize: '1.5rem', fontWeight: 400, color: UI.text }}>
         {t('featuresTitle')}
       </p>
       <div className="flex flex-col gap-3 flex-1">
@@ -242,18 +247,18 @@ function FeaturesContent({ project }: { project: ProjectAnalysis }) {
             <motion.div
               key={i}
               className="flex items-start gap-3 rounded-xl p-4"
-              style={{ backgroundColor: colors.backgroundDark, border: `1px solid ${colors.accent}30` }}
+              style={{ backgroundColor: UI.bgDark, border: `1px solid ${UI.accent}30` }}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: i * 0.07, ease: EASE }}
             >
-              <Zap size={16} color={colors.accent} className="mt-0.5 shrink-0" />
+              <Zap size={16} color={UI.accent} className="mt-0.5 shrink-0" />
               <div>
-                <p className="font-sans font-semibold" style={{ fontSize: '0.8rem', color: colors.textLight, lineHeight: 1.4 }}>
+                <p className="font-sans font-semibold" style={{ fontSize: '0.8rem', color: UI.textLight, lineHeight: 1.4 }}>
                   {title}
                 </p>
                 {desc && (
-                  <p className="font-sans mt-1" style={{ fontSize: '0.65rem', color: `${colors.textLight}B3`, lineHeight: 1.5, fontWeight: 300 }}>
+                  <p className="font-sans mt-1" style={{ fontSize: '0.65rem', color: `${UI.textLight}B3`, lineHeight: 1.5, fontWeight: 300 }}>
                     {desc}
                   </p>
                 )}
@@ -269,23 +274,23 @@ function FeaturesContent({ project }: { project: ProjectAnalysis }) {
 // ─── Advantage ────────────────────────────────────────────────────────────────
 
 function AdvantageContent({ project }: { project: ProjectAnalysis }) {
-  const { colors, structureProposal } = project
+  const { structureProposal } = project
   const { t } = useLanguage()
   return (
     <div className="flex h-full flex-col items-center justify-center">
-      <p className="font-sans uppercase tracking-widest mb-8" style={{ fontSize: '0.55rem', color: colors.textSecondary }}>
+      <p className="font-sans uppercase tracking-widest mb-8" style={{ fontSize: '0.55rem', color: UI.textSecondary }}>
         {t('advantageLabel')}
       </p>
       <motion.p
         className="font-serif italic text-center"
-        style={{ fontSize: '1.25rem', fontWeight: 400, color: colors.text, maxWidth: 520, lineHeight: 1.75 }}
+        style={{ fontSize: '1.25rem', fontWeight: 400, color: UI.text, maxWidth: 520, lineHeight: 1.75 }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: EASE }}
       >
         {structureProposal.mainAdvantage}
       </motion.p>
-      <div style={{ width: 48, height: 1, backgroundColor: colors.accent, marginTop: 32 }} />
+      <div style={{ width: 48, height: 1, backgroundColor: UI.accent, marginTop: 32 }} />
     </div>
   )
 }
@@ -293,11 +298,11 @@ function AdvantageContent({ project }: { project: ProjectAnalysis }) {
 // ─── Competitors ──────────────────────────────────────────────────────────────
 
 function CompetitorsContent({ project }: { project: ProjectAnalysis }) {
-  const { colors, structureProposal } = project
+  const { structureProposal } = project
   const { t } = useLanguage()
   return (
     <div className="flex h-full flex-col">
-      <p className="font-serif mb-5" style={{ fontSize: '1.5rem', fontWeight: 400, color: colors.text }}>
+      <p className="font-serif mb-5" style={{ fontSize: '1.5rem', fontWeight: 400, color: UI.text }}>
         {t('competitorsTitle')}
       </p>
       <div className="flex flex-col gap-4 flex-1">
@@ -305,30 +310,27 @@ function CompetitorsContent({ project }: { project: ProjectAnalysis }) {
           <motion.div
             key={c.name}
             className="rounded-xl p-4"
-            style={{ backgroundColor: `${colors.accent}08`, border: `1px solid ${colors.border}` }}
+            style={{ backgroundColor: `${UI.accent}08`, border: `1px solid ${UI.border}` }}
             initial={{ opacity: 0, scale: 0.97 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.35, delay: i * 0.07, ease: EASE }}
           >
             <div className="flex items-center justify-between mb-3">
-              <p className="font-sans font-semibold" style={{ fontSize: '0.85rem', color: colors.text }}>
+              <p className="font-sans font-semibold" style={{ fontSize: '0.85rem', color: UI.text }}>
                 {c.name}
               </p>
               <div className="flex items-center gap-2">
-                <Globe
-                  size={12}
-                  color={c.hasWebsite ? '#84B59F' : '#F87171'}
-                />
-                <p className="font-sans font-medium" style={{ fontSize: '0.7rem', color: colors.accent }}>
+                <Globe size={12} color={c.hasWebsite ? '#84B59F' : '#F87171'} />
+                <p className="font-sans font-medium" style={{ fontSize: '0.7rem', color: UI.accent }}>
                   {c.digitalScore}/10
                 </p>
               </div>
             </div>
             {/* Score bar */}
-            <div className="rounded-full overflow-hidden mb-3" style={{ height: 4, backgroundColor: colors.border }}>
+            <div className="rounded-full overflow-hidden mb-3" style={{ height: 4, backgroundColor: UI.border }}>
               <motion.div
                 className="rounded-full h-full"
-                style={{ backgroundColor: colors.accent }}
+                style={{ backgroundColor: UI.accent }}
                 initial={{ width: 0 }}
                 animate={{ width: `${c.digitalScore * 10}%` }}
                 transition={{ duration: 0.6, delay: i * 0.07 + 0.2, ease: EASE }}
@@ -336,12 +338,12 @@ function CompetitorsContent({ project }: { project: ProjectAnalysis }) {
             </div>
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <p className="font-sans" style={{ fontSize: '0.58rem', color: colors.textSecondary }}>{t('competitorStrength')}</p>
-                <p className="font-sans" style={{ fontSize: '0.65rem', color: colors.text, marginTop: 2, lineHeight: 1.4 }}>{c.betterThan}</p>
+                <p className="font-sans" style={{ fontSize: '0.58rem', color: UI.textSecondary }}>{t('competitorStrength')}</p>
+                <p className="font-sans" style={{ fontSize: '0.65rem', color: UI.text, marginTop: 2, lineHeight: 1.4 }}>{c.betterThan}</p>
               </div>
               <div>
-                <p className="font-sans" style={{ fontSize: '0.58rem', color: colors.accent }}>{t('competitorOpportunity')}</p>
-                <p className="font-sans" style={{ fontSize: '0.65rem', color: colors.text, marginTop: 2, lineHeight: 1.4 }}>{c.worseThan}</p>
+                <p className="font-sans" style={{ fontSize: '0.58rem', color: UI.accent }}>{t('competitorOpportunity')}</p>
+                <p className="font-sans" style={{ fontSize: '0.65rem', color: UI.text, marginTop: 2, lineHeight: 1.4 }}>{c.worseThan}</p>
               </div>
             </div>
           </motion.div>
@@ -360,7 +362,6 @@ interface StructureViewProps {
 
 export function StructureView({ project, onBack }: StructureViewProps) {
   const [selectedTab, setSelectedTab] = useState<StructureTab>('sitemap')
-  const { colors } = project
   const { t } = useLanguage()
   const isMobile = useIsMobile()
 
@@ -371,9 +372,6 @@ export function StructureView({ project, onBack }: StructureViewProps) {
     { id: 'advantage', label: t('tabAdvantage') },
     { id: 'competitors', label: t('tabCompetitors') },
   ]
-
-  const blockBg = colors.backgroundBlock
-  const blockBorder = colors.border
 
   const tabContent = (
     <AnimatePresence mode="wait">
@@ -404,13 +402,13 @@ export function StructureView({ project, onBack }: StructureViewProps) {
           style={{
             position: 'fixed', top: 16, left: 16, zIndex: 60,
             display: 'flex', alignItems: 'center', gap: 6,
-            backgroundColor: blockBg, border: `1px solid ${blockBorder}`,
+            backgroundColor: UI.bgBlock, border: `1px solid ${UI.border}`,
             borderRadius: 20, padding: '8px 14px',
             cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
           }}
         >
-          <ArrowLeft size={14} color={colors.textSecondary} />
-          <span className="font-sans font-medium" style={{ fontSize: '0.75rem', color: colors.textSecondary }}>
+          <ArrowLeft size={14} color={UI.textSecondary} />
+          <span className="font-sans font-medium" style={{ fontSize: '0.75rem', color: UI.textSecondary }}>
             {t('back')}
           </span>
         </button>
@@ -429,10 +427,10 @@ export function StructureView({ project, onBack }: StructureViewProps) {
                 key={tab.id}
                 onClick={() => setSelectedTab(tab.id)}
                 style={{
-                  padding: '8px 16px', borderRadius: 20, border: isActive ? 'none' : `1px solid ${blockBorder}`,
+                  padding: '8px 16px', borderRadius: 20, border: isActive ? 'none' : `1px solid ${UI.border}`,
                   cursor: 'pointer',
-                  backgroundColor: isActive ? colors.accent : blockBg,
-                  color: isActive ? colors.textLight : colors.textSecondary,
+                  backgroundColor: isActive ? UI.accent : UI.bgBlock,
+                  color: isActive ? '#FFFFFF' : UI.textSecondary,
                   fontSize: '0.7rem', fontFamily: 'var(--font-jakarta)', fontWeight: isActive ? 600 : 400,
                   whiteSpace: 'nowrap', flexShrink: 0,
                 }}
@@ -461,9 +459,9 @@ export function StructureView({ project, onBack }: StructureViewProps) {
               key={tab.id}
               className="cursor-pointer rounded-2xl flex items-center flex-1"
               style={{
-                backgroundColor: blockBg,
-                border: `1px solid ${blockBorder}`,
-                borderLeft: isActive ? `3px solid ${colors.accent}` : `3px solid transparent`,
+                backgroundColor: UI.bgBlock,
+                border: `1px solid ${UI.border}`,
+                borderLeft: isActive ? `3px solid ${UI.accent}` : `3px solid transparent`,
                 padding: '0 16px',
                 minHeight: 0,
               }}
@@ -475,7 +473,7 @@ export function StructureView({ project, onBack }: StructureViewProps) {
             >
               <span className="font-sans" style={{
                 fontSize: '0.75rem', fontWeight: isActive ? 600 : 400,
-                color: isActive ? colors.text : colors.textSecondary,
+                color: isActive ? UI.text : UI.textSecondary,
               }}>
                 {tab.label}
               </span>
@@ -485,15 +483,15 @@ export function StructureView({ project, onBack }: StructureViewProps) {
         {/* Volver */}
         <motion.div
           className="cursor-pointer rounded-2xl flex items-center justify-center gap-2"
-          style={{ backgroundColor: blockBg, border: `1px solid ${blockBorder}`, minHeight: 48 }}
+          style={{ backgroundColor: UI.bgBlock, border: `1px solid ${UI.border}`, minHeight: 48 }}
           initial={{ opacity: 0, x: -8 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3, delay: TABS.length * 0.06, ease: EASE }}
           onClick={onBack}
           whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.05)' }}
         >
-          <ArrowLeft size={14} color={colors.textSecondary} />
-          <span className="font-sans font-medium" style={{ fontSize: '0.72rem', color: colors.textSecondary }}>
+          <ArrowLeft size={14} color={UI.textSecondary} />
+          <span className="font-sans font-medium" style={{ fontSize: '0.72rem', color: UI.textSecondary }}>
             {t('back')}
           </span>
         </motion.div>
@@ -502,7 +500,7 @@ export function StructureView({ project, onBack }: StructureViewProps) {
       {/* Right panel */}
       <motion.div
         className="rounded-2xl overflow-hidden"
-        style={{ backgroundColor: blockBg, border: `1px solid ${blockBorder}`, padding: 28, height: '100%', minHeight: 0 }}
+        style={{ backgroundColor: UI.bgBlock, border: `1px solid ${UI.border}`, padding: 28, height: '100%', minHeight: 0 }}
         initial={{ opacity: 0, x: 16 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3, delay: 0.1, ease: EASE }}

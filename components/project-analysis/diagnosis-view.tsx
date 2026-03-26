@@ -8,6 +8,14 @@ import { useLanguage } from '@/lib/language-context'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
+const UI = {
+  bgBlock: '#F5F6F8',
+  accent: '#4DE8D8',
+  text: '#2D2D2D',
+  textSecondary: '#8C8C8C',
+  border: '#E8E8E8',
+}
+
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
@@ -30,13 +38,13 @@ interface DiagnosisViewProps {
 }
 
 export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
-  const { diagnosis, colors } = project
+  const { diagnosis } = project
   const { t } = useLanguage()
   const isMobile = useIsMobile()
 
   const blockStyle = {
-    backgroundColor: colors.backgroundBlock,
-    border: `1px solid ${colors.border}`,
+    backgroundColor: UI.bgBlock,
+    border: `1px solid ${UI.border}`,
     borderRadius: 16,
     padding: isMobile ? 14 : 20,
   }
@@ -52,14 +60,14 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
           style={{
             position: 'fixed', top: 16, left: 16, zIndex: 60,
             display: 'flex', alignItems: 'center', gap: 6,
-            backgroundColor: colors.backgroundBlock,
-            border: `1px solid ${colors.border}`,
+            backgroundColor: UI.bgBlock,
+            border: `1px solid ${UI.border}`,
             borderRadius: 20, padding: '8px 14px',
             cursor: 'pointer', boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
           }}
         >
-          <ArrowLeft size={14} color={colors.textSecondary} />
-          <span className="font-sans font-medium" style={{ fontSize: '0.75rem', color: colors.textSecondary }}>
+          <ArrowLeft size={14} color={UI.textSecondary} />
+          <span className="font-sans font-medium" style={{ fontSize: '0.75rem', color: UI.textSecondary }}>
             {t('back')}
           </span>
         </button>
@@ -69,8 +77,8 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
 
         {/* Info General */}
         <motion.div style={blockStyle} {...blockIn(0)}>
-          <p className="font-sans font-semibold" style={{ fontSize: '1rem', color: colors.text }}>{project.clientName}</p>
-          <p className="font-sans mt-0.5" style={{ fontSize: '0.7rem', color: colors.textSecondary }}>{diagnosis.location}</p>
+          <p className="font-sans font-semibold" style={{ fontSize: '1rem', color: UI.text }}>{project.clientName}</p>
+          <p className="font-sans mt-0.5" style={{ fontSize: '0.7rem', color: UI.textSecondary }}>{diagnosis.location}</p>
           <div className="mt-3 flex flex-col gap-3">
             {[
               { icon: MapPin, label: t('diagAddress'), value: diagnosis.address },
@@ -79,10 +87,10 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
               { icon: Globe, label: t('diagGoogleMaps'), value: diagnosis.googleMaps },
             ].map(({ icon: Icon, label, value }) => (
               <div key={label} className="flex items-start gap-2">
-                <Icon size={13} color={colors.accent} className="mt-0.5 shrink-0" />
+                <Icon size={13} color={UI.accent} className="mt-0.5 shrink-0" />
                 <div>
-                  <p className="font-sans font-medium" style={{ fontSize: '0.68rem', color: colors.text }}>{label}</p>
-                  <p className="font-sans mt-0.5" style={{ fontSize: '0.65rem', color: colors.textSecondary }}>{value}</p>
+                  <p className="font-sans font-medium" style={{ fontSize: '0.68rem', color: UI.text }}>{label}</p>
+                  <p className="font-sans mt-0.5" style={{ fontSize: '0.65rem', color: UI.textSecondary }}>{value}</p>
                 </div>
               </div>
             ))}
@@ -93,25 +101,25 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
           {/* Rating */}
           <motion.div style={blockStyle} {...blockIn(1)}>
-            <p className="font-sans font-medium uppercase tracking-wide" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>
+            <p className="font-sans font-medium uppercase tracking-wide" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>
               {t('diagRating')}
             </p>
-            <p className="font-serif mt-2" style={{ fontSize: '2.5rem', fontWeight: 500, color: colors.accent, lineHeight: 1 }}>
+            <p className="font-serif mt-2" style={{ fontSize: '2.5rem', fontWeight: 500, color: UI.accent, lineHeight: 1 }}>
               {diagnosis.rating}
             </p>
             <div className="mt-1 flex gap-0.5">
               {Array.from({ length: 5 }).map((_, i) => (
-                <span key={i} style={{ color: colors.accent, fontSize: '0.65rem' }}>★</span>
+                <span key={i} style={{ color: UI.accent, fontSize: '0.65rem' }}>★</span>
               ))}
             </div>
-            <p className="font-sans mt-1" style={{ fontSize: '0.65rem', color: colors.textSecondary }}>
+            <p className="font-sans mt-1" style={{ fontSize: '0.65rem', color: UI.textSecondary }}>
               {diagnosis.reviewCount} {t('diagReviews')}
             </p>
             {diagnosis.clientKeywords.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1">
                 {diagnosis.clientKeywords.map((kw) => (
                   <span key={kw} className="rounded-full px-2 py-0.5 font-sans"
-                    style={{ fontSize: '0.5rem', backgroundColor: `${colors.accent}18`, color: colors.accent }}>
+                    style={{ fontSize: '0.5rem', backgroundColor: `${UI.accent}18`, color: UI.accent }}>
                     {kw}
                   </span>
                 ))}
@@ -121,24 +129,24 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
 
           {/* Instagram */}
           <motion.div style={blockStyle} {...blockIn(2)}>
-            <p className="font-sans font-medium uppercase tracking-wide" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>
+            <p className="font-sans font-medium uppercase tracking-wide" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>
               Instagram
             </p>
-            <p className="font-sans font-semibold mt-2" style={{ fontSize: '0.85rem', color: colors.accent }}>
+            <p className="font-sans font-semibold mt-2" style={{ fontSize: '0.85rem', color: UI.accent }}>
               {diagnosis.instagram}
             </p>
             <div className="mt-3 flex flex-col gap-2">
               <div>
-                <p className="font-sans" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>{t('diagFollowers')}</p>
-                <p className="font-sans font-medium" style={{ fontSize: '0.85rem', color: colors.text }}>{diagnosis.instagramFollowers}</p>
+                <p className="font-sans" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>{t('diagFollowers')}</p>
+                <p className="font-sans font-medium" style={{ fontSize: '0.85rem', color: UI.text }}>{diagnosis.instagramFollowers}</p>
               </div>
               <div>
-                <p className="font-sans" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>{t('diagQuality')}</p>
-                <p className="font-sans font-medium" style={{ fontSize: '0.85rem', color: colors.accent }}>{diagnosis.instagramQuality}</p>
+                <p className="font-sans" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>{t('diagQuality')}</p>
+                <p className="font-sans font-medium" style={{ fontSize: '0.85rem', color: UI.accent }}>{diagnosis.instagramQuality}</p>
               </div>
               <div>
-                <p className="font-sans" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>{t('diagFacebook')}</p>
-                <p className="font-sans" style={{ fontSize: '0.7rem', color: colors.textSecondary }}>{diagnosis.facebook}</p>
+                <p className="font-sans" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>{t('diagFacebook')}</p>
+                <p className="font-sans" style={{ fontSize: '0.7rem', color: UI.textSecondary }}>{diagnosis.facebook}</p>
               </div>
             </div>
           </motion.div>
@@ -146,13 +154,13 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
 
         {/* Lo que dicen */}
         <motion.div style={blockStyle} {...blockIn(3)}>
-          <p className="font-sans font-medium uppercase tracking-wide mb-3" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>
+          <p className="font-sans font-medium uppercase tracking-wide mb-3" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>
             {t('diagCustomerSay')}
           </p>
           <div className="flex flex-col gap-2">
             {diagnosis.positiveQuotes.map((quote, i) => (
-              <p key={i} className="font-serif italic" style={{ fontSize: '0.78rem', lineHeight: 1.5, color: colors.text }}>
-                "{quote}"
+              <p key={i} className="font-serif italic" style={{ fontSize: '0.78rem', lineHeight: 1.5, color: UI.text }}>
+                &ldquo;{quote}&rdquo;
               </p>
             ))}
           </div>
@@ -160,8 +168,8 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
             <div className="mt-4 flex flex-col gap-1.5">
               {diagnosis.negativePoints.map((point, i) => (
                 <div key={i} className="flex items-start gap-1.5">
-                  <AlertTriangle size={11} color={colors.border} className="mt-0.5 shrink-0" />
-                  <p className="font-sans" style={{ fontSize: '0.63rem', color: colors.textSecondary }}>{point}</p>
+                  <AlertTriangle size={11} color={UI.border} className="mt-0.5 shrink-0" />
+                  <p className="font-sans" style={{ fontSize: '0.63rem', color: UI.textSecondary }}>{point}</p>
                 </div>
               ))}
             </div>
@@ -170,22 +178,22 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
 
         {/* Presencia Web */}
         <motion.div style={blockStyle} {...blockIn(4)}>
-          <p className="font-sans font-medium uppercase tracking-wide mb-3" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>
+          <p className="font-sans font-medium uppercase tracking-wide mb-3" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>
             {t('diagWebPresence')}
           </p>
           {diagnosis.websiteNotes.length === 0 ? (
             <div>
-              <p className="font-sans font-semibold" style={{ fontSize: '0.9rem', color: colors.accent }}>
+              <p className="font-sans font-semibold" style={{ fontSize: '0.9rem', color: UI.accent }}>
                 {t('diagNoWebsite')}
               </p>
-              <p className="font-sans mt-2 leading-relaxed" style={{ fontSize: '0.7rem', color: colors.textSecondary }}>
+              <p className="font-sans mt-2 leading-relaxed" style={{ fontSize: '0.7rem', color: UI.textSecondary }}>
                 {t('diagOpportunity')}
               </p>
             </div>
           ) : (
             <div className="flex flex-col gap-1.5">
               {diagnosis.websiteNotes.map((note, i) => (
-                <p key={i} className="font-sans" style={{ fontSize: '0.68rem', color: colors.text }}>· {note}</p>
+                <p key={i} className="font-sans" style={{ fontSize: '0.68rem', color: UI.text }}>· {note}</p>
               ))}
             </div>
           )}
@@ -206,10 +214,10 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
         whileHover={{ scale: 1.008, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <p className="font-sans font-semibold" style={{ fontSize: '1.1rem', color: colors.text }}>
+        <p className="font-sans font-semibold" style={{ fontSize: '1.1rem', color: UI.text }}>
           {project.clientName}
         </p>
-        <p className="font-sans mt-0.5" style={{ fontSize: '0.7rem', color: colors.textSecondary }}>
+        <p className="font-sans mt-0.5" style={{ fontSize: '0.7rem', color: UI.textSecondary }}>
           {diagnosis.location}
         </p>
         <div className="mt-4 flex flex-col gap-3">
@@ -220,10 +228,10 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
             { icon: Globe, label: t('diagGoogleMaps'), value: diagnosis.googleMaps },
           ].map(({ icon: Icon, label, value }) => (
             <div key={label} className="flex items-start gap-2">
-              <Icon size={13} color={colors.accent} className="mt-0.5 shrink-0" />
+              <Icon size={13} color={UI.accent} className="mt-0.5 shrink-0" />
               <div>
-                <p className="font-sans font-medium" style={{ fontSize: '0.68rem', color: colors.text }}>{label}</p>
-                <p className="font-sans mt-0.5" style={{ fontSize: '0.65rem', color: colors.textSecondary }}>{value}</p>
+                <p className="font-sans font-medium" style={{ fontSize: '0.68rem', color: UI.text }}>{label}</p>
+                <p className="font-sans mt-0.5" style={{ fontSize: '0.65rem', color: UI.textSecondary }}>{value}</p>
               </div>
             </div>
           ))}
@@ -235,25 +243,25 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
         whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <p className="font-sans font-medium uppercase tracking-wide" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>
+        <p className="font-sans font-medium uppercase tracking-wide" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>
           {t('diagRating')}
         </p>
-        <p className="font-serif mt-2" style={{ fontSize: '3rem', fontWeight: 500, color: colors.accent, lineHeight: 1 }}>
+        <p className="font-serif mt-2" style={{ fontSize: '3rem', fontWeight: 500, color: UI.accent, lineHeight: 1 }}>
           {diagnosis.rating}
         </p>
         <div className="mt-1 flex gap-0.5">
           {Array.from({ length: 5 }).map((_, i) => (
-            <span key={i} style={{ color: colors.accent, fontSize: '0.75rem' }}>★</span>
+            <span key={i} style={{ color: UI.accent, fontSize: '0.75rem' }}>★</span>
           ))}
         </div>
-        <p className="font-sans mt-1" style={{ fontSize: '0.65rem', color: colors.textSecondary }}>
+        <p className="font-sans mt-1" style={{ fontSize: '0.65rem', color: UI.textSecondary }}>
           {diagnosis.reviewCount} {t('diagReviews')}
         </p>
         {diagnosis.clientKeywords.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-1">
             {diagnosis.clientKeywords.map((kw) => (
               <span key={kw} className="rounded-full px-3 py-0.5 font-sans"
-                style={{ fontSize: '0.55rem', backgroundColor: `${colors.accent}18`, color: colors.accent }}>
+                style={{ fontSize: '0.55rem', backgroundColor: `${UI.accent}18`, color: UI.accent }}>
                 {kw}
               </span>
             ))}
@@ -266,24 +274,24 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
         whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <p className="font-sans font-medium uppercase tracking-wide" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>
+        <p className="font-sans font-medium uppercase tracking-wide" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>
           Instagram
         </p>
-        <p className="font-sans font-semibold mt-2" style={{ fontSize: '0.95rem', color: colors.accent }}>
+        <p className="font-sans font-semibold mt-2" style={{ fontSize: '0.95rem', color: UI.accent }}>
           {diagnosis.instagram}
         </p>
         <div className="mt-4 flex flex-col gap-2.5">
           <div>
-            <p className="font-sans" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>{t('diagFollowers')}</p>
-            <p className="font-sans font-medium" style={{ fontSize: '0.85rem', color: colors.text }}>{diagnosis.instagramFollowers}</p>
+            <p className="font-sans" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>{t('diagFollowers')}</p>
+            <p className="font-sans font-medium" style={{ fontSize: '0.85rem', color: UI.text }}>{diagnosis.instagramFollowers}</p>
           </div>
           <div>
-            <p className="font-sans" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>{t('diagQuality')}</p>
-            <p className="font-sans font-medium" style={{ fontSize: '0.85rem', color: colors.accent }}>{diagnosis.instagramQuality}</p>
+            <p className="font-sans" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>{t('diagQuality')}</p>
+            <p className="font-sans font-medium" style={{ fontSize: '0.85rem', color: UI.accent }}>{diagnosis.instagramQuality}</p>
           </div>
           <div>
-            <p className="font-sans" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>{t('diagFacebook')}</p>
-            <p className="font-sans" style={{ fontSize: '0.7rem', color: colors.textSecondary }}>{diagnosis.facebook}</p>
+            <p className="font-sans" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>{t('diagFacebook')}</p>
+            <p className="font-sans" style={{ fontSize: '0.7rem', color: UI.textSecondary }}>{diagnosis.facebook}</p>
           </div>
         </div>
       </motion.div>
@@ -293,13 +301,13 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
         whileHover={{ scale: 1.008, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <p className="font-sans font-medium uppercase tracking-wide mb-3" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>
+        <p className="font-sans font-medium uppercase tracking-wide mb-3" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>
           {t('diagCustomerSay')}
         </p>
         <div className="flex flex-col gap-2">
           {diagnosis.positiveQuotes.map((quote, i) => (
-            <p key={i} className="font-serif italic" style={{ fontSize: '0.78rem', lineHeight: 1.5, color: colors.text }}>
-              "{quote}"
+            <p key={i} className="font-serif italic" style={{ fontSize: '0.78rem', lineHeight: 1.5, color: UI.text }}>
+              &ldquo;{quote}&rdquo;
             </p>
           ))}
         </div>
@@ -307,8 +315,8 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
           <div className="mt-4 flex flex-col gap-1.5">
             {diagnosis.negativePoints.map((point, i) => (
               <div key={i} className="flex items-start gap-1.5">
-                <AlertTriangle size={11} color={colors.border} className="mt-0.5 shrink-0" />
-                <p className="font-sans" style={{ fontSize: '0.63rem', color: colors.textSecondary }}>{point}</p>
+                <AlertTriangle size={11} color={UI.border} className="mt-0.5 shrink-0" />
+                <p className="font-sans" style={{ fontSize: '0.63rem', color: UI.textSecondary }}>{point}</p>
               </div>
             ))}
           </div>
@@ -320,22 +328,22 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
         whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <p className="font-sans font-medium uppercase tracking-wide mb-3" style={{ fontSize: '0.6rem', color: colors.textSecondary }}>
+        <p className="font-sans font-medium uppercase tracking-wide mb-3" style={{ fontSize: '0.6rem', color: UI.textSecondary }}>
           {t('diagWebPresence')}
         </p>
         {diagnosis.websiteNotes.length === 0 ? (
           <div>
-            <p className="font-sans font-semibold" style={{ fontSize: '0.9rem', color: colors.accent }}>
+            <p className="font-sans font-semibold" style={{ fontSize: '0.9rem', color: UI.accent }}>
               {t('diagNoWebsite')}
             </p>
-            <p className="font-sans mt-2 leading-relaxed" style={{ fontSize: '0.7rem', color: colors.textSecondary }}>
+            <p className="font-sans mt-2 leading-relaxed" style={{ fontSize: '0.7rem', color: UI.textSecondary }}>
               {t('diagOpportunity')}
             </p>
           </div>
         ) : (
           <div className="flex flex-col gap-1.5">
             {diagnosis.websiteNotes.map((note, i) => (
-              <p key={i} className="font-sans" style={{ fontSize: '0.68rem', color: colors.text }}>· {note}</p>
+              <p key={i} className="font-sans" style={{ fontSize: '0.68rem', color: UI.text }}>· {note}</p>
             ))}
           </div>
         )}
@@ -344,14 +352,14 @@ export function DiagnosisView({ project, onBack }: DiagnosisViewProps) {
       {/* ROW 2 COL 3 — Volver */}
       <motion.div
         className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl"
-        style={{ backgroundColor: colors.backgroundBlock, border: `1px solid ${colors.border}` }}
+        style={{ backgroundColor: UI.bgBlock, border: `1px solid ${UI.border}` }}
         {...blockIn(5)}
         onClick={onBack}
         whileHover={{ scale: 1.015, boxShadow: '0 8px 32px rgba(0,0,0,0.06)' }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <ArrowLeft size={16} color={colors.textSecondary} />
-        <span className="font-sans font-medium" style={{ fontSize: '0.85rem', color: colors.textSecondary }}>
+        <ArrowLeft size={16} color={UI.textSecondary} />
+        <span className="font-sans font-medium" style={{ fontSize: '0.85rem', color: UI.textSecondary }}>
           {t('back')}
         </span>
       </motion.div>
