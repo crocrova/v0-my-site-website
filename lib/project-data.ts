@@ -70,10 +70,152 @@ export interface ProjectAnalysis {
   preview: {
     isUnlocked: boolean
     siteComponentName?: string
+    url?: string
   }
 }
 
 export const projects: Record<string, ProjectAnalysis> = {
+  colucci: {
+    slug: 'colucci',
+    clientName: 'Colucci',
+    colors: {
+      background: '#F4ECE1',
+      backgroundBlock: '#FAF6EF',
+      backgroundDark: '#2D1F14',
+      text: '#2D1F14',
+      textSecondary: '#6B5A4E',
+      textLight: '#F4ECE1',
+      accent: '#4D7A38',
+      accentHover: '#3D6028',
+      accentSecondary: '#6CB8A8',
+      border: '#E2D8CC',
+    },
+    keywords: ['colucci', 'coffee-house', 'brunch', 'comfort-food', 'matcha-2x1', 'neighborhood-spot', 'tacos-guisado'],
+    diagnosis: {
+      rating: '4.3',
+      reviewCount: '460 recomendaciones en Facebook (90%)',
+      location: 'Plaza Casa Blanca, Cabo San Lucas',
+      address: 'Plaza Casa Blanca local 8, Carretera a Todos los Santos km 6, Brisas del Pacífico, Cabo San Lucas, B.C.S.',
+      phone: '+52 624 172 5848',
+      hours: 'Lunes a sábado: 7:00 AM – 10:00 PM · Domingo: No confirmado',
+      instagram: '@coluccicafe',
+      instagramFollowers: 'No encontrado',
+      instagramQuality: '7/10',
+      website: 'Sin sitio web',
+      websiteNotes: [
+        'No existe dominio propio',
+        'Presencia solo en Uber Eats, Facebook, Instagram y directorios',
+        'Sin menú digital unificado en su propia plataforma',
+      ],
+      positiveQuotes: [
+        '"Los aromas y sabores del café dentro de una taza… en Colucci Cafe tenemos el MATCHA al 2x1"',
+        '"Y tú ya probaste los tacos de guisado!!! Todos los días desde las 7am a las 10pm."',
+        '"#coluccicafecomoentucasa — ambiente hogareño y cómodo"',
+      ],
+      negativePoints: [
+        'Sin casa digital propia donde ver menú completo, promos y ubicación en un solo lugar',
+        'Feed de Instagram algo heterogéneo visualmente',
+        'Saturación de info de promos sin un centro claro',
+      ],
+      clientKeywords: ['café', 'matcha', '2x1', 'tacos de guisado', 'como en casa', 'desayuno', 'brunch'],
+      googleMaps: 'Perfil completo con fotos y horarios. Rating 4.3/5',
+      facebook: 'Activo — rating 4.5, 90% recomendación, 460+ reseñas. Posts regulares en 2026.',
+      otherPlatforms: [
+        'Uber Eats — menú completo con precios',
+        'Reservándonos / Sabores Locales — ficha con descripción',
+        'Booked AI — ficha con rating y horarios',
+      ],
+    },
+    visualProposal: {
+      palette: [
+        { name: 'Verde Barrio', hex: '#4D7A38', role: 'Acento primario', emotion: 'Vida, frescura, identidad' },
+        { name: 'Crema Casa', hex: '#F4ECE1', role: 'Fondo principal', emotion: 'Calidez, hogar, bienvenida' },
+        { name: 'Café Oscuro', hex: '#2D1F14', role: 'Texto y fondos oscuros', emotion: 'Profundidad, café, seriedad cálida' },
+        { name: 'Menta Fresca', hex: '#6CB8A8', role: 'Acento secundario', emotion: 'Frescura, matcha, alegría' },
+        { name: 'Salmón Cálido', hex: '#D4857A', role: 'Detalle humano', emotion: 'Cercanía, calidez, artesanal' },
+        { name: 'Matcha Verde', hex: '#8AB87A', role: 'Highlight de promo', emotion: 'Frescura, salud, signature' },
+      ],
+      typography: {
+        heading: 'Nunito',
+        body: 'Inter',
+        accent: 'Caveat',
+        description:
+          'Nunito redondeada y amigable para títulos — captura el mood warm del espacio. Inter para cuerpo legible en menú y datos. Caveat handwritten para taglines y frases, como los pizarrones escritos a mano del local.',
+      },
+      mood: {
+        words: ['Ecléctico', 'Vivo', 'Barrio'],
+        description:
+          'Un café con alma y carácter propio. El espacio físico es caos organizado y querible: muros verde intenso, mural pop-art, sillones barrocos y pizarrones escritos a mano. La web debe sentirse así: colorida, personal, nunca genérica.',
+        reference:
+          'La propuesta recoge la energía del letrero rosa del local: "Café / Líquido color tierra que sabe a cielo". Un sitio que huele a café y que hace querer ir ese mismo día.',
+      },
+      proposedElements: {
+        buttons:
+          'Fondo verde #4D7A38, texto blanco, border-radius 9999px (pill shape). Hover: escala suave 1.03 + sombra verde. Sin bordes rígidos.',
+        lighting:
+          'Iluminación cálida natural. Sin efectos de spotlight ni neón. Fondos crema con sombras suaves. El verde actúa como color "encendido".',
+        animations:
+          'Fade-in con slide-up al hacer scroll (stagger 0.08s). Hover con scale(1.03). Transiciones cálidas, directas, no cinematicas. Energía de barrio.',
+        layout:
+          'One-page scroll vertical de 4 secciones. Hero a pantalla completa. Menú en grid de cards. Sección concepto con texto e imagen. Cierre con ubicación y CTA WhatsApp.',
+      },
+      webType: 'One-page scroll corto (4 secciones)',
+    },
+    logoUrl: '/images/proyectos/colucci/logo.png',
+    structureProposal: {
+      sitemap: [
+        { name: 'Inicio', description: 'Hero con tagline y CTAs principales. Primera impresión del café.', icon: 'Home' },
+        { name: 'Menú', description: 'Bebidas calientes, frappes, waffles, desayunos, tacos de guisado. Menú digital completo.', icon: 'UtensilsCrossed' },
+        { name: 'Promociones', description: 'Matcha 2x1, frappe del día, talleres y eventos del café.', icon: 'Tag' },
+        { name: 'Sobre Colucci', description: '"Como en casa" — historia, concepto y espíritu del lugar.', icon: 'Heart' },
+        { name: 'Ubicación & Horarios', description: 'Plaza Casa Blanca, mapa, horarios y cómo llegar desde Cabo.', icon: 'MapPin' },
+        { name: 'Contacto', description: 'WhatsApp directo, redes sociales y pedidos a domicilio.', icon: 'MessageCircle' },
+      ],
+      objectives: [
+        'Menú digital propio — Mostrar toda la carta sin depender de Uber Eats, siempre actualizada y con identidad de la marca.',
+        'Centralizar info clave — Horarios, ubicación y promos en un solo lugar accesible en segundos.',
+        'Comunicar el concepto "como en casa" — La web debe transmitir la calidez del espacio antes de que el cliente llegue.',
+        'Captar búsquedas locales — SEO básico para "café Cabo San Lucas Brisas del Pacífico / Casa Blanca".',
+        'Calendario de promos y eventos — Matcha 2x1, talleres y especiales del día siempre visibles y actualizables.',
+      ],
+      specialFeatures: [
+        'Menú digital completo — Bebidas calientes, frappes, waffles, desayunos, tacos y postres con precios. Sin depender de Uber Eats.',
+        'Badge 2x1 destacado — La promo de frappe aparece prominente en menú y hero, con diseño que llama a la acción.',
+        'Botón WhatsApp directo — Pedidos y preguntas sin fricción, desde cualquier sección de la web.',
+        'Agenda de eventos — Talleres de pintura y promos especiales actualizables desde el mismo sitio.',
+      ],
+      mainAdvantage:
+        'Colucci ya tiene lo más difícil: una comunidad local fiel, 460+ recomendaciones, 4.3–4.5 de rating y un concepto único que ninguna cadena puede replicar. "Como en casa" no es un slogan — es lo que dicen sus clientes. Una web propia lleva ese espíritu al mundo digital y convierte a cada persona que busca "café en Cabo" en un cliente nuevo.',
+      competitors: [
+        {
+          name: 'London Bistro & Café',
+          hasWebsite: false,
+          digitalScore: 8,
+          betterThan: 'Contenido más aspiracional e instagrameable, enfoque en experiencia specialty',
+          worseThan: 'Tu oportunidad: Colucci tiene mayor volumen de reseñas y el diferencial de tacos de guisado + café diario que London no ofrece',
+        },
+        {
+          name: 'Starbucks Cabo San Lucas',
+          hasWebsite: true,
+          digitalScore: 9,
+          betterThan: 'Marca global, app, programa de lealtad y presencia digital masiva',
+          worseThan: 'Tu oportunidad: Colucci ofrece identidad local, tacos de guisado, matcha 2x1 y ese "como en casa" que ninguna cadena puede forzar',
+        },
+        {
+          name: 'Cafés locales Brisas del Pacífico',
+          hasWebsite: false,
+          digitalScore: 6,
+          betterThan: 'Algunos tienen feed de Instagram más cohesivo o se especializan en pastelería',
+          worseThan: 'Tu oportunidad: Colucci los supera en reseñas (460+), visibilidad en Uber Eats y en la amplitud del menú',
+        },
+      ],
+    },
+    preview: {
+      isUnlocked: true,
+      siteComponentName: 'ColucciWeb',
+      url: '/proyectos/colucci/web',
+    },
+  },
   fermento: {
     slug: 'fermento',
     clientName: 'fermento',
