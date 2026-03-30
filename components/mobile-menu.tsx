@@ -343,9 +343,10 @@ export function MobileMenu() {
 
                 {/* Web mockup */}
                 <div style={{
-                  width: '100%', height: 200, borderRadius: 12, overflow: 'hidden',
+                  width: '100%', height: 380, borderRadius: 12, overflow: 'hidden',
                   boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
                   display: 'flex', flexDirection: 'column',
+                  border: '1px solid #E0E2E7',
                 }}>
                   {/* Browser chrome */}
                   <div style={{
@@ -364,24 +365,21 @@ export function MobileMenu() {
                       my.{project.name.toLowerCase().replace(/\s+/g, '')}.com
                     </div>
                   </div>
-                  {/* Screen — real site component scaled to fit */}
-                  <div style={{
-                    flex: 1, overflow: 'hidden', backgroundColor: project.mockupBg, position: 'relative',
-                  }}>
-                    {(() => {
-                      const SiteComponent = SITE_MAP[project.id]
-                      return SiteComponent ? (
-                        <div style={{
-                          position: 'absolute', top: 0, left: 0,
-                          width: 1200, height: 800,
-                          transform: 'scale(0.286)', transformOrigin: 'top left',
-                          pointerEvents: 'none',
-                        }}>
+                  {/* Screen — real site component, scrollable via zoom (affects layout, scroll is 1:1) */}
+                  {(() => {
+                    const SiteComponent = SITE_MAP[project.id]
+                    return SiteComponent ? (
+                      <div style={{
+                        flex: 1, overflow: 'auto',
+                        backgroundColor: project.mockupBg,
+                        WebkitOverflowScrolling: 'touch',
+                      } as React.CSSProperties}>
+                        <div style={{ zoom: 0.286, width: 1200 }}>
                           <SiteComponent />
                         </div>
-                      ) : null
-                    })()}
-                  </div>
+                      </div>
+                    ) : null
+                  })()}
                 </div>
 
                 {/* Disclaimer */}
