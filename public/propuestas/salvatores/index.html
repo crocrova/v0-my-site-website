@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salvatore G's · Italian Restaurant · Cabo San Lucas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ============================================================
+       CUSTOM PROPERTIES
+    ============================================================ */
+    :root {
+      --bg:         #0D0A07;
+      --bg-warm:    #141009;
+      --bg-mid:     #1A1410;
+      --cream:      #F0DEB8;
+      --cream-dim:  #B0996E;
+      --wine:       #8B1F27;
+      --wine-light: #A82530;
+      --green-it:   #1E4A2A;
+      --amber:      #C89832;
+      --amber-dim:  #8A6820;
+      --white:      #FAFAF8;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'Inter', -apple-system, sans-serif;
+      --ease:       cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ============================================================
+       RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--cream);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ============================================================
+       ITALIAN TRICOLOR
+    ============================================================ */
+    .tricolor {
+      display: flex;
+      height: 3px;
+      width: 56px;
+    }
+    .tricolor span { flex: 1; }
+    .tricolor .r { background: #CC2936; }
+    .tricolor .w { background: #EFEFEF; }
+    .tricolor .g { background: #009246; }
+
+    /* ============================================================
+       REVEAL ANIMATIONS
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.85s var(--ease), transform 0.85s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .d1 { transition-delay: 0.12s; }
+    .d2 { transition-delay: 0.24s; }
+    .d3 { transition-delay: 0.36s; }
+    .d4 { transition-delay: 0.48s; }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 52px;
+      transition: background 0.4s ease, padding 0.35s ease, border-color 0.4s ease;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(13, 10, 7, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 14px 52px;
+      border-color: rgba(240, 222, 184, 0.07);
+    }
+
+    .nav-logo img {
+      height: 38px;
+      filter: brightness(0) invert(1);
+      opacity: 0.88;
+      transition: opacity 0.3s;
+    }
+    .nav-logo img:hover { opacity: 1; }
+
+    .nav-links {
+      display: flex;
+      gap: 38px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--cream-dim);
+      transition: color 0.25s;
+    }
+    .nav-links a:hover { color: var(--cream); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .lang-toggle { display: flex; gap: 2px; }
+    .lang-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font-sans); font-size: 11px;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--cream-dim); padding: 5px 9px; border-radius: 2px;
+      transition: all 0.25s;
+    }
+    .lang-btn.active {
+      color: var(--cream);
+      background: rgba(240, 222, 184, 0.1);
+    }
+
+    .nav-cta {
+      padding: 9px 22px; background: var(--wine); color: var(--cream);
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      border-radius: 2px; transition: background 0.25s; cursor: pointer;
+      border: none; font-family: var(--font-sans); font-weight: 400;
+    }
+    .nav-cta:hover { background: var(--wine-light); }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 680px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: -14px;
+      background-image: url('fotos/2025-10-24.webp');
+      background-size: cover;
+      background-position: center 35%;
+      will-change: transform;
+      filter: blur(4px);
+      transform: scale(1.07);
+    }
+
+    /* Semi-dark vignette for elegance */
+    .hero-tint {
+      position: absolute; inset: 0;
+      background: rgba(8,5,3,0.38);
+    }
+
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(13,10,7,0.30) 0%,
+        rgba(13,10,7,0.08) 25%,
+        rgba(13,10,7,0.22) 55%,
+        rgba(13,10,7,0.80) 82%,
+        rgba(13,10,7,0.98) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 0 28px;
+      max-width: 840px;
+    }
+
+    .hero-logo {
+      width: 220px;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
+      margin: 0 auto 36px;
+    }
+
+    .hero-tagline {
+      font-family: var(--font-serif);
+      font-size: clamp(36px, 5.5vw, 68px);
+      font-weight: 300; color: var(--white);
+      line-height: 1.08; letter-spacing: -0.01em;
+      margin-bottom: 22px;
+    }
+    .hero-tagline em { font-style: italic; color: var(--cream); }
+
+    .hero-dots {
+      font-size: 12px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--cream-dim);
+      margin-bottom: 44px;
+    }
+    .hero-dots .sep { display: inline-block; margin: 0 10px; color: var(--wine); }
+
+    .hero-btns {
+      display: flex; gap: 14px;
+      justify-content: center; flex-wrap: wrap;
+    }
+
+    .btn-fill {
+      display: inline-block; padding: 14px 38px;
+      background: var(--wine); color: var(--cream);
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      border-radius: 2px; transition: background 0.25s, transform 0.2s;
+      border: none; cursor: pointer; font-family: var(--font-sans);
+    }
+    .btn-fill:hover { background: var(--wine-light); transform: translateY(-2px); }
+
+    .btn-ghost {
+      display: inline-block; padding: 14px 38px;
+      background: transparent; color: var(--cream);
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      border-radius: 2px; border: 1px solid rgba(240,222,184,0.38);
+      transition: border-color 0.25s, background 0.25s, transform 0.2s;
+      cursor: pointer; font-family: var(--font-sans);
+    }
+    .btn-ghost:hover {
+      border-color: var(--cream);
+      background: rgba(240,222,184,0.07);
+      transform: translateY(-2px);
+    }
+
+    /* Pill badges */
+    .hero-pills {
+      position: absolute; bottom: 44px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; align-items: center; gap: 0;
+      background: rgba(13,10,7,0.6);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(240,222,184,0.11);
+      border-radius: 4px; overflow: hidden;
+      white-space: nowrap;
+    }
+    .pill-item {
+      padding: 12px 28px; text-align: center;
+    }
+    .pill-item strong {
+      display: block;
+      font-family: var(--font-serif); font-size: 24px;
+      font-weight: 500; color: var(--amber); line-height: 1;
+    }
+    .pill-item span {
+      font-size: 10px; letter-spacing: 0.13em;
+      text-transform: uppercase; color: var(--cream-dim);
+      display: block; margin-top: 3px;
+    }
+    .pill-sep {
+      width: 1px; height: 44px;
+      background: rgba(240,222,184,0.12);
+    }
+
+    /* ============================================================
+       STRIP
+    ============================================================ */
+    .strip {
+      background: var(--bg-warm);
+      border-top: 1px solid rgba(240,222,184,0.05);
+      border-bottom: 1px solid rgba(240,222,184,0.05);
+      padding: 28px 52px;
+    }
+    .strip-inner {
+      max-width: 1160px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: center; gap: 44px; flex-wrap: wrap;
+    }
+    .strip-item {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .strip-icon { font-size: 26px; line-height: 1; }
+    .strip-item strong {
+      display: block;
+      font-family: var(--font-serif); font-size: 17px;
+      font-weight: 500; color: var(--cream); line-height: 1.2;
+    }
+    .strip-item span {
+      font-size: 11px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--cream-dim);
+    }
+    .strip-sep {
+      width: 1px; height: 36px;
+      background: rgba(240,222,184,0.1);
+    }
+
+    /* ============================================================
+       SHARED LAYOUT
+    ============================================================ */
+    .wrap { max-width: 1160px; margin: 0 auto; }
+    section { padding: 108px 52px; }
+
+    .eyebrow {
+      font-size: 11px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--wine);
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 18px;
+    }
+    .eyebrow::after {
+      content: ''; display: block;
+      width: 28px; height: 1px;
+      background: var(--wine);
+    }
+
+    .section-h {
+      font-family: var(--font-serif);
+      font-size: clamp(34px, 4vw, 54px);
+      font-weight: 400; line-height: 1.1;
+      color: var(--cream); margin-bottom: 18px;
+    }
+    .section-h em { font-style: italic; color: var(--amber); }
+
+    .section-body {
+      font-size: 15px; line-height: 1.82;
+      color: var(--cream-dim); max-width: 500px;
+    }
+
+    /* ============================================================
+       THE SPACE
+    ============================================================ */
+    .space { background: var(--bg); }
+
+    .space-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 88px; align-items: center;
+    }
+
+    .space-img {
+      position: relative;
+      aspect-ratio: 4/3; overflow: hidden; border-radius: 2px;
+    }
+    .space-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.9s var(--ease);
+    }
+    .space-img:hover img { transform: scale(1.05); }
+    .space-img::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg,rgba(139,31,39,0.08) 0%,transparent 55%);
+      pointer-events: none;
+    }
+
+    .space-text { padding: 12px 0; }
+
+    .space-bq {
+      margin: 32px 0;
+      padding: 18px 22px;
+      border-left: 2px solid var(--wine);
+      font-family: var(--font-serif);
+      font-size: 21px; font-style: italic;
+      color: var(--cream); line-height: 1.5;
+    }
+
+    /* ============================================================
+       LASAGNA SECTION
+    ============================================================ */
+    .lasagna {
+      position: relative; padding: 0;
+      background: var(--bg-mid); overflow: hidden;
+    }
+    .lasagna::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 15% 50%,rgba(92,36,24,0.22) 0%,transparent 52%),
+        radial-gradient(ellipse at 85% 50%,rgba(139,31,39,0.12) 0%,transparent 52%);
+      pointer-events: none;
+    }
+    .lasagna-inner {
+      position: relative; padding: 128px 52px;
+      text-align: center;
+    }
+    .lasagna-eyebrow {
+      font-size: 11px; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--wine);
+      margin-bottom: 24px;
+    }
+    .lasagna-h {
+      font-family: var(--font-serif);
+      font-size: clamp(60px, 11vw, 130px);
+      font-weight: 300; font-style: italic;
+      color: var(--cream); line-height: 0.94;
+      letter-spacing: -0.02em; margin-bottom: 36px;
+    }
+    .lasagna-desc {
+      font-size: 16px; line-height: 1.82;
+      color: var(--cream-dim); max-width: 540px;
+      margin: 0 auto 52px;
+    }
+    .lasagna-quote {
+      font-family: var(--font-serif);
+      font-size: clamp(19px, 2.2vw, 26px);
+      font-style: italic; color: var(--amber);
+      max-width: 580px; margin: 0 auto 52px;
+      line-height: 1.52;
+    }
+    .lasagna-quote cite {
+      display: block; font-style: normal;
+      font-family: var(--font-sans);
+      font-size: 10px; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--cream-dim);
+      margin-top: 14px;
+    }
+
+    /* ============================================================
+       OUR STORY
+    ============================================================ */
+    .story { background: var(--bg); }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 88px; align-items: center;
+    }
+
+    .story-img {
+      position: relative;
+      aspect-ratio: 3/4; overflow: hidden; border-radius: 2px;
+      order: 2;
+    }
+    .story-img img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .story-text { order: 1; }
+
+    .story-body { margin-bottom: 20px; }
+
+    .story-stats {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 44px;
+    }
+    .stat {
+      padding: 22px 18px;
+      border: 1px solid rgba(240,222,184,0.08); border-radius: 2px;
+    }
+    .stat strong {
+      display: block;
+      font-family: var(--font-serif); font-size: 38px;
+      font-weight: 400; color: var(--amber);
+      line-height: 1; margin-bottom: 6px;
+    }
+    .stat span {
+      font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--cream-dim);
+    }
+
+    /* ============================================================
+       MENU HIGHLIGHTS
+    ============================================================ */
+    .menu-sec { background: var(--bg-warm); }
+
+    .menu-head { text-align: center; margin-bottom: 68px; }
+    .menu-head .eyebrow { justify-content: center; }
+    .menu-head .eyebrow::after { display: none; }
+    .menu-head .eyebrow::before {
+      content: ''; display: block;
+      width: 28px; height: 1px; background: var(--wine);
+    }
+    .menu-head .section-body {
+      margin: 0 auto; max-width: 440px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 2px;
+    }
+
+    .menu-card {
+      padding: 42px 36px;
+      background: var(--bg);
+      border: 1px solid rgba(240,222,184,0.05);
+      transition: border-color 0.3s, background 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .menu-card:hover {
+      border-color: rgba(240,222,184,0.13);
+      background: var(--bg-mid);
+    }
+    .card-num {
+      font-family: var(--font-serif); font-style: italic;
+      font-size: 13px; color: var(--wine); margin-bottom: 14px;
+    }
+    .card-name {
+      font-family: var(--font-serif); font-size: 25px;
+      font-weight: 400; color: var(--cream);
+      margin-bottom: 12px; line-height: 1.2;
+    }
+    .card-name em { font-style: italic; }
+    .card-desc {
+      font-size: 13px; line-height: 1.72; color: var(--cream-dim);
+    }
+    .card-tag {
+      display: inline-block; margin-top: 20px;
+      font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--amber);
+      border: 1px solid rgba(200,152,50,0.28);
+      padding: 4px 12px; border-radius: 1px;
+    }
+
+    .menu-card.sig {
+      background: var(--wine);
+      border-color: var(--wine);
+    }
+    .menu-card.sig .card-num { color: rgba(240,222,184,0.55); }
+    .menu-card.sig .card-name { color: var(--white); }
+    .menu-card.sig .card-desc { color: rgba(240,222,184,0.78); }
+    .menu-card.sig .card-tag { color: var(--cream); border-color: rgba(240,222,184,0.35); }
+    .menu-card.sig:hover { background: var(--wine-light); border-color: var(--wine-light); }
+
+    .menu-cta { text-align: center; margin-top: 56px; }
+
+    /* ============================================================
+       GALLERY
+    ============================================================ */
+    .gallery { background: var(--bg); padding: 0; }
+
+    .gallery-label {
+      padding: 80px 52px 48px;
+      text-align: center;
+    }
+    .gallery-label .eyebrow { justify-content: center; }
+    .gallery-label .eyebrow::after { display: none; }
+    .gallery-label .eyebrow::before {
+      content: ''; display: block;
+      width: 28px; height: 1px; background: var(--wine);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 52% 24% 24%;
+      grid-template-rows: 380px 300px;
+      gap: 4px;
+    }
+    .gi { overflow: hidden; position: relative; }
+    .gi img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.75s var(--ease);
+    }
+    .gi:hover img { transform: scale(1.06); }
+    .gi::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(13,10,7,0); transition: background 0.4s;
+      pointer-events: none;
+    }
+    .gi:hover::after { background: rgba(13,10,7,0.12); }
+
+    .gi-1 { grid-column: 1; grid-row: 1 / 3; }
+    .gi-2 { grid-column: 2; grid-row: 1; }
+    .gi-3 { grid-column: 3; grid-row: 1; }
+    .gi-4 { grid-column: 2 / 4; grid-row: 2; }
+
+    /* ============================================================
+       REVIEWS
+    ============================================================ */
+    .reviews { background: var(--bg-warm); }
+
+    .reviews-head { text-align: center; margin-bottom: 60px; }
+    .ta-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(0,170,96,0.07);
+      border: 1px solid rgba(0,170,96,0.18);
+      border-radius: 4px; padding: 8px 20px;
+      margin-bottom: 18px;
+    }
+    .ta-dot {
+      width: 22px; height: 22px; background: #00AA60;
+      border-radius: 50%; font-size: 12px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ta-badge span {
+      font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: #00AA60;
+    }
+
+    .reviews-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 22px;
+    }
+    .rv {
+      padding: 36px;
+      background: var(--bg);
+      border: 1px solid rgba(240,222,184,0.07); border-radius: 2px;
+      transition: border-color 0.3s;
+    }
+    .rv:hover { border-color: rgba(240,222,184,0.14); }
+    .rv-stars { color: var(--amber); font-size: 13px; letter-spacing: 3px; margin-bottom: 18px; }
+    .rv-text {
+      font-family: var(--font-serif); font-size: 18px;
+      font-style: italic; color: var(--cream);
+      line-height: 1.6; margin-bottom: 24px;
+    }
+    .rv-author { display: flex; align-items: center; gap: 12px; }
+    .rv-av {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg-mid);
+      border: 1px solid rgba(240,222,184,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-serif); font-size: 16px; color: var(--cream-dim);
+    }
+    .rv-name {
+      font-size: 12px; font-weight: 500; color: var(--cream); letter-spacing: 0.05em;
+    }
+    .rv-src {
+      font-size: 10px; color: var(--cream-dim);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px;
+    }
+
+    /* ============================================================
+       RESERVE
+    ============================================================ */
+    .reserve { position: relative; padding: 0; overflow: hidden; }
+
+    .reserve-bg {
+      background-image: url('fotos/2025-12-17.webp');
+      background-size: cover; background-position: center;
+      position: relative;
+    }
+    .reserve-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(13,10,7,0.90) 0%,
+        rgba(13,10,7,0.82) 50%,
+        rgba(13,10,7,0.93) 100%
+      );
+    }
+    .reserve-inner {
+      position: relative; z-index: 2;
+      padding: 120px 52px; text-align: center;
+    }
+
+    .reserve-h {
+      font-family: var(--font-serif);
+      font-size: clamp(40px, 5.5vw, 68px);
+      font-weight: 400; color: var(--cream);
+      margin-bottom: 14px;
+    }
+    .reserve-h em { font-style: italic; color: var(--amber); }
+
+    .reserve-sub {
+      font-size: 14px; color: var(--cream-dim);
+      letter-spacing: 0.06em; margin-bottom: 56px;
+    }
+
+    .reserve-btns {
+      display: flex; justify-content: center;
+      gap: 18px; flex-wrap: wrap; margin-bottom: 72px;
+    }
+
+    .rbtn {
+      display: inline-flex; align-items: center; gap: 11px;
+      padding: 16px 32px; border-radius: 2px;
+      font-size: 12px; letter-spacing: 0.14em;
+      text-transform: uppercase; transition: all 0.25s;
+      font-family: var(--font-sans); border: none; cursor: pointer;
+    }
+    .rbtn svg { width: 17px; height: 17px; flex-shrink: 0; }
+    .rbtn.wa { background: #25D366; color: #fff; }
+    .rbtn.wa:hover { background: #1EC65C; transform: translateY(-2px); }
+    .rbtn.ot { background: var(--wine); color: var(--cream); }
+    .rbtn.ot:hover { background: var(--wine-light); transform: translateY(-2px); }
+    .rbtn.em {
+      background: transparent; color: var(--cream);
+      border: 1px solid rgba(240,222,184,0.3);
+    }
+    .rbtn.em:hover {
+      border-color: var(--cream);
+      background: rgba(240,222,184,0.06);
+      transform: translateY(-2px);
+    }
+
+    .reserve-info {
+      display: flex; justify-content: center;
+      gap: 52px; flex-wrap: wrap;
+    }
+    .ri strong {
+      display: block;
+      font-family: var(--font-serif); font-size: 16px;
+      color: var(--cream); margin-bottom: 4px;
+    }
+    .ri span {
+      font-size: 11px; color: var(--cream-dim); letter-spacing: 0.08em;
+    }
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid rgba(240,222,184,0.06);
+      padding: 56px 52px 36px;
+    }
+    .footer-top {
+      max-width: 1160px; margin: 0 auto;
+      display: grid; grid-template-columns: 1fr auto 1fr;
+      align-items: center; gap: 40px;
+      margin-bottom: 44px;
+    }
+    .footer-logo img {
+      height: 34px; filter: brightness(0) invert(1); opacity: 0.38;
+    }
+    .footer-center { text-align: center; }
+    .footer-links {
+      display: flex; gap: 28px; list-style: none; justify-content: flex-end;
+    }
+    .footer-links a {
+      font-size: 11px; letter-spacing: 0.13em;
+      text-transform: uppercase; color: var(--cream-dim);
+      transition: color 0.25s;
+    }
+    .footer-links a:hover { color: var(--cream); }
+
+    .footer-bottom {
+      max-width: 1160px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 22px;
+      border-top: 1px solid rgba(240,222,184,0.05);
+    }
+    .footer-bottom p {
+      font-size: 11px; color: rgba(176,153,110,0.35); letter-spacing: 0.07em;
+    }
+    .footer-social { display: flex; gap: 18px; }
+    .footer-social a {
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(176,153,110,0.35); transition: color 0.25s;
+    }
+    .footer-social a:hover { color: var(--cream-dim); }
+
+    /* ============================================================
+       MOBILE
+    ============================================================ */
+    @media (max-width: 900px) {
+      section { padding: 80px 28px; }
+      nav { padding: 16px 28px; }
+      nav.scrolled { padding: 12px 28px; }
+      .nav-links { display: none; }
+
+      .space-grid,
+      .story-grid { grid-template-columns: 1fr; gap: 40px; }
+      .story-img { aspect-ratio: 4/3; order: 1; }
+      .story-text { order: 2; }
+
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 220px 200px 200px;
+      }
+      .gi-1 { grid-column: 1 / 3; grid-row: 1; }
+      .gi-2 { grid-column: 1;     grid-row: 2; }
+      .gi-3 { grid-column: 2;     grid-row: 2; }
+      .gi-4 { grid-column: 1 / 3; grid-row: 3; }
+
+      .menu-grid { grid-template-columns: 1fr; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .reserve-btns { flex-direction: column; align-items: stretch; max-width: 360px; margin-left: auto; margin-right: auto; }
+      .rbtn { justify-content: center; }
+      .reserve-info { gap: 28px; }
+      .hero-pills { display: none; }
+      .footer-top { grid-template-columns: 1fr; text-align: center; }
+      .footer-links { justify-content: center; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+      .strip-sep { display: none; }
+      .strip-inner { gap: 24px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero-logo { width: 160px; }
+      .hero-tagline { font-size: 28px; }
+      .hero-dots { display: none; }
+      .hero-btns { flex-direction: column; }
+      .lasagna-inner { padding: 80px 24px; }
+      .story-stats { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       NAVBAR
+  ============================================================ -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">
+      <img src="logo/Diseño sin título.png" alt="Salvatore G's">
+    </a>
+    <ul class="nav-links">
+      <li><a href="#space" class="t" data-en="The Space" data-es="El Espacio">The Space</a></li>
+      <li><a href="#story" class="t" data-en="Our Story" data-es="Nuestra Historia">Our Story</a></li>
+      <li><a href="#menu" class="t" data-en="Menu" data-es="Menú">Menu</a></li>
+      <li><a href="#reserve" class="t" data-en="Reserve" data-es="Reservar">Reserve</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('es')">ES</button>
+      </div>
+      <a href="#reserve" class="nav-cta t" data-en="Reserve" data-es="Reservar">Reserve</a>
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       HERO
+  ============================================================ -->
+  <div class="hero">
+    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-tint"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <img class="hero-logo" src="logo/Diseño sin título.png" alt="Salvatore G's Italian Restaurant">
+      <h1 class="hero-tagline">
+        <span class="t" data-en="Family-style Italian<br><em>in the heart of Cabo</em>" data-es="Tradición italiana familiar<br><em>en el corazón de Cabo</em>">Family-style Italian<br><em>in the heart of Cabo</em></span>
+      </h1>
+      <p class="hero-dots">
+        <span class="t" data-en="Legendary Lasagna" data-es="Lasaña Legendaria">Legendary Lasagna</span>
+        <span class="sep">·</span>
+        <span class="t" data-en="Generous Portions" data-es="Porciones Generosas">Generous Portions</span>
+        <span class="sep">·</span>
+        <span class="t" data-en="Courtyard Dining" data-es="Cena en el Patio">Courtyard Dining</span>
+      </p>
+      <div class="hero-btns">
+        <a href="#reserve" class="btn-fill t" data-en="Reserve Your Table" data-es="Reserva Tu Mesa">Reserve Your Table</a>
+        <a href="#menu" class="btn-ghost t" data-en="View Menu" data-es="Ver Menú">View Menu</a>
+      </div>
+    </div>
+    <div class="hero-pills">
+      <div class="pill-item">
+        <strong>4.7★</strong>
+        <span>TripAdvisor</span>
+      </div>
+      <div class="pill-sep"></div>
+      <div class="pill-item">
+        <strong>#5</strong>
+        <span class="t" data-en="Best in Cabo" data-es="Mejor en Cabo">Best in Cabo</span>
+      </div>
+      <div class="pill-sep"></div>
+      <div class="pill-item">
+        <strong>4,000+</strong>
+        <span class="t" data-en="Reviews" data-es="Reseñas">Reviews</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TRUST STRIP
+  ============================================================ -->
+  <div class="strip">
+    <div class="strip-inner">
+      <div class="strip-item reveal">
+        <div class="strip-icon">🍷</div>
+        <div>
+          <strong class="t" data-en="Family Tradition" data-es="Tradición Familiar">Family Tradition</strong>
+          <span class="t" data-en="Galluzzo family recipes" data-es="Recetas de la familia Galluzzo">Galluzzo family recipes</span>
+        </div>
+      </div>
+      <div class="strip-sep"></div>
+      <div class="strip-item reveal d1">
+        <div class="strip-icon">🏆</div>
+        <div>
+          <strong>#5 · 730+ <span class="t" data-en="Restaurants" data-es="Restaurantes">Restaurants</span></strong>
+          <span>TripAdvisor Travelers' Choice</span>
+        </div>
+      </div>
+      <div class="strip-sep"></div>
+      <div class="strip-item reveal d2">
+        <div class="strip-icon">🌿</div>
+        <div>
+          <strong class="t" data-en="Open Every Night" data-es="Abierto Cada Noche">Open Every Night</strong>
+          <span class="t" data-en="Downtown Cabo San Lucas" data-es="Centro de Cabo San Lucas">Downtown Cabo San Lucas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       THE SPACE
+  ============================================================ -->
+  <section class="space" id="space">
+    <div class="wrap">
+      <div class="space-grid">
+        <div class="space-img reveal">
+          <img src="fotos/poolside-dining.jpg" alt="Salvatore G's courtyard">
+        </div>
+        <div class="space-text">
+          <p class="eyebrow reveal t" data-en="The Atmosphere" data-es="La Atmósfera">The Atmosphere</p>
+          <h2 class="section-h reveal d1">
+            <span class="t" data-en="Where Cabo<br>meets <em>Italy</em>" data-es="Donde Cabo<br>se encuentra con <em>Italia</em>">Where Cabo<br>meets <em>Italy</em></span>
+          </h2>
+          <div class="tricolor reveal d2" style="margin: 14px 0 24px;"><span class="r"></span><span class="w"></span><span class="g"></span></div>
+          <p class="section-body reveal d2 t" data-en="Tucked inside the courtyard of Hotel Siesta Suites in downtown Cabo San Lucas, Salvatore G's is a place apart. String lights overhead. Tropical vines climbing brick walls. A wrought-iron fountain at the center. Tables full every night." data-es="Escondido en el patio del Hotel Siesta Suites en el centro de Cabo San Lucas, Salvatore G's es un lugar diferente. Guirnaldas de luces. Enredaderas tropicales trepando paredes de ladrillo. Una fuente de hierro forjado en el centro. Mesas llenas cada noche.">Tucked inside the courtyard of Hotel Siesta Suites in downtown Cabo San Lucas, Salvatore G's is a place apart. String lights overhead. Tropical vines climbing brick walls. A wrought-iron fountain at the center. Tables full every night.</p>
+          <blockquote class="space-bq reveal d3 t" data-en='"The atmosphere alone is worth the visit.<br>Then the food arrives."' data-es='"El ambiente solo ya vale la visita.<br>Después llega la comida."'>"The atmosphere alone is worth the visit.<br>Then the food arrives."</blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       LASAGNA SECTION
+  ============================================================ -->
+  <section class="lasagna">
+    <div class="lasagna-inner">
+      <p class="lasagna-eyebrow reveal t" data-en="The Signature Dish" data-es="El Plato Insignia">The Signature Dish</p>
+      <h2 class="lasagna-h reveal d1">
+        <span class="t" data-en="The Legendary<br>Lasagna" data-es="La Lasaña<br>Legendaria">The Legendary<br>Lasagna</span>
+      </h2>
+      <div class="tricolor reveal d2" style="width:56px; margin: 0 auto 36px;"><span class="r"></span><span class="w"></span><span class="g"></span></div>
+      <p class="lasagna-desc reveal d2 t" data-en="Made from the Galluzzo family recipe. Layered, slow-cooked, generous beyond expectation. The dish that made Salvatore G's legendary in Cabo — and keeps every table full every night." data-es="Preparada con la receta familiar Galluzzo. En capas, cocción lenta, generosa más allá de lo esperado. El plato que hizo legendario a Salvatore G's en Cabo — y mantiene cada mesa llena cada noche.">Made from the Galluzzo family recipe. Layered, slow-cooked, generous beyond expectation. The dish that made Salvatore G's legendary in Cabo — and keeps every table full every night.</p>
+      <blockquote class="lasagna-quote reveal d3">
+        <span class="t" data-en='"This is lasagna for one? Wow. Best meal so far in Cabo. Gigantic portions — and every single bite worth it."' data-es='"¿Esto es lasaña para uno? Wow. La mejor comida en Cabo hasta ahora. Porciones gigantes — y cada bocado vale la pena."'>"This is lasagna for one? Wow. Best meal so far in Cabo. Gigantic portions — and every single bite worth it."</span>
+        <cite>— TripAdvisor, 5★ Verified Review</cite>
+      </blockquote>
+      <a href="#reserve" class="btn-fill reveal d4 t" data-en="Reserve a Table" data-es="Reservar una Mesa">Reserve a Table</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       OUR STORY
+  ============================================================ -->
+  <section class="story" id="story">
+    <div class="wrap">
+      <div class="story-grid">
+        <div class="story-text">
+          <p class="eyebrow reveal t" data-en="Our Story" data-es="Nuestra Historia">Our Story</p>
+          <h2 class="section-h reveal d1">
+            <span class="t" data-en="Three generations<br>of <em>Italian craft</em>" data-es="Tres generaciones<br>de <em>cocina italiana</em>">Three generations<br>of <em>Italian craft</em></span>
+          </h2>
+          <div class="tricolor reveal d2" style="margin: 14px 0 24px;"><span class="r"></span><span class="w"></span><span class="g"></span></div>
+          <p class="section-body story-body reveal d2 t" data-en="Salvatore G's was born from the Galluzzo family's love for Italian cooking — the kind passed down at the family table, made with care, shared without reservation. They brought it to Cabo San Lucas and found the perfect home: a sun-drenched courtyard, loyal guests, and a city that knows good food when it tastes it." data-es="Salvatore G's nació del amor de la familia Galluzzo por la cocina italiana — el tipo que se transmite en la mesa familiar, hecho con cuidado, compartido sin reservas. Lo llevaron a Cabo San Lucas y encontraron el hogar perfecto: un patio cálido, comensales leales y una ciudad que sabe reconocer la buena comida.">Salvatore G's was born from the Galluzzo family's love for Italian cooking — the kind passed down at the family table, made with care, shared without reservation. They brought it to Cabo San Lucas and found the perfect home: a sun-drenched courtyard, loyal guests, and a city that knows good food when it tastes it.</p>
+          <p class="section-body reveal d3 t" data-en="Every recipe carries that history. Homemade pastas, slow-cooked sauces, Italian porketta — each dish is a statement that food should be generous, communal, and unforgettable." data-es="Cada receta lleva esa historia. Pastas artesanales, salsas de cocción lenta, porchetta italiana — cada plato es una declaración de que la comida debe ser generosa, comunal e inolvidable.">Every recipe carries that history. Homemade pastas, slow-cooked sauces, Italian porketta — each dish is a statement that food should be generous, communal, and unforgettable.</p>
+          <div class="story-stats">
+            <div class="stat reveal d1">
+              <strong>4.7★</strong>
+              <span class="t" data-en="TripAdvisor Rating" data-es="Calificación TripAdvisor">TripAdvisor Rating</span>
+            </div>
+            <div class="stat reveal d2">
+              <strong>#5</strong>
+              <span class="t" data-en="of 730+ in Cabo" data-es="de 730+ en Cabo">of 730+ in Cabo</span>
+            </div>
+            <div class="stat reveal d3">
+              <strong>4,000+</strong>
+              <span class="t" data-en="Verified Reviews" data-es="Reseñas Verificadas">Verified Reviews</span>
+            </div>
+            <div class="stat reveal d4">
+              <strong>13K+</strong>
+              <span>Facebook Check-ins</span>
+            </div>
+          </div>
+        </div>
+        <div class="story-img reveal d2">
+          <img src="fotos/unnamed.webp" alt="Salvatore G's interior">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       MENU
+  ============================================================ -->
+  <section class="menu-sec" id="menu">
+    <div class="wrap">
+      <div class="menu-head">
+        <p class="eyebrow reveal t" data-en="From the Kitchen" data-es="De la Cocina">From the Kitchen</p>
+        <h2 class="section-h reveal d1 t" data-en="Signature Dishes" data-es="Platos Insignia">Signature Dishes</h2>
+        <p class="section-body reveal d2 t" data-en="Homemade, generous, Italian. Every dish built from family recipes and served the way food was meant to be — in abundance." data-es="Artesanal, generoso, italiano. Cada plato construido con recetas familiares y servido como la comida debe ser — en abundancia.">Homemade, generous, Italian. Every dish built from family recipes and served the way food was meant to be — in abundance.</p>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card sig reveal">
+          <p class="card-num">I</p>
+          <h3 class="card-name"><em class="t" data-en="Lasagna Classica" data-es="Lasaña Clásica">Lasagna Classica</em></h3>
+          <p class="card-desc t" data-en="The Salvatore G's legend. Galluzzo family recipe — layered, slow-cooked, served in a portion that becomes part of every guest's Cabo story." data-es="La leyenda de Salvatore G's. Receta familiar Galluzzo — en capas, cocción lenta, servida en una porción que se vuelve parte de la historia de Cabo de cada comensal.">The Salvatore G's legend. Galluzzo family recipe — layered, slow-cooked, served in a portion that becomes part of every guest's Cabo story.</p>
+          <span class="card-tag t" data-en="Must Order" data-es="Imperdible">Must Order</span>
+        </div>
+        <div class="menu-card reveal d1">
+          <p class="card-num">II</p>
+          <h3 class="card-name"><em class="t" data-en="Homemade Pasta" data-es="Pasta Artesanal">Homemade Pasta</em></h3>
+          <p class="card-desc t" data-en="Made fresh daily. Fettuccine, penne, or rigatoni with classic Italian sauces — each one prepared in-house, from scratch." data-es="Preparada fresca a diario. Fettuccine, penne o rigatoni con salsas italianas clásicas — cada una preparada en casa, desde cero.">Made fresh daily. Fettuccine, penne, or rigatoni with classic Italian sauces — each one prepared in-house, from scratch.</p>
+        </div>
+        <div class="menu-card reveal d2">
+          <p class="card-num">III</p>
+          <h3 class="card-name"><em>Italian Porketta</em></h3>
+          <p class="card-desc t" data-en="Slow-roasted pork with Italian herbs and aromatics. A Sunday tradition brought to Cabo by the Galluzzo family." data-es="Cerdo asado lento con hierbas italianas y aromáticos. Una tradición dominical traída a Cabo por la familia Galluzzo.">Slow-roasted pork with Italian herbs and aromatics. A Sunday tradition brought to Cabo by the Galluzzo family.</p>
+        </div>
+        <div class="menu-card reveal">
+          <p class="card-num">IV</p>
+          <h3 class="card-name"><em class="t" data-en="The Godfather" data-es="El Padrino">The Godfather</em></h3>
+          <p class="card-desc t" data-en="Maker's Mark and Disaronno, poured over ice. Marlon Brando's drink of choice — our favorite way to open an evening." data-es="Maker's Mark y Disaronno sobre hielo. La bebida favorita de Marlon Brando — nuestra forma favorita de comenzar la noche.">Maker's Mark and Disaronno, poured over ice. Marlon Brando's drink of choice — our favorite way to open an evening.</p>
+          <span class="card-tag t" data-en="Bar Signature" data-es="Firma del Bar">Bar Signature</span>
+        </div>
+        <div class="menu-card reveal d1">
+          <p class="card-num">V</p>
+          <h3 class="card-name"><em>Aperol Spritz</em></h3>
+          <p class="card-desc t" data-en="Aperol, sparkling wine, mineral water, a slice of orange. Italy's most beloved cocktail — served the proper Italian way." data-es="Aperol, vino espumoso, agua mineral, una rodaja de naranja. El cóctel más querido de Italia — servido a la manera italiana correcta.">Aperol, sparkling wine, mineral water, a slice of orange. Italy's most beloved cocktail — served the proper Italian way.</p>
+        </div>
+        <div class="menu-card reveal d2">
+          <p class="card-num">VI</p>
+          <h3 class="card-name"><em>Tiramisu</em></h3>
+          <p class="card-desc t" data-en="Espresso-soaked, mascarpone-rich, dusted with cocoa. The way it should be. A proper Italian ending to a proper Italian meal." data-es="Con espresso, rico en mascarpone, espolvoreado con cacao. Como debe ser. Un final italiano correcto para una comida italiana correcta.">Espresso-soaked, mascarpone-rich, dusted with cocoa. The way it should be. A proper Italian ending to a proper Italian meal.</p>
+        </div>
+      </div>
+      <div class="menu-cta reveal d1">
+        <a href="#reserve" class="btn-fill t" data-en="Reserve Your Table" data-es="Reserva Tu Mesa">Reserve Your Table</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       GALLERY
+  ============================================================ -->
+  <section class="gallery">
+    <div class="gallery-label">
+      <p class="eyebrow reveal t" data-en="The Experience" data-es="La Experiencia">The Experience</p>
+      <h2 class="section-h reveal d1">
+        <span class="t" data-en="Every night, <em>alive</em>" data-es="Cada noche, <em>viva</em>">Every night, <em>alive</em></span>
+      </h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gi gi-1">
+        <img src="fotos/2025-10-24.webp" alt="Patio nocturno Salvatore G's">
+      </div>
+      <div class="gi gi-2">
+        <img src="fotos/2025-12-17.webp" alt="Palapa Salvatore G's">
+      </div>
+      <div class="gi gi-3">
+        <img src="fotos/unnamed.webp" alt="Interior Salvatore G's">
+      </div>
+      <div class="gi gi-4">
+        <img src="fotos/poolside-dining.jpg" alt="Poolside dining Salvatore G's">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       REVIEWS
+  ============================================================ -->
+  <section class="reviews">
+    <div class="wrap">
+      <div class="reviews-head">
+        <div class="ta-badge reveal">
+          <div class="ta-dot">🦉</div>
+          <span>TripAdvisor Travelers' Choice · Cabo San Lucas</span>
+        </div>
+        <h2 class="section-h reveal d1">
+          <span class="t" data-en="What guests <em>are saying</em>" data-es="Lo que dicen <em>los comensales</em>">What guests <em>are saying</em></span>
+        </h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="rv reveal">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text t" data-en='"This is lasagna for one? Wow. Best meal in Cabo. Gigantic portions — service was outstanding from start to finish."' data-es='"¿Esto es lasaña para uno? Wow. La mejor comida en Cabo. Porciones gigantes — el servicio fue excepcional de principio a fin."'>"This is lasagna for one? Wow. Best meal in Cabo. Gigantic portions — service was outstanding from start to finish."</p>
+          <div class="rv-author">
+            <div class="rv-av">M</div>
+            <div>
+              <div class="rv-name">Michael R.</div>
+              <div class="rv-src">TripAdvisor · Verified</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv reveal d1">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text t" data-en='"Stellar reputation with locals and return visitors — and every bit deserved. The porketta, the courtyard, the lights. We will be back."' data-es='"Reputación estelar con locales y visitantes recurrentes — y completamente merecida. La porchetta, el patio, las luces. Regresaremos."'>"Stellar reputation with locals and return visitors — and every bit deserved. The porketta, the courtyard, the lights. We will be back."</p>
+          <div class="rv-author">
+            <div class="rv-av">S</div>
+            <div>
+              <div class="rv-name">Sarah L.</div>
+              <div class="rv-src">TripAdvisor · Verified</div>
+            </div>
+          </div>
+        </div>
+        <div class="rv reveal d2">
+          <div class="rv-stars">★★★★★</div>
+          <p class="rv-text t" data-en='"The best lasagna in Cabo. Homemade pasta, family atmosphere, lights in the courtyard at night — we come back every single trip."' data-es='"La mejor lasaña en Cabo. Pasta artesanal, ambiente familiar, luces en el patio de noche — regresamos en cada viaje."'>"The best lasagna in Cabo. Homemade pasta, family atmosphere, lights in the courtyard at night — we come back every single trip."</p>
+          <div class="rv-author">
+            <div class="rv-av">J</div>
+            <div>
+              <div class="rv-name">Jennifer K.</div>
+              <div class="rv-src">TripAdvisor · Verified</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       RESERVE
+  ============================================================ -->
+  <section class="reserve" id="reserve">
+    <div class="reserve-bg">
+      <div class="reserve-overlay"></div>
+      <div class="reserve-inner">
+        <p class="eyebrow reveal t" style="justify-content:center;" data-en="Come Dine With Us" data-es="Ven a Cenar Con Nosotros">Come Dine With Us</p>
+        <h2 class="reserve-h reveal d1">
+          <span class="t" data-en="Reserve your table<br><em>tonight</em>" data-es="Reserva tu mesa<br><em>esta noche</em>">Reserve your table<br><em>tonight</em></span>
+        </h2>
+        <p class="reserve-sub reveal d2 t" data-en="Tables fill fast — especially on weekends. Reserve ahead to guarantee your evening." data-es="Las mesas se llenan rápido — especialmente los fines de semana. Reserva con anticipación para garantizar tu noche.">Tables fill fast — especially on weekends. Reserve ahead to guarantee your evening.</p>
+        <div class="reserve-btns reveal d2">
+          <a href="https://wa.me/526241051044" class="rbtn wa" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp
+          </a>
+          <a href="https://www.opentable.com/r/salvatore-gs-cabo-san-lucas" class="rbtn ot" target="_blank">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.14-7-7 3.14-7 7-7zm0 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 2c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z"/></svg>
+            OpenTable
+          </a>
+          <a href="mailto:contactus@salvatoregs.com" class="rbtn em">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            contactus@salvatoregs.com
+          </a>
+        </div>
+        <div class="reserve-info reveal d3">
+          <div class="ri">
+            <strong class="t" data-en="Dinner Nightly" data-es="Cena Diaria">Dinner Nightly</strong>
+            <span class="t" data-en="Afternoon · Evening · Late Night" data-es="Tarde · Noche · Noche Tardía">Afternoon · Evening · Late Night</span>
+          </div>
+          <div class="ri">
+            <strong class="t" data-en="Downtown Cabo" data-es="Centro de Cabo">Downtown Cabo</strong>
+            <span class="t" data-en="Emiliano Zapata · Hotel Siesta Suites Courtyard" data-es="Emiliano Zapata · Patio del Hotel Siesta Suites">Emiliano Zapata · Hotel Siesta Suites Courtyard</span>
+          </div>
+          <div class="ri">
+            <strong>+52 624 143 3050</strong>
+            <span class="t" data-en="Reservations & Info" data-es="Reservaciones e Info">Reservations & Info</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer>
+    <div class="footer-top">
+      <div class="footer-logo">
+        <img src="logo/Diseño sin título.png" alt="Salvatore G's">
+      </div>
+      <div class="footer-center">
+        <div class="tricolor" style="width:60px; margin:0 auto;"><span class="r"></span><span class="w"></span><span class="g"></span></div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#space" class="t" data-en="The Space" data-es="El Espacio">The Space</a></li>
+        <li><a href="#story" class="t" data-en="Our Story" data-es="Nuestra Historia">Our Story</a></li>
+        <li><a href="#menu" class="t" data-en="Menu" data-es="Menú">Menu</a></li>
+        <li><a href="#reserve" class="t" data-en="Reserve" data-es="Reservar">Reserve</a></li>
+      </ul>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Salvatore G's Italian Restaurant · Cabo San Lucas, B.C.S., México</p>
+      <div class="footer-social">
+        <a href="https://instagram.com/salvatoregscabo" target="_blank">@salvatoregscabo</a>
+        <a href="https://facebook.com/salvatoregscabo" target="_blank">Facebook</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================================
+       JAVASCRIPT
+  ============================================================ -->
+  <script>
+    // ── PARALLAX HERO ─────────────────────────────────────────
+    const heroBg = document.getElementById('hero-bg');
+    window.addEventListener('scroll', () => {
+      heroBg.style.transform = `scale(1.07) translateY(${window.scrollY * 0.22}px)`;
+    }, { passive: true });
+
+    // ── NAV SCROLL ────────────────────────────────────────────
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 64);
+    }, { passive: true });
+
+    // ── SCROLL REVEAL ─────────────────────────────────────────
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    // ── LANGUAGE TOGGLE ───────────────────────────────────────
+    let lang = 'en';
+
+    function setLang(l) {
+      lang = l;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.lang-btn[onclick="setLang('${l}')"]`).classList.add('active');
+      document.querySelectorAll('.t[data-' + l + ']').forEach(el => {
+        const v = el.getAttribute('data-' + l);
+        if (v !== null) el.innerHTML = v;
+      });
+    }
+
+    // Init HTML attrs on load
+    document.querySelectorAll('.t[data-en]').forEach(el => {
+      el.innerHTML = el.getAttribute('data-en');
+    });
+  </script>
+</body>
+</html>
